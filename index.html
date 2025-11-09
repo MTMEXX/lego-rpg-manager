@@ -94,6 +94,7 @@
       display: inline-flex;
       gap: 8px;
       align-items: center;
+      cursor: pointer;
     }
     .sub-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08); }
 
@@ -163,19 +164,6 @@
     }
     .pg-btn:hover { background: #ffd633; }
 
-    .add-btn {
-      align-self: flex-start;
-      background: var(--lego-blue);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .add-btn:hover { background: #0070f3; }
-
     /* Footer */
     footer {
       background: white;
@@ -241,24 +229,9 @@
           <div class="muted">PG attualmente in gioco</div>
         </div>
       </div>
-      <button class="add-btn" onclick="addPg()">➕ Aggiungi PG alla sessione</button>
+      <button class="sub-btn" style="width: fit-content;" onclick="addPg()">➕ Aggiungi PG alla sessione</button>
 
-      <div class="pg-list" id="pgList">
-        <!-- Esempi PG -->
-        <div class="pg">
-          <h3>Sir Brickalot 🧱</h3>
-          <div class="bars">
-            <div class="bar"><div class="bar-inner bar-hp" style="width: 85%;"></div></div>
-            <div class="bar"><div class="bar-inner bar-energy" style="width: 60%;"></div></div>
-          </div>
-          <div class="pg-actions">
-            <button class="pg-btn">🎽 Equip</button>
-            <button class="pg-btn">🎒 Inventario</button>
-            <button class="pg-btn">📊 Stat</button>
-            <button class="pg-btn" style="background:#f87171;color:white;">❌ Rimuovi</button>
-          </div>
-        </div>
-      </div>
+      <div class="pg-list" id="pgList"></div>
     </section>
 
     <!-- ARCHIVIO -->
@@ -290,10 +263,9 @@
     </section>
   </main>
 
-  <footer>© 2025 LEGO RPG Manager — by MEX</footer>
+  <footer>© 2025 LEGO RPG Manager — by Mex</footer>
 
   <script>
-    // Demo JS per aggiungere PG temporanei (solo per prova)
     function addPg() {
       const name = prompt("Nome del nuovo PG?");
       if (!name) return;
@@ -307,9 +279,9 @@
           <div class="bar"><div class="bar-inner bar-energy" style="width:100%;"></div></div>
         </div>
         <div class="pg-actions">
-          <button class="pg-btn">🎽 Equip</button>
-          <button class="pg-btn">🎒 Inventario</button>
-          <button class="pg-btn">📊 Stat</button>
+          <a class="pg-btn" href="equip.html">🎽 Equip</a>
+          <a class="pg-btn" href="inventario.html">🎒 Inventario</a>
+          <a class="pg-btn" href="stat.html">📊 Stat</a>
           <button class="pg-btn" style="background:#f87171;color:white;" onclick="this.closest('.pg').remove()">❌ Rimuovi</button>
         </div>`;
       pgList.appendChild(pg);
