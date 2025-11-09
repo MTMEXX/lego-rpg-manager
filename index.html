@@ -5,132 +5,185 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LEGO RPG Manager</title>
   <style>
-    :root{
-      --lego-blue:#0057b7;
-      --lego-yellow:#ffcf00;
-      --bg:#f4f5f7;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --shadow: 0 10px 25px rgba(15,23,42,0.08);
+    :root {
+      --lego-blue: #0057b7;
+      --lego-yellow: #ffcf00;
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      --hp: #e63946;
+      --energy: #0077b6;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
       font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
-      background:var(--bg);
-      color:#111827;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
+      background: var(--bg);
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* HEADER */
-    header{
-      background:var(--lego-blue);
-      color:white;
-      padding:16px 24px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+    header {
+      background: var(--lego-blue);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       box-shadow: var(--shadow);
     }
-    .logo{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      font-weight:700;
-      font-size:1.25rem;
+    .logo {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.25rem;
     }
-    .logo .brick{
-      font-size:1.6rem;
-      transform: translateY(-2px);
-    }
-    .header-actions{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .btn-small{
-      background:var(--lego-yellow);
-      border:none;
-      padding:8px 12px;
-      border-radius:10px;
-      font-weight:700;
-      cursor:pointer;
+    .brick { font-size: 1.6rem; transform: translateY(-2px); }
+    .btn-small {
+      background: var(--lego-yellow);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    /* MAIN GRID */
-    main{
-      padding:32px;
-      display:grid;
+    main {
+      padding: 32px;
+      display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap:24px;
-      align-items:start;
-      flex:1;
+      gap: 24px;
+      flex: 1;
+      align-items: start;
     }
 
-    /* BIG CARD - spans */
-    .big-card{
-      background:var(--card);
-      border-radius:18px;
-      box-shadow:var(--shadow);
-      padding:22px;
-      position:relative;
-      overflow:hidden;
+    .big-card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 22px;
     }
-    /* responsive sizing - choose layout */
-    .card-large{ grid-column: span 6; min-height:200px; display:flex; flex-direction:column; gap:14px; }
-    .card-medium{ grid-column: span 3; min-height:160px; display:flex; flex-direction:column; gap:12px; }
-    @media (max-width:900px){
-      .card-large{ grid-column: span 12; }
-      .card-medium{ grid-column: span 6; }
-      main{ padding:18px; gap:16px; }
+    .card-large { grid-column: span 6; display: flex; flex-direction: column; gap: 14px; }
+    .card-medium { grid-column: span 6; display: flex; flex-direction: column; gap: 14px; }
+    @media (max-width: 900px) { .card-large, .card-medium { grid-column: span 12; } }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
-    @media (max-width:520px){
-      .card-medium{ grid-column: span 12; }
+    .card-emoji { font-size: 1.6rem; }
+    .card-title { font-weight: 700; font-size: 1.05rem; }
+    .muted { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
+
+    .card-sub { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+    .sub-btn {
+      background: #f8fafc;
+      border: 1px solid #eef2f7;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      color: #111827;
+      text-decoration: none;
+      box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
+      transition: transform 0.12s, box-shadow 0.12s;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .sub-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08); }
+
+    /* SEZIONE SESSIONE */
+    .session-card {
+      grid-column: span 12;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .card-head{
-      display:flex;
-      align-items:center;
-      gap:14px;
+    .pg-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
     }
-    .card-emoji{ font-size:1.6rem; }
-    .card-title{ font-weight:700; font-size:1.05rem; }
+    .pg {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      flex: 1 1 260px;
+      min-width: 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+    .pg h3 { margin: 0; font-size: 1.05rem; }
 
-    .card-sub{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:6px;
+    .bars {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
-    .sub-btn{
-      background:#f8fafc;
-      border:1px solid #eef2f7;
-      padding:8px 12px;
-      border-radius:10px;
-      font-weight:600;
-      color:#111827;
-      text-decoration:none;
-      box-shadow: 0 6px 14px rgba(2,6,23,0.04);
-      transition: transform .12s, box-shadow .12s;
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
+    .bar {
+      height: 10px;
+      border-radius: 5px;
+      background: #e5e7eb;
+      overflow: hidden;
     }
-    .sub-btn:hover{ transform: translateY(-4px); box-shadow: 0 12px 30px rgba(2,6,23,0.08); }
+    .bar-inner {
+      height: 100%;
+      border-radius: 5px;
+    }
+    .bar-hp { background: var(--hp); }
+    .bar-energy { background: var(--energy); }
 
-    /* small helper text */
-    .muted{ color:var(--muted); font-size:0.88rem; margin-top:6px; }
+    .pg-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pg-btn {
+      background: var(--lego-yellow);
+      border: none;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .pg-btn:hover { background: #ffd633; }
+
+    .add-btn {
+      align-self: flex-start;
+      background: var(--lego-blue);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .add-btn:hover { background: #0070f3; }
 
     /* Footer */
-    footer{
+    footer {
       background: white;
-      padding:12px 20px;
-      text-align:center;
-      font-size:0.9rem;
-      color:#374151;
-      border-top:1px solid #e6e9ef;
+      padding: 12px 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #374151;
+      border-top: 1px solid #e6e9ef;
     }
   </style>
 </head>
@@ -140,42 +193,37 @@
       <div class="brick">🧱</div>
       <div>LEGO RPG Manager</div>
     </div>
-    <div class="header-actions">
-      <button class="btn-small" onclick="location.href='create.html'">Crea</button>
-      <button class="btn-small" onclick="location.href='interact.html'">Interagisci</button>
-    </div>
+    <button class="btn-small" onclick="location.href='settings.html'">⚙️</button>
   </header>
 
   <main>
-    <!-- CREATE / MANAGE (big) -->
-    <section class="big-card card-large" aria-labelledby="createTitle">
+    <!-- CREATE / MANAGE -->
+    <section class="big-card card-large">
       <div class="card-head">
         <div class="card-emoji">🧑‍🎨</div>
         <div>
-          <div id="createTitle" class="card-title">Create / Manage</div>
+          <div class="card-title">Create / Manage</div>
           <div class="muted">Aggiungi nuovi elementi al mondo di gioco</div>
         </div>
       </div>
-
-      <div class="card-sub" role="list">
-        <a class="sub-btn" href="create_new_pg.html" role="listitem">➕ Nuovo PG</a>
-        <a class="sub-btn" href="create_new_luogo.html" role="listitem">➕ Nuovo Luogo</a>
-        <a class="sub-btn" href="create_new_animale.html" role="listitem">➕ Nuovo Animale</a>
-        <a class="sub-btn" href="create_new_veicolo.html" role="listitem">➕ Nuovo Veicolo</a>
-        <a class="sub-btn" href="create_new_oggetto.html" role="listitem">➕ Nuovo Oggetto</a>
+      <div class="card-sub">
+        <a class="sub-btn" href="create_new_pg.html">➕ Nuovo PG</a>
+        <a class="sub-btn" href="create_new_luogo.html">➕ Nuovo Luogo</a>
+        <a class="sub-btn" href="create_new_animale.html">➕ Nuovo Animale</a>
+        <a class="sub-btn" href="create_new_veicolo.html">➕ Nuovo Veicolo</a>
+        <a class="sub-btn" href="create_new_oggetto.html">➕ Nuovo Oggetto</a>
       </div>
     </section>
 
-    <!-- INTERACTIONS (big) -->
-    <section class="big-card card-large" aria-labelledby="interactTitle">
+    <!-- INTERAZIONI -->
+    <section class="big-card card-large">
       <div class="card-head">
         <div class="card-emoji">⚔️</div>
         <div>
-          <div id="interactTitle" class="card-title">Interazioni</div>
+          <div class="card-title">Interazioni</div>
           <div class="muted">Azioni di gioco: ambiente, social, economia e combattimenti</div>
         </div>
       </div>
-
       <div class="card-sub">
         <a class="sub-btn" href="interact_commercio.html">💱 Scambi / Commercio</a>
         <a class="sub-btn" href="interact_personali.html">🗣️ Interazioni personali</a>
@@ -184,27 +232,42 @@
       </div>
     </section>
 
-    <!-- INVENTARIO -->
-    <section class="big-card card-medium" aria-labelledby="invTitle">
+    <!-- SESSIONE ATTIVA -->
+    <section class="session-card">
       <div class="card-head">
-        <div class="card-emoji">🎒</div>
+        <div class="card-emoji">🎮</div>
         <div>
-          <div id="invTitle" class="card-title">Inventario</div>
-          <div class="muted">Visualizza / assegna oggetti ai PG</div>
+          <div class="card-title">Sessione Attiva</div>
+          <div class="muted">PG attualmente in gioco</div>
         </div>
       </div>
-      <div style="margin-top:12px">
-        <a class="sub-btn" href="inventory.html">Apri Inventario</a>
+      <button class="add-btn" onclick="addPg()">➕ Aggiungi PG alla sessione</button>
+
+      <div class="pg-list" id="pgList">
+        <!-- Esempi PG -->
+        <div class="pg">
+          <h3>Sir Brickalot 🧱</h3>
+          <div class="bars">
+            <div class="bar"><div class="bar-inner bar-hp" style="width: 85%;"></div></div>
+            <div class="bar"><div class="bar-inner bar-energy" style="width: 60%;"></div></div>
+          </div>
+          <div class="pg-actions">
+            <button class="pg-btn">🎽 Equip</button>
+            <button class="pg-btn">🎒 Inventario</button>
+            <button class="pg-btn">📊 Stat</button>
+            <button class="pg-btn" style="background:#f87171;color:white;">❌ Rimuovi</button>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ARCHIVIO -->
-    <section class="big-card card-medium" aria-labelledby="archiveTitle">
+    <section class="big-card card-medium">
       <div class="card-head">
         <div class="card-emoji">📚</div>
         <div>
-          <div id="archiveTitle" class="card-title">Archivio</div>
-          <div class="muted">Classi, specialità, oggetti e lore</div>
+          <div class="card-title">Archivio</div>
+          <div class="muted">Consulta o filtra i dati del mondo di gioco</div>
         </div>
       </div>
       <div style="margin-top:12px">
@@ -212,26 +275,12 @@
       </div>
     </section>
 
-    <!-- LUOGHI -->
-    <section class="big-card card-medium" aria-labelledby="placesTitle">
-      <div class="card-head">
-        <div class="card-emoji">🏰</div>
-        <div>
-          <div id="placesTitle" class="card-title">Luoghi</div>
-          <div class="muted">Gestione biomi e mappe</div>
-        </div>
-      </div>
-      <div style="margin-top:12px">
-        <a class="sub-btn" href="places.html">Apri Luoghi</a>
-      </div>
-    </section>
-
     <!-- IMPOSTAZIONI -->
-    <section class="big-card card-medium" aria-labelledby="settingsTitle">
+    <section class="big-card card-medium">
       <div class="card-head">
         <div class="card-emoji">⚙️</div>
         <div>
-          <div id="settingsTitle" class="card-title">Impostazioni</div>
+          <div class="card-title">Impostazioni</div>
           <div class="muted">Regole, backup e preferenze</div>
         </div>
       </div>
@@ -239,13 +288,32 @@
         <a class="sub-btn" href="settings.html">Apri Impostazioni</a>
       </div>
     </section>
-
   </main>
 
-  <footer>
-    © 2025 LEGO RPG Manager — by Mex · Aggiorna facilmente i singoli moduli dalla cartella del progetto
-  </footer>
+  <footer>© 2025 LEGO RPG Manager — by MEX</footer>
 
-  <!-- NOTE: non serve JS per il layout base; aggiungi funzionalità nelle pagine collegate -->
+  <script>
+    // Demo JS per aggiungere PG temporanei (solo per prova)
+    function addPg() {
+      const name = prompt("Nome del nuovo PG?");
+      if (!name) return;
+      const pgList = document.getElementById("pgList");
+      const pg = document.createElement("div");
+      pg.className = "pg";
+      pg.innerHTML = `
+        <h3>${name}</h3>
+        <div class="bars">
+          <div class="bar"><div class="bar-inner bar-hp" style="width:100%;"></div></div>
+          <div class="bar"><div class="bar-inner bar-energy" style="width:100%;"></div></div>
+        </div>
+        <div class="pg-actions">
+          <button class="pg-btn">🎽 Equip</button>
+          <button class="pg-btn">🎒 Inventario</button>
+          <button class="pg-btn">📊 Stat</button>
+          <button class="pg-btn" style="background:#f87171;color:white;" onclick="this.closest('.pg').remove()">❌ Rimuovi</button>
+        </div>`;
+      pgList.appendChild(pg);
+    }
+  </script>
 </body>
 </html>
