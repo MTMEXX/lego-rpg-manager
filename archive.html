@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Archivio LEGO RPG</title>
   <style>
-    /* Stili esistenti + stili per filtri */
     body {
       font-family: "Segoe UI", Roboto, sans-serif;
       background: #f4f5f7;
@@ -38,66 +37,37 @@
       border-radius: 8px;
       font-weight: 600;
       text-decoration: none;
-      transition: background 0.2s;
-    }
-    .back:hover {
-        background: #e5b800;
     }
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
       background: white;
+      border-radius: 18px;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 10px 25px rgba(15,23,42,0.08);
     }
-    h2 {
-      margin-top: 0;
-      color: #0057b7;
-    }
-    #controls {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    #search, #filterType {
-      padding: 10px 15px;
-      border: 1px solid #ccc;
+    input {
+      padding: 8px 12px;
+      margin-bottom: 15px;
+      width: 100%;
       border-radius: 8px;
-      font-size: 1rem;
+      border: 1px solid #ccc;
     }
-    #search {
-        flex-grow: 1;
-    }
-    #filterType {
-        flex-grow: 0;
-        min-width: 150px;
-        background-color: white; /* Per coerenza con l'input */
-    }
-    #dataTable {
+    table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 10px;
     }
-    #dataTable th, #dataTable td {
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
       text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid #eee;
     }
-    #dataTable th {
-      background-color: #f0f8ff;
-      color: #0057b7;
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-    }
-    #dataTable tr:hover:not(#tableHead) {
-        background-color: #f7f9fa;
+    th {
+      background-color: #ffcf00;
+      color: #111;
     }
   </style>
 </head>
 <body>
-
   <header>
     <div class="title"><span class="brick">🧱</span> Archivio LEGO RPG</div>
     <a href="index.html" class="back">⬅️ Torna alla Home</a>
@@ -107,13 +77,7 @@
     <h2>Esamina Database</h2>
     <p>Carica e consulta il tuo archivio CSV di personaggi, oggetti, luoghi e altro.</p>
 
-    <div id="controls">
-        <input type="text" id="search" placeholder="🔍 Cerca per nome, descrizione o punti...">
-        <select id="filterType">
-            <option value="TUTTI">Tutti i Tipi</option>
-            <option value="GRADO">Grado</option>
-            </select>
-    </div>
+    <input type="text" id="search" placeholder="🔍 Cerca per nome o tipo...">
 
     <table id="dataTable">
       <thead>
@@ -124,89 +88,30 @@
   </div>
 
   <script>
-    const CSV_DELIMITER = ';'; // Imposta il delimitatore corretto
-
-    // Funzione per assegnare un "Tipo" al record (necessario per il filtro)
-    // In un DB più complesso, questo dovrebbe essere gestito con una colonna 'TIPO' nel CSV
-    function getRecordType(row, headers) {
-        // Poiché il database.csv attuale contiene i Gradi (ID GRADI, NOME GRADO...), assumiamo sia un GRADO
-        if (headers.includes('ID GRADI (PK)')) {
-            return 'GRADO';
-        }
-        // Aggiungi qui la logica per riconoscere altri tipi in futuro
-        return 'SCONOSCIUTO';
-    }
-
-    // Funzione principale per caricare e visualizzare il CSV
     async function loadCSV() {
-      const response = await fetch('database.csv');
+      const response = await fetch('data/database.csv');
       const data = await response.text();
-      // Usiamo una RegEx per dividere le righe rispettando i \r\n o solo \n
-      const rows = data.trim().split(/[\r\n]+/).map(r => r.split(CSV_DELIMITER));
+      const rows = data.trim().split('\n').map(r => r.split(','));
 
-      // 1. HEADERS
-      const headers = rows.shift().map(h => h.trim());
+      const headers = rows.shift();
       const headRow = document.getElementById('tableHead');
       headRow.innerHTML = headers.map(h => `<th>${h}</th>`).join('');
 
-      // 2. CORPO DELLA TABELLA
       const body = document.getElementById('tableBody');
-      // Mappa i dati in un formato più facile da filtrare e aggiungi il 'tipo'
-      const dataRecords = rows.map(row => {
-        const record = {};
-        headers.forEach((header, i) => {
-            record[header] = row[i] ? row[i].trim() : ''; // Pulisci anche le celle
-        });
-        record.type = getRecordType(record, headers); // Assegna il tipo
-        record.trElement = createTableRow(record, headers); // Crea l'elemento DOM
-        return record;
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = row.map(cell => `<td>${cell}</td>`).join('');
+        body.appendChild(tr);
       });
 
-      // Aggiunge tutti gli elementi al DOM
-      dataRecords.forEach(record => body.appendChild(record.trElement));
-
-      // 3. LOGICA DI RICERCA E FILTRAGGIO
-      const searchInput = document.getElementById('search');
-      const filterType = document.getElementById('filterType');
-
-      // Aggiungi un singolo listener per entrambi gli input
-      searchInput.addEventListener('input', () => filterTable(dataRecords));
-      filterType.addEventListener('change', () => filterTable(dataRecords));
-    }
-
-    // Funzione per creare un elemento <tr>
-    function createTableRow(record, headers) {
-        const tr = document.createElement('tr');
-        tr.setAttribute('data-type', record.type);
-        tr.innerHTML = headers.map(header => `<td>${record[header]}</td>`).join('');
-        return tr;
-    }
-
-    // Funzione per applicare i filtri
-    function filterTable(dataRecords) {
-        const searchTerm = document.getElementById('search').value.toLowerCase();
-        const selectedType = document.getElementById('filterType').value;
-
-        dataRecords.forEach(record => {
-            const isTypeMatch = selectedType === 'TUTTI' || record.type === selectedType;
-            
-            // Cerca il termine in tutti i valori del record
-            const isSearchMatch = Object.values(record).some(value => 
-                String(value).toLowerCase().includes(searchTerm)
-            );
-
-            // Mostra o nasconde la riga
-            if (isTypeMatch && isSearchMatch) {
-                record.trElement.style.display = ''; // Mostra
-            } else {
-                record.trElement.style.display = 'none'; // Nascondi
-            }
+      document.getElementById('search').addEventListener('input', e => {
+        const term = e.target.value.toLowerCase();
+        Array.from(body.rows).forEach(r => {
+          r.style.display = r.innerText.toLowerCase().includes(term) ? '' : 'none';
         });
+      });
     }
-
-    // Avvia il caricamento dei dati all'apertura della pagina
     loadCSV();
   </script>
-
 </body>
 </html>
