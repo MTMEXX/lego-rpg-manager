@@ -1,2 +1,14 @@
 ﻿ID;NOME;DESCRIZIONE
-1;test;effetto di test
+1;Stordito;Il personaggio ha ridotta precisione e velocità.
+2;Accecato;La visibilità è drasticamente ridotta ed aumenta la probabilità di fallire attacchi o azioni.
+3;Stanco;La rigenerazione è rallentata e le azioni subiscono malus alle prove.
+4;Congelato;Il movimento è fortemente ostruito.
+5;Bruciato;Subisce danni periodici a causa del calore.
+6;Veleno;Subisce danni nel tempo finché non viene curato.
+7;Confuso;Le azioni possono fallire o essere rivolte a target sbagliati.
+8;Panico;Il personaggio può scappare involontariamente o agire in modo imprevedibile.
+9;Infortunato;Diminuisce temporaneamente la forza e la destrezza.
+10;Iperattivo;Movimento aumentato, ma precisione e difesa ridotte.
+11;Felice;Bonus morale: aumenta la precisione e la velocità temporaneamente.
+12;Affamato;Diminuisce resistenze e rigenerazione.
+13;Ubriaco;Movimento casuale o azioni imprevedibili, precisione ridotta.
