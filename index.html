@@ -1,290 +1,114 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LEGO RPG Manager</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO RPG Manager - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --lego-blue: #0057b7;
-      --lego-yellow: #ffcf00;
-      --bg: #f4f5f7;
-      --card: #ffffff;
-      --muted: #6b7280;
-      --shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-      --hp: #e63946;
-      --energy: #0077b6;
+      --lego-yellow: #f7d23e;
+      --lego-red: #e53e3e;
+      --lego-blue: #3182ce;
+      --lego-gray: #f8f8f8;
     }
-    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
-      background: var(--bg);
-      color: #111827;
-      min-height: 100vh;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--lego-gray);
       display: flex;
       flex-direction: column;
-    }
-
-    header {
-      background: var(--lego-blue);
-      color: white;
-      padding: 16px 24px;
-      display: flex;
       align-items: center;
-      justify-content: space-between;
-      box-shadow: var(--shadow);
-    }
-    .logo {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-weight: 700;
-      font-size: 1.25rem;
-    }
-    .brick { font-size: 1.6rem; transform: translateY(-2px); }
-    .btn-small {
-      background: var(--lego-yellow);
-      border: none;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
+      justify-content: center;
+      height: 100vh;
+      color: #222;
     }
 
-    main {
-      padding: 32px;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 24px;
-      flex: 1;
-      align-items: start;
-    }
-
-    .big-card {
-      background: var(--card);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 22px;
-    }
-    .card-large { grid-column: span 6; display: flex; flex-direction: column; gap: 14px; }
-    .card-medium { grid-column: span 6; display: flex; flex-direction: column; gap: 14px; }
-    @media (max-width: 900px) { .card-large, .card-medium { grid-column: span 12; } }
-
-    .card-head {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .card-emoji { font-size: 1.6rem; }
-    .card-title { font-weight: 700; font-size: 1.05rem; }
-    .muted { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
-
-    .card-sub { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
-    .sub-btn {
-      background: #f8fafc;
-      border: 1px solid #eef2f7;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-weight: 600;
-      color: #111827;
-      text-decoration: none;
-      box-shadow: 0 6px 14px rgba(2, 6, 23, 0.04);
-      transition: transform 0.12s, box-shadow 0.12s;
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      cursor: pointer;
-    }
-    .sub-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08); }
-
-    /* SEZIONE SESSIONE */
-    .session-card {
-      grid-column: span 12;
-      background: var(--card);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .pg-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .pg {
-      background: #f8fafc;
-      border-radius: 14px;
-      padding: 14px 18px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      flex: 1 1 260px;
-      min-width: 240px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      position: relative;
-    }
-    .pg h3 { margin: 0; font-size: 1.05rem; }
-
-    .bars {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .bar {
-      height: 10px;
-      border-radius: 5px;
-      background: #e5e7eb;
-      overflow: hidden;
-    }
-    .bar-inner {
-      height: 100%;
-      border-radius: 5px;
-    }
-    .bar-hp { background: var(--hp); }
-    .bar-energy { background: var(--energy); }
-
-    .pg-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .pg-btn {
-      background: var(--lego-yellow);
-      border: none;
-      border-radius: 8px;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    .pg-btn:hover { background: #ffd633; }
-
-    /* Footer */
-    footer {
+    .login-container {
       background: white;
-      padding: 12px 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      padding: 40px;
+      width: 350px;
       text-align: center;
-      font-size: 0.9rem;
-      color: #374151;
-      border-top: 1px solid #e6e9ef;
+      border-top: 8px solid var(--lego-yellow);
+    }
+
+    .logo {
+      font-size: 2.4em;
+      font-weight: 800;
+      color: var(--lego-red);
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 0 var(--lego-yellow);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      font-size: 1em;
+      transition: all 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--lego-yellow);
+      outline: none;
+      box-shadow: 0 0 8px var(--lego-yellow);
+    }
+
+    button {
+      background: var(--lego-yellow);
+      border: none;
+      color: #222;
+      font-weight: 700;
+      padding: 12px 20px;
+      font-size: 1.1em;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      transition: 0.25s;
+    }
+
+    button:hover {
+      background: #ffdc4a;
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 0.85em;
+      color: #777;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <div class="brick">🧱</div>
-      <div>LEGO RPG Manager</div>
-    </div>
-    <button class="btn-small" onclick="location.href='settings.html'">⚙️</button>
-  </header>
-
-  <main>
-    <!-- CREATE / MANAGE -->
-    <section class="big-card card-large">
-      <div class="card-head">
-        <div class="card-emoji">🧑‍🎨</div>
-        <div>
-          <div class="card-title">Create / Manage</div>
-          <div class="muted">Aggiungi nuovi elementi al mondo di gioco</div>
-        </div>
-      </div>
-      <div class="card-sub">
-        <a class="sub-btn" href="create_new_pg.html">➕ Nuovo PG</a>
-        <a class="sub-btn" href="create_new_luogo.html">➕ Nuovo Luogo</a>
-        <a class="sub-btn" href="create_new_animale.html">➕ Nuovo Animale</a>
-        <a class="sub-btn" href="create_new_veicolo.html">➕ Nuovo Veicolo</a>
-        <a class="sub-btn" href="create_new_oggetto.html">➕ Nuovo Oggetto</a>
-      </div>
-    </section>
-
-    <!-- INTERAZIONI -->
-    <section class="big-card card-large">
-      <div class="card-head">
-        <div class="card-emoji">⚔️</div>
-        <div>
-          <div class="card-title">Interazioni</div>
-          <div class="muted">Azioni di gioco: ambiente, social, economia e combattimenti</div>
-        </div>
-      </div>
-      <div class="card-sub">
-        <a class="sub-btn" href="interact_commercio.html">💱 Scambi / Commercio</a>
-        <a class="sub-btn" href="interact_personali.html">🗣️ Interazioni personali</a>
-        <a class="sub-btn" href="interact_ambientali.html">🌲 Interazioni ambientali</a>
-        <a class="sub-btn" href="interact_combattimenti.html">⚔️ Combattimenti</a>
-      </div>
-    </section>
-
-    <!-- SESSIONE ATTIVA -->
-    <section class="session-card">
-      <div class="card-head">
-        <div class="card-emoji">🎮</div>
-        <div>
-          <div class="card-title">Sessione Attiva</div>
-          <div class="muted">PG attualmente in gioco</div>
-        </div>
-      </div>
-      <button class="sub-btn" style="width: fit-content;" onclick="addPg()">➕ Aggiungi PG alla sessione</button>
-
-      <div class="pg-list" id="pgList"></div>
-    </section>
-
-    <!-- ARCHIVIO -->
-    <section class="big-card card-medium">
-      <div class="card-head">
-        <div class="card-emoji">📚</div>
-        <div>
-          <div class="card-title">Archivio</div>
-          <div class="muted">Consulta o filtra i dati del mondo di gioco</div>
-        </div>
-      </div>
-      <div style="margin-top:12px">
-        <a class="sub-btn" href="archive.html">Apri Archivio</a>
-      </div>
-    </section>
-
-    <!-- IMPOSTAZIONI -->
-    <section class="big-card card-medium">
-      <div class="card-head">
-        <div class="card-emoji">⚙️</div>
-        <div>
-          <div class="card-title">Impostazioni</div>
-          <div class="muted">Regole, backup e preferenze</div>
-        </div>
-      </div>
-      <div style="margin-top:12px">
-        <a class="sub-btn" href="settings.html">Apri Impostazioni</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>© 2025 LEGO RPG Manager — by Mex</footer>
+  <div class="login-container">
+    <div class="logo">LEGO RPG Manager</div>
+    <h3>Accedi</h3>
+    <input type="text" id="username" placeholder="Nome utente">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Entra</button>
+    <div class="footer">Creato da MEX · Versione protoripo</div>
+  </div>
 
   <script>
-    function addPg() {
-      const name = prompt("Nome del nuovo PG?");
-      if (!name) return;
-      const pgList = document.getElementById("pgList");
-      const pg = document.createElement("div");
-      pg.className = "pg";
-      pg.innerHTML = `
-        <h3>${name}</h3>
-        <div class="bars">
-          <div class="bar"><div class="bar-inner bar-hp" style="width:100%;"></div></div>
-          <div class="bar"><div class="bar-inner bar-energy" style="width:100%;"></div></div>
-        </div>
-        <div class="pg-actions">
-          <a class="pg-btn" href="equip.html">🎽 Equip</a>
-          <a class="pg-btn" href="inventario.html">🎒 Inventario</a>
-          <a class="pg-btn" href="stat.html">📊 Stat</a>
-          <button class="pg-btn" style="background:#f87171;color:white;" onclick="this.closest('.pg').remove()">❌ Rimuovi</button>
-        </div>`;
-      pgList.appendChild(pg);
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !password) {
+        alert("Inserisci nome e password!");
+        return;
+      }
+
+      // In futuro potrai collegarlo a un vero backend
+      localStorage.setItem("legoUser", JSON.stringify({ username }));
+      window.location.href = "dashboard.html";
     }
   </script>
 </body>

@@ -2,60 +2,209 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>LEGO RPG Manager - [NOME PAGINA]</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO RPG Manager - Impostazioni</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --lego-yellow: #f7d23e;
+      --lego-red: #e53e3e;
+      --lego-blue: #3182ce;
+      --lego-gray: #f8f8f8;
+    }
+
     body {
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      background: #f4f5f7;
-      color: #111827;
       margin: 0;
-      padding: 40px;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--lego-gray);
+      color: #222;
     }
+
     header {
-      background: #0057b7;
-      color: white;
-      padding: 14px 20px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+      background: var(--lego-yellow);
+      padding: 20px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.8em;
+      color: var(--lego-red);
+      text-shadow: 2px 2px 0 #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
     }
-    .title {
-      font-weight: 700;
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .brick { font-size: 1.4rem; }
-    .back {
-      background: #ffcf00;
-      color: black;
-      padding: 8px 14px;
+
+    .logout, .back {
+      position: absolute;
+      top: 20px;
+      border: none;
+      padding: 8px 16px;
       border-radius: 8px;
+      cursor: pointer;
       font-weight: 600;
-      text-decoration: none;
+      transition: 0.2s;
+      color: white;
     }
-    .container {
+
+    .logout {
+      right: 30px;
+      background: var(--lego-red);
+    }
+    .logout:hover { background: #ff5252; }
+
+    .back {
+      left: 30px;
+      background: var(--lego-blue);
+    }
+    .back:hover { background: #4a9aff; }
+
+    main {
+      max-width: 1000px;
+      margin: 40px auto;
       background: white;
-      border-radius: 18px;
-      padding: 30px;
-      box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--lego-blue);
+      font-size: 1.8em;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-top: 6px solid var(--lego-yellow);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .section h2 {
+      color: var(--lego-blue);
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 5px;
+      font-family: inherit;
+    }
+
+    button {
+      margin-top: 15px;
+      background: var(--lego-blue);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #4a9aff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #777;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="title"><span class="brick">🧱</span> LEGO RPG Manager - [NOME PAGINA]</div>
-    <a href="index.html" class="back">⬅️ Torna alla Home</a>
+    LEGO RPG Manager - Impostazioni
+    <button class="back" onclick="goBack()">← Dashboard</button>
+    <button class="logout" onclick="logout()">Logout</button>
   </header>
 
-  <div class="container">
-    <h2>[Titolo pagina]</h2>
-    <p>Pagina di esempio per la sezione “[NOME PAGINA]”.</p>
-    <p>Qui in futuro aggiungeremo moduli, interfacce e funzioni specifiche.</p>
-  </div>
+  <main>
+    <h1>Centro Impostazioni di Gioco</h1>
+
+    <div class="section">
+      <h2>🎲 Parametri di Gioco</h2>
+      <label>Tipo di dado principale</label>
+      <select>
+        <option>D6 (6 facce)</option>
+        <option>D8 (8 facce)</option>
+        <option>D10 (10 facce)</option>
+        <option>D12 (12 facce)</option>
+        <option>D20 (20 facce)</option>
+      </select>
+
+      <label>Energia massima base per i personaggi</label>
+      <input type="number" value="100">
+
+      <label>Salute massima base per i personaggi</label>
+      <input type="number" value="100">
+
+      <button>💾 Salva parametri</button>
+    </div>
+
+    <div class="section">
+      <h2>🔁 Gestione Interazioni</h2>
+      <p>Definisci o modifica le interazioni tra personaggi, oggetti o ambienti.</p>
+
+      <label>Nome interazione</label>
+      <input type="text" placeholder="Es. Scambia, Costruisce, Combatti...">
+
+      <label>Descrizione</label>
+      <textarea rows="3" placeholder="Descrivi cosa comporta questa interazione..."></textarea>
+
+      <label>Categoria</label>
+      <select>
+        <option>PG → PG</option>
+        <option>PG → Oggetto</option>
+        <option>PG → Ambiente</option>
+        <option>Altro</option>
+      </select>
+
+      <button>➕ Aggiungi Interazione</button>
+    </div>
+
+    <div class="section">
+      <h2>⚙️ Regole Personalizzate</h2>
+      <p>Aggiungi, modifica o rimuovi regole che influenzano il gameplay.</p>
+
+      <label>Nome regola</label>
+      <input type="text" placeholder="Es. Danno critico, penalità terreno...">
+
+      <label>Effetto / Descrizione</label>
+      <textarea rows="3"></textarea>
+
+      <button>➕ Aggiungi Regola</button>
+    </div>
+
+  </main>
+
+  <footer>Creato da MEX · Versione prototipo</footer>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("legoUser"));
+    if (!user) window.location.href = "index.html";
+
+    function logout() {
+      localStorage.removeItem("legoUser");
+      window.location.href = "index.html";
+    }
+
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+  </script>
 </body>
 </html>

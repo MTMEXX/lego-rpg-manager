@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LEGO RPG Manager - Crea</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lego-yellow:#f7d23e; --lego-red:#e53e3e; --lego-blue:#3182ce; --lego-gray:#f8f8f8;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Montserrat',sans-serif;background:var(--lego-gray);color:#222}
+    header{background:var(--lego-yellow);padding:20px;text-align:center;font-weight:800;font-size:1.8em;color:var(--lego-red);text-shadow:2px 2px 0 #fff;box-shadow:0 4px 10px rgba(0,0,0,0.15);position:relative}
+    .logout,.back{position:absolute;top:20px;padding:8px 16px;border-radius:8px;border:none;color:#fff;font-weight:600;cursor:pointer}
+    .back{left:30px;background:var(--lego-blue)} .logout{right:30px;background:var(--lego-red)}
+    .back:hover{background:#4a9aff} .logout:hover{background:#ff5252}
+    main{max-width:1000px;margin:40px auto;background:white;border-radius:20px;padding:40px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+    h1{text-align:center;color:var(--lego-blue);margin:0 0 18px}
+    .create-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:30px}
+    .card-btn{background:white;border-radius:20px;padding:30px 20px;text-align:center;box-shadow:0 5px 20px rgba(0,0,0,0.1);border-top:8px solid var(--lego-yellow);transition:0.3s;cursor:pointer;font-weight:600;font-size:1.1em;color:var(--lego-blue)}
+    .card-btn:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,0.15)}
+    .form-section{margin-top:40px;display:none}
+    .form-section.active{display:block}
+    label{display:block;font-weight:600;margin:10px 0 5px}
+    input,textarea,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;font-family:inherit;margin-bottom:10px}
+    textarea{min-height:80px;resize:vertical}
+    .save-btn{background:var(--lego-blue);color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer}
+    .save-btn:hover{background:#4a9aff}
+    footer{text-align:center;padding:20px;color:#777;font-size:0.9em}
+    /* toast */
+    .toast{position:fixed;right:20px;bottom:20px;background:#222;color:#fff;padding:10px 14px;border-radius:8px;display:none}
+  </style>
+</head>
+<body>
+  <header>LEGO RPG Manager - Crea
+    <button class="back" onclick="goBack()">← Dashboard</button>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+
+  <main>
+    <h1>Seleziona cosa vuoi creare</h1>
+
+    <div class="create-grid">
+      <div class="card-btn" onclick="showForm('pg')">👤 Personaggio</div>
+      <div class="card-btn" onclick="showForm('luogo')">🏰 Luogo</div>
+      <div class="card-btn" onclick="showForm('oggetto')">🧱 Oggetto</div>
+      <div class="card-btn" onclick="showForm('veicolo')">🚗 Veicolo</div>
+      <div class="card-btn" onclick="showForm('animale')">🐾 Creatura</div>
+      <div class="card-btn" onclick="showForm('azione')">⚡ Azione</div>
+    </div>
+
+    <div id="form-area">
+      <!-- PERSONAGGIO -->
+      <div id="form-pg" class="form-section">
+        <h2>👤 Crea Nuovo Personaggio</h2>
+        <label>Nome</label><input id="pg_nome" type="text" placeholder="Nome personaggio">
+        <label>Ruolo / Classe</label><input id="pg_ruolo" type="text" placeholder="Es. Cavaliere, Mago...">
+        <label>Note / Descrizione</label><textarea id="pg_desc"></textarea>
+        <button class="save-btn" onclick="save('pg')">Salva Personaggio</button>
+      </div>
+
+      <!-- LUOGO -->
+      <div id="form-luogo" class="form-section">
+        <h2>🏰 Crea Nuovo Luogo</h2>
+        <label>Nome</label><input id="luogo_nome" type="text" placeholder="Nome luogo">
+        <label>Tipo</label><input id="luogo_tipo" type="text" placeholder="Es. Villaggio, Foresta...">
+        <label>Descrizione</label><textarea id="luogo_desc"></textarea>
+        <button class="save-btn" onclick="save('luoghi')">Salva Luogo</button>
+      </div>
+
+      <!-- OGGETTO -->
+      <div id="form-oggetto" class="form-section">
+        <h2>🧱 Crea Nuovo Oggetto</h2>
+        <label>Nome</label><input id="oggetto_nome" type="text" placeholder="Nome oggetto">
+        <label>Categoria</label><input id="oggetto_cat" type="text" placeholder="Es. Arma, Consumabile...">
+        <label>Descrizione</label><textarea id="oggetto_desc"></textarea>
+        <button class="save-btn" onclick="save('oggetti')">Salva Oggetto</button>
+      </div>
+
+      <!-- VEICOLO -->
+      <div id="form-veicolo" class="form-section">
+        <h2>🚗 Crea Nuovo Veicolo</h2>
+        <label>Nome</label><input id="veicolo_nome" type="text" placeholder="Nome veicolo">
+        <label>Tipo</label><input id="veicolo_tipo" type="text" placeholder="Es. Carro, Nave...">
+        <label>Capacità</label><input id="veicolo_cap" type="text" placeholder="Es. 2 persone">
+        <button class="save-btn" onclick="save('veicoli')">Salva Veicolo</button>
+      </div>
+
+      <!-- ANIMALE / CREATURA -->
+      <div id="form-animale" class="form-section">
+        <h2>🐾 Crea Nuova Creatura</h2>
+        <label>Nome</label><input id="animale_nome" type="text" placeholder="Nome creatura">
+        <label>Specie</label><input id="animale_specie" type="text" placeholder="Es. Drago, Lupo...">
+        <label>Descrizione</label><textarea id="animale_desc"></textarea>
+        <button class="save-btn" onclick="save('animali')">Salva Creatura</button>
+      </div>
+
+      <!-- AZIONE / INTERAZIONE -->
+      <div id="form-azione" class="form-section">
+        <h2>⚡ Crea Nuova Azione / Interazione</h2>
+        <label>Nome azione</label><input id="az_name" type="text" placeholder="Es. Scambia, Attacca...">
+        <label>Relazione (tipo)</label>
+        <select id="az_relation">
+          <option value="pg->pg">PG → PG</option>
+          <option value="pg->luogo">PG → Luogo</option>
+          <option value="pg->oggetto">PG → Oggetto</option>
+          <option value="pg->creatura">PG → Creatura</option>
+          <option value="creatura->creatura">Creatura → Creatura</option>
+          <option value="altro">Altro</option>
+        </select>
+        <label>Prova richiesta (attributo)</label>
+        <select id="az_test">
+          <option value="forza">Forza</option><option value="destrezza">Destrezza</option>
+          <option value="intelligenza">Intelligenza</option><option value="nessuna">Nessuna</option>
+        </select>
+        <label>Tipo difficoltà</label>
+        <select id="az_diff_type">
+          <option value="fixed">Valore fisso</option><option value="formula">Formula</option>
+        </select>
+        <label>Valore / formula (es. 12 o 8 + livello)</label><input id="az_diff_val" type="text">
+        <label>Effetto se successo</label><textarea id="az_success"></textarea>
+        <label>Effetto se fallisce</label><textarea id="az_fail"></textarea>
+        <button class="save-btn" onclick="save('azioni')">Salva Azione</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast">✓</div>
+  <footer>Creato da MEX · Versione prototipo</footer>
+
+<script>
+  // check login
+  const user = JSON.parse(localStorage.getItem('legoUser'));
+  if(!user) location.href='index.html';
+
+  function logout(){ localStorage.removeItem('legoUser'); location.href='index.html' }
+  function goBack(){ location.href='dashboard.html' }
+
+  // helper toast
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.display='block';
+    setTimeout(()=> t.style.display='none', 1400);
+  }
+
+  // show forms
+  function showForm(type){
+    document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+    const sec = document.getElementById('form-' + type);
+    if(sec) sec.classList.add('active');
+    sec && sec.scrollIntoView({behavior:'smooth'});
+  }
+
+  // storage helper per tipo
+  function getStore(key){
+    return JSON.parse(localStorage.getItem('lego_' + key) || '[]');
+  }
+  function setStore(key, arr){
+    localStorage.setItem('lego_' + key, JSON.stringify(arr));
+  }
+
+  // salva per categorie: 'pg','luoghi','oggetti','veicoli','animali','azioni'
+  function save(category){
+    const id = Date.now();
+    let obj = { id };
+
+    if(category === 'pg'){
+      const nome = document.getElementById('pg_nome').value.trim();
+      if(!nome) return alert('Inserisci il nome del personaggio');
+      obj.nome = nome;
+      obj.ruolo = document.getElementById('pg_ruolo').value.trim();
+      obj.desc = document.getElementById('pg_desc').value.trim();
+    } else if(category === 'luoghi'){
+      obj.nome = document.getElementById('luogo_nome').value.trim();
+      if(!obj.nome) return alert('Inserisci il nome del luogo');
+      obj.tipo = document.getElementById('luogo_tipo').value.trim();
+      obj.desc = document.getElementById('luogo_desc').value.trim();
+    } else if(category === 'oggetti'){
+      obj.nome = document.getElementById('oggetto_nome').value.trim();
+      if(!obj.nome) return alert('Inserisci il nome dell\'oggetto');
+      obj.cat = document.getElementById('oggetto_cat').value.trim();
+      obj.desc = document.getElementById('oggetto_desc').value.trim();
+    } else if(category === 'veicoli'){
+      obj.nome = document.getElementById('veicolo_nome').value.trim();
+      if(!obj.nome) return alert('Inserisci il nome del veicolo');
+      obj.tipo = document.getElementById('veicolo_tipo').value.trim();
+      obj.cap = document.getElementById('veicolo_cap').value.trim();
+    } else if(category === 'animali'){
+      obj.nome = document.getElementById('animale_nome').value.trim();
+      if(!obj.nome) return alert('Inserisci il nome della creatura');
+      obj.specie = document.getElementById('animale_specie').value.trim();
+      obj.desc = document.getElementById('animale_desc').value.trim();
+    } else if(category === 'azioni'){
+      obj.name = document.getElementById('az_name').value.trim();
+      if(!obj.name) return alert('Inserisci il nome dell\'azione');
+      obj.relation = document.getElementById('az_relation').value;
+      obj.test = document.getElementById('az_test').value;
+      obj.diff_type = document.getElementById('az_diff_type').value;
+      obj.diff_val = document.getElementById('az_diff_val').value.trim();
+      obj.success = document.getElementById('az_success').value.trim();
+      obj.fail = document.getElementById('az_fail').value.trim();
+    } else {
+      return alert('Categoria non gestita');
+    }
+
+    // push e salva
+    const arr = getStore(category);
+    arr.push(obj);
+    setStore(category, arr);
+    showToast('Salvato: ' + (obj.nome || obj.name));
+    clearFormFields(category);
+  }
+
+  function clearFormFields(category){
+    // pulizia semplice per i campi usati
+    if(category==='pg'){ ['pg_nome','pg_ruolo','pg_desc'].forEach(id=>document.getElementById(id).value=''); }
+    if(category==='luoghi'){ ['luogo_nome','luogo_tipo','luogo_desc'].forEach(id=>document.getElementById(id).value=''); }
+    if(category==='oggetti'){ ['oggetto_nome','oggetto_cat','oggetto_desc'].forEach(id=>document.getElementById(id).value=''); }
+    if(category==='veicoli'){ ['veicolo_nome','veicolo_tipo','veicolo_cap'].forEach(id=>document.getElementById(id).value=''); }
+    if(category==='animali'){ ['animale_nome','animale_specie','animale_desc'].forEach(id=>document.getElementById(id).value=''); }
+    if(category==='azioni'){ ['az_name','az_relation','az_test','az_diff_type','az_diff_val','az_success','az_fail'].forEach(id=>document.getElementById(id).value=''); }
+  }
+
+  // init: mostra nulla di default ma puoi aprire quick con showForm('azione')
+  // showForm('azione');
+
+</script>
+</body>
+</html>

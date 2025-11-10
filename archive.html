@@ -2,116 +2,326 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Archivio LEGO RPG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO RPG Manager - Archivio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --lego-yellow: #f7d23e;
+      --lego-red: #e53e3e;
+      --lego-blue: #3182ce;
+      --lego-gray: #f8f8f8;
+    }
+
     body {
-      font-family: "Segoe UI", Roboto, sans-serif;
-      background: #f4f5f7;
-      color: #111827;
       margin: 0;
-      padding: 40px;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--lego-gray);
+      color: #222;
     }
+
     header {
-      background: #0057b7;
+      background: var(--lego-yellow);
+      padding: 20px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.8em;
+      color: var(--lego-red);
+      text-shadow: 2px 2px 0 #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    .logout, .back {
+      position: absolute;
+      top: 20px;
+      background: var(--lego-red);
       color: white;
-      padding: 14px 20px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-    }
-    .title {
-      font-weight: 700;
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .brick { font-size: 1.4rem; }
-    .back {
-      background: #ffcf00;
-      color: black;
-      padding: 8px 14px;
+      border: none;
+      padding: 8px 16px;
       border-radius: 8px;
+      cursor: pointer;
       font-weight: 600;
-      text-decoration: none;
+      transition: 0.2s;
     }
-    .container {
+
+    .back {
+      left: 30px;
+      background: var(--lego-blue);
+    }
+
+    .logout {
+      right: 30px;
+    }
+
+    .logout:hover {
+      background: #ff5252;
+    }
+
+    .back:hover {
+      background: #4a9aff;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto;
       background: white;
-      border-radius: 18px;
+      border-radius: 20px;
       padding: 30px;
-      box-shadow: 0 10px 25px rgba(15,23,42,0.08);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
-    input {
-      padding: 8px 12px;
-      margin-bottom: 15px;
-      width: 100%;
+
+    h1 {
+      text-align: center;
+      color: var(--lego-blue);
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    select {
+      padding: 10px;
       border-radius: 8px;
+      font-size: 1em;
       border: 1px solid #ccc;
+      margin-bottom: 20px;
+      width: 250px;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
     }
+
     th, td {
       border-bottom: 1px solid #ddd;
       padding: 10px;
       text-align: left;
     }
+
     th {
-      background-color: #ffcf00;
-      color: #111;
+      background: var(--lego-yellow);
+      color: var(--lego-red);
+    }
+
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    .action-btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      padding: 5px 10px;
+      margin: 0 3px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .edit-btn {
+      background: var(--lego-blue);
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background: #4a9aff;
+    }
+
+    .delete-btn {
+      background: var(--lego-red);
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background: #ff5252;
+    }
+
+    /* Popup per la modifica */
+    .popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup.active {
+      display: flex;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    .popup-content h2 {
+      margin-top: 0;
+      color: var(--lego-blue);
+    }
+
+    .popup-content input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .popup-content button {
+      background: var(--lego-yellow);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .popup-content button:hover {
+      background: #ffe55a;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #777;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="title"><span class="brick">🧱</span> Archivio LEGO RPG</div>
-    <a href="index.html" class="back">⬅️ Torna alla Home</a>
+    LEGO RPG Manager - Archivio
+    <button class="back" onclick="goBack()">← Dashboard</button>
+    <button class="logout" onclick="logout()">Logout</button>
   </header>
 
-  <div class="container">
-    <h2>Esamina Database</h2>
-    <p>Carica e consulta il tuo archivio CSV di personaggi, oggetti, luoghi e altro.</p>
+  <main>
+    <h1>Archivio Database</h1>
 
-    <input type="text" id="search" placeholder="🔍 Cerca per nome o tipo...">
+    <select id="dbSelect" onchange="loadData()">
+      <option value="">— Seleziona una categoria —</option>
+      <option value="pg">Personaggi</option>
+      <option value="luoghi">Luoghi</option>
+      <option value="oggetti">Oggetti</option>
+      <option value="veicoli">Veicoli</option>
+      <option value="animali">Creature</option>
+      <option value="azioni">Azioni</option>
+    </select>
 
-    <table id="dataTable">
-      <thead>
-        <tr id="tableHead"></tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+    <table id="dataTable"></table>
+  </main>
+
+  <!-- Popup di modifica -->
+  <div class="popup" id="editPopup">
+    <div class="popup-content">
+      <h2>Modifica Elemento</h2>
+      <form id="editForm"></form>
+      <button onclick="saveEdit()">💾 Salva</button>
+      <button onclick="closePopup()">❌ Chiudi</button>
+    </div>
   </div>
 
+  <footer>Creato da MEX · Versione prototipo</footer>
+
   <script>
-    async function loadCSV() {
-      const response = await fetch('data/database.csv');
-      const data = await response.text();
-      const rows = data.trim().split('\n').map(r => r.split(','));
+    const user = JSON.parse(localStorage.getItem("legoUser"));
+    if (!user) window.location.href = "index.html";
 
-      const headers = rows.shift();
-      const headRow = document.getElementById('tableHead');
-      headRow.innerHTML = headers.map(h => `<th>${h}</th>`).join('');
-
-      const body = document.getElementById('tableBody');
-      rows.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = row.map(cell => `<td>${cell}</td>`).join('');
-        body.appendChild(tr);
-      });
-
-      document.getElementById('search').addEventListener('input', e => {
-        const term = e.target.value.toLowerCase();
-        Array.from(body.rows).forEach(r => {
-          r.style.display = r.innerText.toLowerCase().includes(term) ? '' : 'none';
-        });
-      });
+    function logout() {
+      localStorage.removeItem("legoUser");
+      window.location.href = "index.html";
     }
-    loadCSV();
+
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+
+    // Simuliamo database fittizio per ora
+    const mockDB = {
+      pg: [
+        { id: 1, nome: "Sir Brickalot", ruolo: "Cavaliere" },
+        { id: 2, nome: "Luna Studbrick", ruolo: "Maga" }
+      ],
+      luoghi: [
+        { id: 1, nome: "Castello Rosso", tipo: "Fortezza" },
+        { id: 2, nome: "Foresta Nera", tipo: "Selva" }
+      ],
+      azioni: [
+        { id: 1, nome: "Attacco Base", prova: "Forza", difficolta: 10 }
+      ]
+    };
+
+    let currentCategory = "";
+    let editingItem = null;
+
+    function loadData() {
+      const cat = document.getElementById("dbSelect").value;
+      currentCategory = cat;
+      const table = document.getElementById("dataTable");
+      table.innerHTML = "";
+
+      if (!cat || !mockDB[cat]) return;
+
+      const data = mockDB[cat];
+      const keys = Object.keys(data[0] || {});
+      table.innerHTML = `
+        <tr>${keys.map(k => `<th>${k}</th>`).join("")}<th>Azioni</th></tr>
+        ${data.map(row => `
+          <tr>
+            ${keys.map(k => `<td>${row[k]}</td>`).join("")}
+            <td>
+              <button class="action-btn edit-btn" onclick="editItem('${cat}', ${row.id})">✏️</button>
+              <button class="action-btn delete-btn" onclick="deleteItem('${cat}', ${row.id})">🗑️</button>
+            </td>
+          </tr>
+        `).join("")}
+      `;
+    }
+
+    function editItem(cat, id) {
+      const item = mockDB[cat].find(i => i.id === id);
+      if (!item) return;
+      editingItem = { cat, id };
+
+      const form = document.getElementById("editForm");
+      form.innerHTML = Object.keys(item).filter(k => k !== "id").map(k => `
+        <label>${k}</label>
+        <input id="edit-${k}" value="${item[k]}">
+      `).join("");
+
+      document.getElementById("editPopup").classList.add("active");
+    }
+
+    function saveEdit() {
+      if (!editingItem) return;
+      const { cat, id } = editingItem;
+      const item = mockDB[cat].find(i => i.id === id);
+
+      Object.keys(item).forEach(k => {
+        if (k !== "id") item[k] = document.getElementById(`edit-${k}`).value;
+      });
+
+      closePopup();
+      loadData();
+      alert("Elemento aggiornato (in memoria) ✅");
+    }
+
+    function deleteItem(cat, id) {
+      if (!confirm("Eliminare questo elemento?")) return;
+      mockDB[cat] = mockDB[cat].filter(i => i.id !== id);
+      loadData();
+    }
+
+    function closePopup() {
+      document.getElementById("editPopup").classList.remove("active");
+    }
   </script>
 </body>
 </html>

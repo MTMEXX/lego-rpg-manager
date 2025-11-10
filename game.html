@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO RPG Manager - Gestione Gioco</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lego-yellow: #f7d23e;
+      --lego-red: #e53e3e;
+      --lego-blue: #3182ce;
+      --lego-gray: #f8f8f8;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--lego-gray);
+      color: #222;
+    }
+
+    header {
+      background: var(--lego-yellow);
+      padding: 20px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.8em;
+      color: var(--lego-red);
+      text-shadow: 2px 2px 0 #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    .logout, .back {
+      position: absolute;
+      top: 20px;
+      background: var(--lego-red);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .back {
+      left: 30px;
+      background: var(--lego-blue);
+    }
+
+    .logout {
+      right: 30px;
+    }
+
+    .logout:hover {
+      background: #ff5252;
+    }
+
+    .back:hover {
+      background: #4a9aff;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--lego-blue);
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      color: var(--lego-red);
+      margin-top: 40px;
+      font-size: 1.3em;
+      border-left: 6px solid var(--lego-yellow);
+      padding-left: 10px;
+    }
+
+    .pg-sessione {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .pg-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-top: 8px solid var(--lego-yellow);
+      padding: 20px;
+      transition: 0.3s;
+    }
+
+    .pg-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .pg-card h3 {
+      color: var(--lego-blue);
+      margin: 0 0 5px;
+    }
+
+    .pg-card p {
+      font-size: 0.9em;
+      color: #555;
+      margin: 4px 0;
+    }
+
+    .pg-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pg-btn {
+      background: var(--lego-blue);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85em;
+      transition: 0.2s;
+    }
+
+    .pg-btn:hover {
+      background: #4a9aff;
+    }
+
+    .remove-btn {
+      background: var(--lego-red);
+    }
+
+    .remove-btn:hover {
+      background: #ff5252;
+    }
+
+    .add-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+      margin-right: 10px;
+      width: 200px;
+    }
+
+    button.add-btn {
+      background: var(--lego-yellow);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button.add-btn:hover {
+      background: #ffd83b;
+    }
+
+    .interaction-section, .event-section {
+      margin-top: 40px;
+      background: #fafafa;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    LEGO RPG Manager - Gestione Gioco
+    <button class="back" onclick="goBack()">← Dashboard</button>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+
+  <main>
+    <h1>🎮 Gestione Sessione di Gioco</h1>
+
+    <h2 class="section-title">Personaggi in Sessione</h2>
+    <div class="pg-sessione" id="pgSessione">
+      <!-- Esempio iniziale -->
+      <div class="pg-card">
+        <h3>Sir Bricksalot</h3>
+        <p>Ruolo: Cavaliere</p>
+        <div class="pg-actions">
+          <button class="pg-btn" onclick="openStats('Sir Bricksalot')">Stat</button>
+          <button class="pg-btn" onclick="openInventory('Sir Bricksalot')">Inventario</button>
+          <button class="pg-btn" onclick="openEquip('Sir Bricksalot')">Equip</button>
+          <button class="remove-btn pg-btn" onclick="removePG('Sir Bricksalot')">Rimuovi</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-section">
+      <select id="pgSelect">
+        <option value="">-- Seleziona PG da aggiungere --</option>
+        <option value="Lady Brickella">Lady Brickella</option>
+        <option value="Captain Studbeard">Captain Studbeard</option>
+        <option value="Mister Plate">Mister Plate</option>
+      </select>
+      <button class="add-btn" onclick="addPG()">➕ Aggiungi PG</button>
+    </div>
+
+    <div class="interaction-section">
+      <h2 class="section-title">Interazioni</h2>
+      <textarea placeholder="Descrivi interazione PG o evento ambientale..."></textarea>
+      <button class="add-btn" style="margin-top:10px;">Registra Interazione</button>
+    </div>
+
+    <div class="event-section">
+      <h2 class="section-title">Eventi in Corso</h2>
+      <textarea placeholder="Annota qui eventi, condizioni speciali, turni o note di gioco..."></textarea>
+      <button class="add-btn" style="margin-top:10px;">Aggiorna Evento</button>
+    </div>
+  </main>
+
+  <footer>Creato da MEX · Versione prototipo</footer>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("legoUser"));
+    if (!user) window.location.href = "index.html";
+
+    function logout() {
+      localStorage.removeItem("legoUser");
+      window.location.href = "index.html";
+    }
+
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+
+    const pgSessione = document.getElementById("pgSessione");
+
+    function addPG() {
+      const select = document.getElementById("pgSelect");
+      const name = select.value;
+      if (!name) return alert("Seleziona un personaggio!");
+      const card = document.createElement("div");
+      card.className = "pg-card";
+      card.innerHTML = `
+        <h3>${name}</h3>
+        <p>Ruolo: —</p>
+        <div class="pg-actions">
+          <button class="pg-btn" onclick="openStats('${name}')">Stat</button>
+          <button class="pg-btn" onclick="openInventory('${name}')">Inventario</button>
+          <button class="pg-btn" onclick="openEquip('${name}')">Equip</button>
+          <button class="remove-btn pg-btn" onclick="removePG('${name}', this)">Rimuovi</button>
+        </div>
+      `;
+      pgSessione.appendChild(card);
+      select.value = "";
+    }
+
+    function removePG(name, btn) {
+      if (!confirm(`Rimuovere ${name} dalla sessione?`)) return;
+      btn.closest(".pg-card").remove();
+    }
+
+    function openStats(name) {
+      alert(`Aprire pagina STAT per ${name}`);
+      // window.location.href = `stats.html?pg=${encodeURIComponent(name)}`;
+    }
+
+    function openInventory(name) {
+      alert(`Aprire INVENTARIO per ${name}`);
+      // window.location.href = `inventory.html?pg=${encodeURIComponent(name)}`;
+    }
+
+    function openEquip(name) {
+      alert(`Aprire EQUIP per ${name}`);
+      // window.location.href = `equip.html?pg=${encodeURIComponent(name)}`;
+    }
+  </script>
+</body>
+</html>

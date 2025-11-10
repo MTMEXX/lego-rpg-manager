@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO RPG Manager - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lego-yellow: #f7d23e;
+      --lego-red: #e53e3e;
+      --lego-blue: #3182ce;
+      --lego-gray: #f8f8f8;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--lego-gray);
+      color: #222;
+    }
+
+    header {
+      background: var(--lego-yellow);
+      padding: 20px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.8em;
+      color: var(--lego-red);
+      text-shadow: 2px 2px 0 #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    .logout {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: var(--lego-red);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .logout:hover {
+      background: #ff5252;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 40px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      border-top: 8px solid var(--lego-yellow);
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: var(--lego-blue);
+      font-weight: 700;
+      font-size: 1.5em;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 0.95em;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>LEGO RPG Manager
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+
+  <main class="dashboard">
+    <div class="card" onclick="goTo('create.html')">
+      <h2>➕ Crea</h2>
+      <p>Editor degli elementi.</p>
+    </div>
+
+    <div class="card" onclick="goTo('game.html')">
+      <h2>▶️ Gioca</h2>
+      <p>Gestore della sessione.</p>
+    </div>
+
+    <div class="card" onclick="goTo('archive.html')">
+      <h2>📚 Database</h2>
+      <p>Archivio degli elementi.</p>
+    </div>
+
+    <div class="card" onclick="goTo('settings.html')">
+      <h2>⚙️ Impostazioni</h2>
+      <p>Impostazioni di gioco.</p>
+    </div>
+  </main>
+
+  <footer>Creato da MEX · Versione protoripo</footer>
+
+  <script>
+    // controllo login attivo
+    const user = JSON.parse(localStorage.getItem("legoUser"));
+    if (!user) {
+      window.location.href = "index.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("legoUser");
+      window.location.href = "index.html";
+    }
+
+    function goTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>
