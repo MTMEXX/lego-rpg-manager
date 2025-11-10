@@ -6,7 +6,7 @@
 5;Città Abbandonata;4;Disorientato;25%;Percorsi complicati e strutture crollate rendono difficile orientarsi e completare azioni.
 6;Cratere Lavico;8;Bruciato / Panico;45%;Lava e gas tossici infliggono danni e possono far fuggire i personaggi involontariamente.
 7;Distretto Innevato;3;Congelato;25%;Neve e ghiaccio ostacolano il movimento.
-8;Distretto Radioattivo;5;Intossicato;30%;"Esposizione a radiazioni riduce salute e rigenerazione; rischio di danni progressivi."
+8;Distretto Radioattivo;5;Intossicato;30%;Esposizione a radiazioni riduce salute e rigenerazione, rischio di danni progressivi.
 9;Fabbrica;4;Bruciato;20%;Calore e macchinari possono infliggere danni periodici.
 10;Fabbrica Abbandonata;7;Stordito / Distratto;35%;Macchinari arrugginiti e rumori rendono difficile concentrazione e precisione.
 11;Fiume o Lago Cittadino;2;Bagnato;30%;Scivolosità e acqua possono rallentare le azioni.
@@ -22,9 +22,9 @@
 21;Ponte Sospeso Instabile;4;Slittante;25%;Superficie scivolosa e movimenti bruschi possono far cadere i personaggi.
 22;Strade Urbane;2;Stanco;20%;Traffico e rumori rallentano i personaggi e riducono la concentrazione.
 23;Tempesta Crossover;5;Confuso;35%;Effetti imprevedibili dai multiversi possono alterare le azioni dei personaggi.
-24;Tempesta Dimensionale;10;Confusione magica / Panico;50%;"Distorsioni interdimensionali alterano gravità e posizione; alto rischio di azioni involontarie."
-25;Tempesta Magnetica;7;Confuso / Iperattivo;40%;"Campi magnetici instabili alterano movimenti e azioni; stimolano iperattività e imprecisione."
-26;Tempesta Psionica;8;Confusione magica / Paura;40%;"Onde psioniche alterano azioni e morale; rischio di fallire obiettivi o attaccare amici."
+24;Tempesta Dimensionale;10;Confusione magica / Panico;50%;Distorsioni interdimensionali alterano gravità e posizione, alto rischio di azioni involontarie.
+25;Tempesta Magnetica;7;Confuso / Iperattivo;40%;Campi magnetici instabili alterano movimenti e azioni, stimolano iperattività e imprecisione.
+26;Tempesta Psionica;8;Confusione magica / Paura;40%;Onde psioniche alterano azioni e morale, rischio di fallire obiettivi o attaccare amici.
 27;Vulcano Attivo;6;Bruciato;35%;Lava e calore estremo infliggono danni continui e ostacolano il movimento.
 28;Vulcano in Eruzione;9;Bruciato / Confuso;50%;Lava, gas e crolli rendono movimenti e azioni rischiosi e imprevedibili.
 29;Zona Radioattiva Avanzata;9;Intossicato / Sonnolenza;45%;Esposizione estrema a radiazioni riduce rigenerazione e forza, con rischio di collasso.
