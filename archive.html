@@ -33,27 +33,6 @@
       position: relative;
     }
 
-    .back, .logout {
-      position: absolute;
-      top: 18px;
-      background: var(--lego-blue);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-
-    .logout {
-      right: 30px;
-      background: var(--lego-red);
-    }
-
-    .logout:hover { background: #ff5252; }
-    .back:hover { background: #4a9aff; }
-
     main {
       max-width: 1200px;
       margin: 40px auto;
@@ -82,6 +61,7 @@
       background: var(--lego-blue);
       color: white;
       cursor: pointer;
+      transition: 0.2s;
     }
 
     button:hover {
@@ -122,9 +102,40 @@
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 30px;
       font-size: 0.9em;
       color: #777;
+    }
+
+    .bottom-buttons {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .bottom-buttons button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .logout {
+      background: var(--lego-red);
+      color: white;
+    }
+
+    .logout:hover {
+      background: #ff5252;
+    }
+
+    .back {
+      background: var(--lego-blue);
+      color: white;
+    }
+
+    .back:hover {
+      background: #4a9aff;
     }
 
     #loading {
@@ -137,8 +148,6 @@
 <body>
   <header>
     LEGO RPG Manager - Archivio
-    <button class="back" onclick="goBack()">← Dashboard</button>
-    <button class="logout" onclick="logout()">Logout</button>
   </header>
 
   <main>
@@ -149,7 +158,7 @@
         <option value="">📂 Seleziona un database...</option>
         <option value="db/statistiche_primarie.csv">Statistiche Primarie</option>
         <option value="db/statistiche_secondarie.csv">Statistiche Secondarie</option>
-        <option value="db/effetti-stati.csv">Effetti-Stati</option>
+        <option value="db/effetti - stati.csv">Effetti e Stati</option>
         <option value="db/biomi.csv">Biomi</option>
         <option value="db/multiversi.csv">Multiversi</option>
       </select>
@@ -159,6 +168,11 @@
 
     <div id="loading"></div>
     <div id="table-container"></div>
+
+    <div class="bottom-buttons">
+      <button class="back" onclick="goBack()">← Dashboard</button>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
   </main>
 
   <footer>Creato da MEX · LEGO RPG Manager</footer>
@@ -186,7 +200,9 @@
       document.getElementById("loading").innerHTML = "⏳ Caricamento in corso...";
 
       try {
-        const response = await fetch(GITHUB_BASE + path);
+        // gestisce spazi e caratteri speciali
+        const encodedPath = encodeURI(path);
+        const response = await fetch(GITHUB_BASE + encodedPath);
         if (!response.ok) throw new Error("Errore nel caricamento del file");
         const text = await response.text();
         renderTable(text);
@@ -198,7 +214,6 @@
     function renderTable(csvText) {
       document.getElementById("loading").innerHTML = "";
 
-      // 🔍 Rilevamento automatico del separatore
       const separator = csvText.includes(";") ? ";" : ",";
       const rows = csvText.trim().split("\n").map(r => r.split(separator));
 
