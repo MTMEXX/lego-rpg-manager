@@ -100,6 +100,8 @@
       padding: 12px;
       border: 1px solid #ddd;
       text-align: left;
+      vertical-align: top;
+      word-break: break-word;
     }
 
     th {
@@ -145,8 +147,8 @@
     <div style="text-align:center;">
       <select id="csv-selector">
         <option value="">📂 Seleziona un database...</option>
-        <!-- Aggiungi qui i tuoi file CSV -->
         <option value="db/statistiche_primarie.csv">Statistiche Primarie</option>
+        <option value="db/statistiche_secondarie.csv">Statistiche Secondarie</option>
         <option value="db/effetti-stati.csv">Effetti e Stati</option>
         <option value="db/biomi.csv">Biomi</option>
         <option value="db/multiversi.csv">Multiversi</option>
@@ -195,16 +197,20 @@
 
     function renderTable(csvText) {
       document.getElementById("loading").innerHTML = "";
-      const rows = csvText.trim().split("\n").map(r => r.split(","));
+
+      // 🔍 Rilevamento automatico del separatore
+      const separator = csvText.includes(";") ? ";" : ",";
+      const rows = csvText.trim().split("\n").map(r => r.split(separator));
+
       if (rows.length === 0) return;
 
       let html = "<table><thead><tr>";
-      rows[0].forEach(h => html += `<th>${h}</th>`);
+      rows[0].forEach(h => html += `<th>${h.trim()}</th>`);
       html += "</tr></thead><tbody>";
 
       rows.slice(1).forEach(r => {
         html += "<tr>";
-        r.forEach(c => html += `<td>${c}</td>`);
+        r.forEach(c => html += `<td>${c.trim()}</td>`);
         html += "</tr>";
       });
 
@@ -217,7 +223,7 @@
       if (!currentCSV || currentData.length === 0)
         return alert("Nessun CSV caricato da scaricare.");
 
-      const csv = currentData.map(r => r.join(",")).join("\n");
+      const csv = currentData.map(r => r.join(";")).join("\n");
       const blob = new Blob([csv], { type: "text/csv" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
