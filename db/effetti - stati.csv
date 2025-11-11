@@ -1,0 +1,31 @@
+﻿ID;NOME;DESCRIZIONE
+1;Accecato;La visibilità è drasticamente ridotta ed aumenta la probabilità di fallire attacchi o azioni.
+2;Affamato;Diminuisce resistenze e rigenerazione.
+3;Appiccicato;Movimento rallentato e difficoltà a interagire con oggetti.
+4;Avvelenato;Subisce danni nel tempo finché non viene curato.
+5;Bruciato;Subisce danni periodici a causa del calore.
+6;Confusione magica;Azioni imprevedibili.
+7;Confuso;Le azioni possono fallire o essere rivolte a target sbagliati.
+8;Congelato;Il movimento è fortemente ostruito.
+9;Disorientato;Difficoltà a orientarsi, azioni e movimenti possono fallire.
+10;Distratto;Difficoltà a concentrarsi, penalità su prove di abilità e combattimento.
+11;Elettrizzato;Immobilizzazione temporanea o vulnerabilità aumentata agli attacchi elettrici.
+12;Euforico;Bonus morale e velocità, ma azioni affette da malus.
+13;Felice;Bonus morale: aumenta la precisione e la velocità temporaneamente.
+14;Frastornato;Riduzione della precisione e possibilità di fallire azioni automatiche.
+15;Immobilizzato;Non può muoversi a causa di vincoli fisici o effetti esterni.
+16;Infortunato;Diminuisce temporaneamente la forza e la destrezza.
+17;Intossicato;Subisce danni periodici da sostanze nocive fino a guarigione.
+18;Iperattivo;Movimento aumentato, ma precisione e difesa ridotte.
+19;Irritato;Penalità alla difesa e precisione.
+20;Mal di testa;Ridotta concentrazione, precisione e successo nelle prove complesse.
+21;Panico;Il personaggio può scappare involontariamente o agire in modo imprevedibile.
+22;Paura;Riduzione delle azioni offensive.
+23;Rallentato;Movimento e azioni più lente del normale.
+24;Slittante;Rischio di caduta grave con conseguente possibile infortunio.
+25;Sonnolenza;Azioni rallentate e rischio di addormentarsi.
+26;Sovraeccitato;Aumento di movimento e azioni rapide ma precisione e controllo ridotti.
+27;Stanco;La rigenerazione è rallentata e le azioni subiscono malus alle prove.
+28;Stordito;Il personaggio ha ridotta precisione e velocità.
+29;Svenuto;Immobilizzato per alcuni turni, incapace di agire.
+30;Ubriaco;Movimento casuale o azioni imprevedibili, precisione ridotta.
