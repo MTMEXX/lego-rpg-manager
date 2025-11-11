@@ -193,7 +193,7 @@
       if (!file) return alert("Seleziona un file CSV.");
       currentFile = file;
 
-      const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/${file}`;
+      const url = `https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/statistiche_primarie.csv`;
       const res = await fetch(url);
       if (!res.ok) return alert("Errore nel caricamento del CSV.");
       const text = await res.text();
