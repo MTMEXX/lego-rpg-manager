@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LEGO RPG Manager - Archivio</title>
+  <title>Archivio - LEGO RPG Manager</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,6 +18,9 @@
       font-family: 'Montserrat', sans-serif;
       background: var(--lego-gray);
       color: #222;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     header {
@@ -29,208 +32,154 @@
       color: var(--lego-red);
       text-shadow: 2px 2px 0 #fff;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      position: relative;
     }
 
-    .logout, .back {
-      position: absolute;
-      top: 20px;
-      background: var(--lego-red);
-      color: white;
-      border: none;
-      padding: 8px 16px;
+    main {
+      flex: 1;
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    select, input, textarea, button {
+      font-family: inherit;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
       border-radius: 8px;
+      font-size: 1em;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
       cursor: pointer;
       font-weight: 600;
       transition: 0.2s;
     }
 
-    .back {
-      left: 30px;
+    .primary {
       background: var(--lego-blue);
+      color: white;
+      border: none;
+    }
+
+    .primary:hover {
+      background: #276bb0;
+    }
+
+    .danger {
+      background: var(--lego-red);
+      color: white;
+      border: none;
+    }
+
+    .danger:hover {
+      background: #ff5252;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background: var(--lego-yellow);
+    }
+
+    tr:hover {
+      background: #f2f2f2;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
     }
 
     .logout {
-      right: 30px;
+      background: var(--lego-red);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+      margin-top: 10px;
     }
 
     .logout:hover {
       background: #ff5252;
     }
 
-    .back:hover {
-      background: #4a9aff;
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 40px auto;
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      color: var(--lego-blue);
-      font-size: 1.8em;
-      margin-bottom: 20px;
-    }
-
-    select {
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
-      width: 250px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      border-bottom: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-
-    th {
-      background: var(--lego-yellow);
-      color: var(--lego-red);
-    }
-
-    tr:hover {
-      background: #f9f9f9;
-    }
-
-    .action-btn {
-      border: none;
-      cursor: pointer;
-      border-radius: 6px;
-      padding: 5px 10px;
-      margin: 0 3px;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-
-    .edit-btn {
-      background: var(--lego-blue);
-      color: white;
-    }
-
-    .edit-btn:hover {
-      background: #4a9aff;
-    }
-
-    .delete-btn {
-      background: var(--lego-red);
-      color: white;
-    }
-
-    .delete-btn:hover {
-      background: #ff5252;
-    }
-
-    /* Popup per la modifica */
-    .popup {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
+    #createForm {
       display: none;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .popup.active {
-      display: flex;
-    }
-
-    .popup-content {
+      margin-top: 20px;
       background: white;
-      padding: 30px;
-      border-radius: 15px;
-      max-width: 400px;
-      width: 100%;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    }
-
-    .popup-content h2 {
-      margin-top: 0;
-      color: var(--lego-blue);
-    }
-
-    .popup-content input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-
-    .popup-content button {
-      background: var(--lego-yellow);
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .popup-content button:hover {
-      background: #ffe55a;
-    }
-
-    footer {
-      text-align: center;
       padding: 20px;
-      font-size: 0.9em;
-      color: #777;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <header>
-    LEGO RPG Manager - Archivio
-    <button class="back" onclick="goBack()">← Dashboard</button>
-    <button class="logout" onclick="logout()">Logout</button>
-  </header>
+  <header>📚 Archivio</header>
 
   <main>
-    <h1>Archivio Database</h1>
+    <h2>Gestione Database</h2>
 
-    <select id="dbSelect" onchange="loadData()">
-      <option value="">— Seleziona una categoria —</option>
-      <option value="pg">Personaggi</option>
-      <option value="luoghi">Luoghi</option>
-      <option value="oggetti">Oggetti</option>
-      <option value="veicoli">Veicoli</option>
-      <option value="animali">Creature</option>
-      <option value="azioni">Azioni</option>
+    <label for="csvSelect">Scegli un archivio:</label>
+    <select id="csvSelect">
+      <option value="">-- Seleziona --</option>
+      <option value="statistiche_primarie.csv">Statistiche Primarie</option>
     </select>
 
-    <table id="dataTable"></table>
+    <button class="primary" onclick="loadCSV()">Carica</button>
+
+    <div id="tableContainer"></div>
+
+    <button id="createBtn" class="primary" style="display:none;" onclick="showCreateForm()">➕ Crea Nuova Riga</button>
+
+    <div id="createForm">
+      <h3>Nuova voce</h3>
+      <label>Nome:</label>
+      <input type="text" id="newNome">
+      <label>Descrizione:</label>
+      <textarea id="newDescrizione"></textarea>
+      <button class="primary" onclick="addRow()">Aggiungi</button>
+      <button class="danger" onclick="cancelCreate()">Annulla</button>
+    </div>
+
+    <button id="downloadBtn" class="primary" style="display:none;margin-top:20px;" onclick="downloadCSV()">⬇️ Scarica CSV aggiornato</button>
   </main>
 
-  <!-- Popup di modifica -->
-  <div class="popup" id="editPopup">
-    <div class="popup-content">
-      <h2>Modifica Elemento</h2>
-      <form id="editForm"></form>
-      <button onclick="saveEdit()">💾 Salva</button>
-      <button onclick="closePopup()">❌ Chiudi</button>
-    </div>
-  </div>
-
-  <footer>Creato da MEX · Versione prototipo</footer>
+  <footer>
+    <button class="logout" onclick="logout()">Logout</button>
+  </footer>
 
   <script>
+    const GITHUB_USER = "MTMEXX";
+    const GITHUB_REPO = "lego-rpg-manager";
+    const BRANCH = "main";
+
+    let currentData = [];
+    let currentFile = "";
+
     const user = JSON.parse(localStorage.getItem("legoUser"));
     if (!user) window.location.href = "index.html";
 
@@ -239,88 +188,90 @@
       window.location.href = "index.html";
     }
 
-    function goBack() {
-      window.location.href = "dashboard.html";
+    async function loadCSV() {
+      const file = document.getElementById("csvSelect").value;
+      if (!file) return alert("Seleziona un file CSV.");
+      currentFile = file;
+
+      const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/${file}`;
+      const res = await fetch(url);
+      if (!res.ok) return alert("Errore nel caricamento del CSV.");
+      const text = await res.text();
+
+      const rows = text.trim().split("\n").map(r => r.split(","));
+      const headers = rows.shift();
+      currentData = rows.map(r => Object.fromEntries(headers.map((h, i) => [h, r[i]])));
+
+      renderTable(headers);
     }
 
-    // Simuliamo database fittizio per ora
-    const mockDB = {
-      pg: [
-        { id: 1, nome: "Sir Brickalot", ruolo: "Cavaliere" },
-        { id: 2, nome: "Luna Studbrick", ruolo: "Maga" }
-      ],
-      luoghi: [
-        { id: 1, nome: "Castello Rosso", tipo: "Fortezza" },
-        { id: 2, nome: "Foresta Nera", tipo: "Selva" }
-      ],
-      azioni: [
-        { id: 1, nome: "Attacco Base", prova: "Forza", difficolta: 10 }
-      ]
-    };
+    function renderTable(headers) {
+      const container = document.getElementById("tableContainer");
+      container.innerHTML = "";
 
-    let currentCategory = "";
-    let editingItem = null;
+      if (currentData.length === 0) {
+        container.innerHTML = "<p>Nessun dato presente.</p>";
+        return;
+      }
 
-    function loadData() {
-      const cat = document.getElementById("dbSelect").value;
-      currentCategory = cat;
-      const table = document.getElementById("dataTable");
-      table.innerHTML = "";
+      let html = "<table><tr>";
+      headers.forEach(h => html += `<th>${h}</th>`);
+      html += "<th>Azioni</th></tr>";
 
-      if (!cat || !mockDB[cat]) return;
-
-      const data = mockDB[cat];
-      const keys = Object.keys(data[0] || {});
-      table.innerHTML = `
-        <tr>${keys.map(k => `<th>${k}</th>`).join("")}<th>Azioni</th></tr>
-        ${data.map(row => `
-          <tr>
-            ${keys.map(k => `<td>${row[k]}</td>`).join("")}
-            <td>
-              <button class="action-btn edit-btn" onclick="editItem('${cat}', ${row.id})">✏️</button>
-              <button class="action-btn delete-btn" onclick="deleteItem('${cat}', ${row.id})">🗑️</button>
-            </td>
-          </tr>
-        `).join("")}
-      `;
-    }
-
-    function editItem(cat, id) {
-      const item = mockDB[cat].find(i => i.id === id);
-      if (!item) return;
-      editingItem = { cat, id };
-
-      const form = document.getElementById("editForm");
-      form.innerHTML = Object.keys(item).filter(k => k !== "id").map(k => `
-        <label>${k}</label>
-        <input id="edit-${k}" value="${item[k]}">
-      `).join("");
-
-      document.getElementById("editPopup").classList.add("active");
-    }
-
-    function saveEdit() {
-      if (!editingItem) return;
-      const { cat, id } = editingItem;
-      const item = mockDB[cat].find(i => i.id === id);
-
-      Object.keys(item).forEach(k => {
-        if (k !== "id") item[k] = document.getElementById(`edit-${k}`).value;
+      currentData.forEach((row, i) => {
+        html += "<tr>";
+        headers.forEach(h => html += `<td>${row[h]}</td>`);
+        html += `<td><button class='danger' onclick='deleteRow(${i})'>Elimina</button></td></tr>`;
       });
 
-      closePopup();
-      loadData();
-      alert("Elemento aggiornato (in memoria) ✅");
+      html += "</table>";
+      container.innerHTML = html;
+      document.getElementById("createBtn").style.display = "inline-block";
+      document.getElementById("downloadBtn").style.display = "inline-block";
     }
 
-    function deleteItem(cat, id) {
-      if (!confirm("Eliminare questo elemento?")) return;
-      mockDB[cat] = mockDB[cat].filter(i => i.id !== id);
-      loadData();
+    function deleteRow(index) {
+      if (!confirm("Vuoi davvero eliminare questa riga?")) return;
+      currentData.splice(index, 1);
+      const headers = ["ID","NOME","DESCRIZIONE"];
+      renderTable(headers);
     }
 
-    function closePopup() {
-      document.getElementById("editPopup").classList.remove("active");
+    function showCreateForm() {
+      document.getElementById("createForm").style.display = "block";
+    }
+
+    function cancelCreate() {
+      document.getElementById("createForm").style.display = "none";
+      document.getElementById("newNome").value = "";
+      document.getElementById("newDescrizione").value = "";
+    }
+
+    function addRow() {
+      const nome = document.getElementById("newNome").value.trim();
+      const descr = document.getElementById("newDescrizione").value.trim();
+      if (!nome || !descr) return alert("Compila tutti i campi.");
+
+      const newId = currentData.length > 0
+        ? Math.max(...currentData.map(r => parseInt(r.ID) || 0)) + 1
+        : 1;
+
+      currentData.push({ ID: newId.toString(), NOME: nome, DESCRIZIONE: descr });
+
+      const headers = ["ID","NOME","DESCRIZIONE"];
+      renderTable(headers);
+      cancelCreate();
+    }
+
+    function downloadCSV() {
+      const headers = ["ID","NOME","DESCRIZIONE"];
+      const csv = [headers.join(",")].concat(currentData.map(r => headers.map(h => r[h]).join(","))).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = currentFile;
+      a.click();
     }
   </script>
 </body>
