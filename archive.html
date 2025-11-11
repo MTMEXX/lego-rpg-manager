@@ -30,7 +30,6 @@
       color: var(--lego-red);
       text-shadow: 1px 1px 0 #fff;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      position: relative;
     }
 
     main {
@@ -46,14 +45,27 @@
       text-align: center;
       color: var(--lego-blue);
       font-size: 1.6em;
+      margin-bottom: 10px;
     }
 
-    select, button {
+    #file-info {
+      text-align: center;
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    select, button, input {
       font-family: inherit;
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      margin: 10px 5px;
+      margin: 8px 5px;
       font-weight: 600;
     }
 
@@ -68,10 +80,14 @@
       background: #4a9aff;
     }
 
+    input[type="text"] {
+      width: 250px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 10px;
       overflow-x: auto;
       display: block;
     }
@@ -82,6 +98,7 @@
       text-align: left;
       vertical-align: top;
       word-break: break-word;
+      white-space: pre-wrap;
     }
 
     th {
@@ -98,6 +115,12 @@
 
     tr:hover {
       background: #f1f9ff;
+    }
+
+    #loading {
+      text-align: center;
+      color: #555;
+      margin-top: 20px;
     }
 
     footer {
@@ -137,23 +160,16 @@
     .back:hover {
       background: #4a9aff;
     }
-
-    #loading {
-      text-align: center;
-      color: #555;
-      margin-top: 20px;
-    }
   </style>
 </head>
 <body>
-  <header>
-    LEGO RPG Manager - Archivio
-  </header>
+  <header>LEGO RPG Manager - Archivio</header>
 
   <main>
     <h1>Archivio Database (Visualizzazione CSV)</h1>
+    <div id="file-info"></div>
 
-    <div style="text-align:center;">
+    <div class="controls">
       <select id="csv-selector">
         <option value="">📂 Seleziona un database...</option>
         <option value="db/statistiche_primarie.csv">Statistiche Primarie</option>
@@ -164,6 +180,7 @@
       </select>
       <button onclick="loadCSV()">Carica</button>
       <button onclick="downloadCSV()">💾 Scarica CSV</button>
+      <input type="text" id="filter" placeholder="🔍 Cerca..." oninput="filterTable()">
     </div>
 
     <div id="loading"></div>
@@ -198,9 +215,9 @@
 
       currentCSV = path;
       document.getElementById("loading").innerHTML = "⏳ Caricamento in corso...";
+      document.getElementById("table-container").innerHTML = "";
 
       try {
-        // gestisce spazi e caratteri speciali
         const encodedPath = encodeURI(path);
         const response = await fetch(GITHUB_BASE + encodedPath);
         if (!response.ok) throw new Error("Errore nel caricamento del file");
@@ -216,14 +233,18 @@
 
       const separator = csvText.includes(";") ? ";" : ",";
       const rows = csvText.trim().split("\n").map(r => r.split(separator));
+      const header = rows[0];
+      const body = rows.slice(1);
 
-      if (rows.length === 0) return;
+      currentData = [header, ...body];
 
       let html = "<table><thead><tr>";
-      rows[0].forEach(h => html += `<th>${h.trim()}</th>`);
+      header.forEach(h => html += `<th>${h.trim()}</th>`);
       html += "</tr></thead><tbody>";
 
-      rows.slice(1).forEach(r => {
+      body.forEach(r => {
+        // se ci sono colonne mancanti, completa
+        while (r.length < header.length) r.push("");
         html += "<tr>";
         r.forEach(c => html += `<td>${c.trim()}</td>`);
         html += "</tr>";
@@ -231,7 +252,17 @@
 
       html += "</tbody></table>";
       document.getElementById("table-container").innerHTML = html;
-      currentData = rows;
+
+      document.getElementById("file-info").innerHTML = `📊 Righe totali: ${body.length} — Colonne: ${header.length}`;
+    }
+
+    function filterTable() {
+      const term = document.getElementById("filter").value.toLowerCase();
+      const rows = document.querySelectorAll("#table-container tbody tr");
+      rows.forEach(r => {
+        const text = r.innerText.toLowerCase();
+        r.style.display = text.includes(term) ? "" : "none";
+      });
     }
 
     function downloadCSV() {
