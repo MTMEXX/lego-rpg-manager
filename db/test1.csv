@@ -1,0 +1,7 @@
+﻿ID;NOME;DESCRIZIONE
+1;test;Potenza fisica e muscolare grezza. Misura la capacità di un personaggio di sollevare pesi, sferrare colpi potenti in mischia, sfondare porte o lottare contro avversari fisicamente superiori.
+2;test;Agilità, coordinazione occhio-mano e rapidità di movimento. Determina la prontezza di riflessi in combattimento, la precisione con armi a distanza, la capacità di eseguire acrobazie e l'abilità nello sfuggire o nascondersi.
+3;test;Resistenza fisica, salute generale e vitalità. Misura quanto un personaggio sia in grado di sopportare danni fisici, resistere a malattie, veleni e alla fatica prolungata. È fondamentale per determinare i Punti Ferita massimi (HP).
+4;Intelligenza;Acume mentale, capacità di ragionamento logico e conoscenza accademica/scientifica. Misura l'abilità di un personaggio nel risolvere enigmi, ricordare informazioni, decifrare linguaggi o padroneggiare discipline scientifiche e arcane complesse.
+5;Saggezza;Intuizione, buon senso, percezione e forza di volontà. Misura la capacità di un personaggio di leggere situazioni, percepire pericoli nascosti, resistere a influenze mentali e l'efficacia delle magie basate sulla fede e sull'esperienza.
+6;Carisma;Presenza scenica, personalità, fascino e capacità di persuasione. Misura l'abilità del personaggio di interagire con gli altri, influenzare folle, negoziare accordi o ispirare alleati. Determina l'efficacia delle abilità sociali.

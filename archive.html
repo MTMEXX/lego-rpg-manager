@@ -10,7 +10,8 @@
       --lego-yellow: #f7d23e;
       --lego-red: #e53e3e;
       --lego-blue: #3182ce;
-      --lego-gray: #f8f8f8;
+      --lego-gray: #f4f4f4;
+      --lego-white: #ffffff;
     }
 
     body {
@@ -27,18 +28,18 @@
       font-weight: 800;
       font-size: 1.8em;
       color: var(--lego-red);
-      text-shadow: 2px 2px 0 #fff;
+      text-shadow: 1px 1px 0 #fff;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       position: relative;
     }
 
     .back, .logout {
       position: absolute;
-      top: 20px;
+      top: 18px;
       background: var(--lego-blue);
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
@@ -54,58 +55,67 @@
     .back:hover { background: #4a9aff; }
 
     main {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 40px auto;
-      background: white;
+      background: var(--lego-white);
       border-radius: 20px;
-      padding: 40px;
+      padding: 30px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--lego-blue);
+      font-size: 1.6em;
+    }
+
+    select, button {
+      font-family: inherit;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin: 10px 5px;
+      font-weight: 600;
+    }
+
+    button {
+      background: var(--lego-blue);
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #4a9aff;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
+      overflow-x: auto;
+      display: block;
     }
 
     th, td {
-      padding: 10px;
+      padding: 12px;
       border: 1px solid #ddd;
       text-align: left;
     }
 
     th {
       background: var(--lego-yellow);
+      color: #333;
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
 
-    .btn {
-      background: var(--lego-blue);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-right: 10px;
-      font-weight: 600;
+    tr:nth-child(even) {
+      background: #fafafa;
     }
 
-    .btn:hover {
-      background: #4a9aff;
-    }
-
-    .delete-btn {
-      background: var(--lego-red);
-    }
-
-    .delete-btn:hover {
-      background: #ff5252;
-    }
-
-    input, select {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin: 5px;
+    tr:hover {
+      background: #f1f9ff;
     }
 
     footer {
@@ -113,6 +123,12 @@
       padding: 20px;
       font-size: 0.9em;
       color: #777;
+    }
+
+    #loading {
+      text-align: center;
+      color: #555;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -124,38 +140,31 @@
   </header>
 
   <main>
-    <h1>Gestione Database CSV</h1>
+    <h1>Archivio Database (Visualizzazione CSV)</h1>
 
-    <div>
-      <select id="load-type">
-        <option value="">Seleziona origine...</option>
-        <option value="github">📂 Carica da GitHub</option>
-        <option value="local">💾 Carica da File Locale</option>
+    <div style="text-align:center;">
+      <select id="csv-selector">
+        <option value="">📂 Seleziona un database...</option>
+        <!-- Aggiungi qui i tuoi file CSV -->
+        <option value="db/statistiche_primarie.csv">Statistiche Primarie</option>
+        <option value="db/effetti-stati.csv">Effetti e Stati</option>
+        <option value="db/biomi.csv">Biomi</option>
+        <option value="db/multiversi.csv">Multiversi</option>
       </select>
-
-      <input type="file" id="file-input" accept=".csv" style="display:none">
-      <button class="btn" id="load-btn" onclick="loadCSV()">Carica</button>
-      <button class="btn" onclick="downloadCSV()">💾 Scarica CSV</button>
+      <button onclick="loadCSV()">Carica</button>
+      <button onclick="downloadCSV()">💾 Scarica CSV</button>
     </div>
 
-    <div id="file-name" style="margin-top:10px;font-weight:600;color:#555;"></div>
-
+    <div id="loading"></div>
     <div id="table-container"></div>
-
-    <button class="btn" style="margin-top:20px;" onclick="addRow()">➕ Aggiungi Riga</button>
   </main>
 
-  <footer>Creato da MEX · Versione prototipo</footer>
+  <footer>Creato da MEX · LEGO RPG Manager</footer>
 
   <script>
-    const GITHUB_USER = "MTMEXX";
-    const GITHUB_REPO = "lego-rpg-manager";
-    const BRANCH = "main";
-    const FILE_PATH = "statistiche_primarie.csv";
-
+    const GITHUB_BASE = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/";
+    let currentCSV = "";
     let currentData = [];
-    let headers = [];
-    let currentFile = "";
 
     function goBack() {
       window.location.href = "dashboard.html";
@@ -167,86 +176,52 @@
     }
 
     async function loadCSV() {
-      const type = document.getElementById("load-type").value;
-      if (!type) return alert("Seleziona un'origine per caricare il CSV");
+      const selector = document.getElementById("csv-selector");
+      const path = selector.value;
+      if (!path) return alert("Seleziona un file CSV da visualizzare.");
 
-      if (type === "github") {
-        const url = `https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db`;
-        const response = await fetch(url);
-        if (!response.ok) return alert("Errore nel caricamento dal server GitHub");
+      currentCSV = path;
+      document.getElementById("loading").innerHTML = "⏳ Caricamento in corso...";
+
+      try {
+        const response = await fetch(GITHUB_BASE + path);
+        if (!response.ok) throw new Error("Errore nel caricamento del file");
         const text = await response.text();
-        parseCSV(text);
-        currentFile = FILE_PATH;
-        document.getElementById("file-name").innerText = `File caricato da GitHub: ${FILE_PATH}`;
-      } else {
-        const fileInput = document.getElementById("file-input");
-        fileInput.click();
-        fileInput.onchange = () => {
-          const file = fileInput.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            parseCSV(e.target.result);
-            currentFile = file.name;
-            document.getElementById("file-name").innerText = `File caricato localmente: ${file.name}`;
-          };
-          reader.readAsText(file);
-        };
+        renderTable(text);
+      } catch (e) {
+        document.getElementById("loading").innerHTML = "❌ Errore nel caricamento del CSV.";
       }
     }
 
-    function parseCSV(text) {
-      const rows = text.trim().split("\n").map(r => r.split(","));
-      headers = rows[0];
-      currentData = rows.slice(1);
-      renderTable();
-    }
+    function renderTable(csvText) {
+      document.getElementById("loading").innerHTML = "";
+      const rows = csvText.trim().split("\n").map(r => r.split(","));
+      if (rows.length === 0) return;
 
-    function renderTable() {
-      const container = document.getElementById("table-container");
-      if (!headers.length) {
-        container.innerHTML = "<p>Nessun dato caricato</p>";
-        return;
-      }
       let html = "<table><thead><tr>";
-      headers.forEach(h => html += `<th>${h}</th>`);
-      html += "<th>Azioni</th></tr></thead><tbody>";
+      rows[0].forEach(h => html += `<th>${h}</th>`);
+      html += "</tr></thead><tbody>";
 
-      currentData.forEach((row, i) => {
+      rows.slice(1).forEach(r => {
         html += "<tr>";
-        headers.forEach((_, j) => {
-          html += `<td contenteditable="true">${row[j] ?? ""}</td>`;
-        });
-        html += `<td><button class='delete-btn' onclick='deleteRow(${i})'>🗑️</button></td>`;
+        r.forEach(c => html += `<td>${c}</td>`);
         html += "</tr>";
       });
+
       html += "</tbody></table>";
       document.getElementById("table-container").innerHTML = html;
-    }
-
-    function addRow() {
-      const newRow = headers.map(() => "");
-      currentData.push(newRow);
-      renderTable();
-    }
-
-    function deleteRow(index) {
-      currentData.splice(index, 1);
-      renderTable();
+      currentData = rows;
     }
 
     function downloadCSV() {
-      let csv = headers.join(",") + "\n";
-      document.querySelectorAll("tbody tr").forEach(tr => {
-        const values = Array.from(tr.querySelectorAll("td:not(:last-child)"))
-          .map(td => td.innerText.replace(/,/g, " "));
-        csv += values.join(",") + "\n";
-      });
+      if (!currentCSV || currentData.length === 0)
+        return alert("Nessun CSV caricato da scaricare.");
 
+      const csv = currentData.map(r => r.join(",")).join("\n");
       const blob = new Blob([csv], { type: "text/csv" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = currentFile || "database.csv";
+      link.download = currentCSV.split("/").pop();
       link.click();
     }
   </script>
