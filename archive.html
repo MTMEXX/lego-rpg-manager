@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Archivio - LEGO RPG Manager</title>
+  <title>LEGO RPG Manager - Archivio</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,9 +18,6 @@
       font-family: 'Montserrat', sans-serif;
       background: var(--lego-gray);
       color: #222;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
     header {
@@ -32,156 +29,137 @@
       color: var(--lego-red);
       text-shadow: 2px 2px 0 #fff;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
     }
 
-    main {
-      flex: 1;
-      max-width: 1000px;
-      margin: auto;
-      padding: 30px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    select, input, textarea, button {
-      font-family: inherit;
-      padding: 10px;
-      margin: 5px 0;
-      border: 1px solid #ddd;
+    .back, .logout {
+      position: absolute;
+      top: 20px;
+      background: var(--lego-blue);
+      color: white;
+      border: none;
+      padding: 8px 16px;
       border-radius: 8px;
-      font-size: 1em;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    button {
       cursor: pointer;
       font-weight: 600;
       transition: 0.2s;
     }
 
-    .primary {
-      background: var(--lego-blue);
-      color: white;
-      border: none;
-    }
-
-    .primary:hover {
-      background: #276bb0;
-    }
-
-    .danger {
+    .logout {
+      right: 30px;
       background: var(--lego-red);
-      color: white;
-      border: none;
     }
 
-    .danger:hover {
-      background: #ff5252;
+    .logout:hover { background: #ff5252; }
+    .back:hover { background: #4a9aff; }
+
+    main {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     th, td {
-      padding: 12px;
+      padding: 10px;
+      border: 1px solid #ddd;
       text-align: left;
-      border-bottom: 1px solid #eee;
     }
 
     th {
       background: var(--lego-yellow);
     }
 
-    tr:hover {
-      background: #f2f2f2;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #fff;
-      box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
-    }
-
-    .logout {
-      background: var(--lego-red);
+    .btn {
+      background: var(--lego-blue);
       color: white;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
+      margin-right: 10px;
       font-weight: 600;
-      transition: 0.2s;
-      margin-top: 10px;
     }
 
-    .logout:hover {
+    .btn:hover {
+      background: #4a9aff;
+    }
+
+    .delete-btn {
+      background: var(--lego-red);
+    }
+
+    .delete-btn:hover {
       background: #ff5252;
     }
 
-    #createForm {
-      display: none;
-      margin-top: 20px;
-      background: white;
+    input, select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin: 5px;
+    }
+
+    footer {
+      text-align: center;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      font-size: 0.9em;
+      color: #777;
     }
   </style>
 </head>
 <body>
-  <header>📚 Archivio</header>
+  <header>
+    LEGO RPG Manager - Archivio
+    <button class="back" onclick="goBack()">← Dashboard</button>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
 
   <main>
-    <h2>Gestione Database</h2>
+    <h1>Gestione Database CSV</h1>
 
-    <label for="csvSelect">Scegli un archivio:</label>
-    <select id="csvSelect">
-      <option value="">-- Seleziona --</option>
-      <option value="statistiche_primarie.csv">Statistiche Primarie</option>
-    </select>
+    <div>
+      <select id="load-type">
+        <option value="">Seleziona origine...</option>
+        <option value="github">📂 Carica da GitHub</option>
+        <option value="local">💾 Carica da File Locale</option>
+      </select>
 
-    <button class="primary" onclick="loadCSV()">Carica</button>
-
-    <div id="tableContainer"></div>
-
-    <button id="createBtn" class="primary" style="display:none;" onclick="showCreateForm()">➕ Crea Nuova Riga</button>
-
-    <div id="createForm">
-      <h3>Nuova voce</h3>
-      <label>Nome:</label>
-      <input type="text" id="newNome">
-      <label>Descrizione:</label>
-      <textarea id="newDescrizione"></textarea>
-      <button class="primary" onclick="addRow()">Aggiungi</button>
-      <button class="danger" onclick="cancelCreate()">Annulla</button>
+      <input type="file" id="file-input" accept=".csv" style="display:none">
+      <button class="btn" id="load-btn" onclick="loadCSV()">Carica</button>
+      <button class="btn" onclick="downloadCSV()">💾 Scarica CSV</button>
     </div>
 
-    <button id="downloadBtn" class="primary" style="display:none;margin-top:20px;" onclick="downloadCSV()">⬇️ Scarica CSV aggiornato</button>
+    <div id="file-name" style="margin-top:10px;font-weight:600;color:#555;"></div>
+
+    <div id="table-container"></div>
+
+    <button class="btn" style="margin-top:20px;" onclick="addRow()">➕ Aggiungi Riga</button>
   </main>
 
-  <footer>
-    <button class="logout" onclick="logout()">Logout</button>
-  </footer>
+  <footer>Creato da MEX · Versione prototipo</footer>
 
   <script>
     const GITHUB_USER = "MTMEXX";
     const GITHUB_REPO = "lego-rpg-manager";
     const BRANCH = "main";
+    const FILE_PATH = "statistiche_primarie.csv";
 
     let currentData = [];
+    let headers = [];
     let currentFile = "";
 
-    const user = JSON.parse(localStorage.getItem("legoUser"));
-    if (!user) window.location.href = "index.html";
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
 
     function logout() {
       localStorage.removeItem("legoUser");
@@ -189,89 +167,87 @@
     }
 
     async function loadCSV() {
-      const file = document.getElementById("csvSelect").value;
-      if (!file) return alert("Seleziona un file CSV.");
-      currentFile = file;
+      const type = document.getElementById("load-type").value;
+      if (!type) return alert("Seleziona un'origine per caricare il CSV");
 
-      const url = `https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/statistiche_primarie.csv`;
-      const res = await fetch(url);
-      if (!res.ok) return alert("Errore nel caricamento del CSV.");
-      const text = await res.text();
-
-      const rows = text.trim().split("\n").map(r => r.split(","));
-      const headers = rows.shift();
-      currentData = rows.map(r => Object.fromEntries(headers.map((h, i) => [h, r[i]])));
-
-      renderTable(headers);
+      if (type === "github") {
+        const url = `https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db`;
+        const response = await fetch(url);
+        if (!response.ok) return alert("Errore nel caricamento dal server GitHub");
+        const text = await response.text();
+        parseCSV(text);
+        currentFile = FILE_PATH;
+        document.getElementById("file-name").innerText = `File caricato da GitHub: ${FILE_PATH}`;
+      } else {
+        const fileInput = document.getElementById("file-input");
+        fileInput.click();
+        fileInput.onchange = () => {
+          const file = fileInput.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            parseCSV(e.target.result);
+            currentFile = file.name;
+            document.getElementById("file-name").innerText = `File caricato localmente: ${file.name}`;
+          };
+          reader.readAsText(file);
+        };
+      }
     }
 
-    function renderTable(headers) {
-      const container = document.getElementById("tableContainer");
-      container.innerHTML = "";
+    function parseCSV(text) {
+      const rows = text.trim().split("\n").map(r => r.split(","));
+      headers = rows[0];
+      currentData = rows.slice(1);
+      renderTable();
+    }
 
-      if (currentData.length === 0) {
-        container.innerHTML = "<p>Nessun dato presente.</p>";
+    function renderTable() {
+      const container = document.getElementById("table-container");
+      if (!headers.length) {
+        container.innerHTML = "<p>Nessun dato caricato</p>";
         return;
       }
-
-      let html = "<table><tr>";
+      let html = "<table><thead><tr>";
       headers.forEach(h => html += `<th>${h}</th>`);
-      html += "<th>Azioni</th></tr>";
+      html += "<th>Azioni</th></tr></thead><tbody>";
 
       currentData.forEach((row, i) => {
         html += "<tr>";
-        headers.forEach(h => html += `<td>${row[h]}</td>`);
-        html += `<td><button class='danger' onclick='deleteRow(${i})'>Elimina</button></td></tr>`;
+        headers.forEach((_, j) => {
+          html += `<td contenteditable="true">${row[j] ?? ""}</td>`;
+        });
+        html += `<td><button class='delete-btn' onclick='deleteRow(${i})'>🗑️</button></td>`;
+        html += "</tr>";
       });
-
-      html += "</table>";
-      container.innerHTML = html;
-      document.getElementById("createBtn").style.display = "inline-block";
-      document.getElementById("downloadBtn").style.display = "inline-block";
-    }
-
-    function deleteRow(index) {
-      if (!confirm("Vuoi davvero eliminare questa riga?")) return;
-      currentData.splice(index, 1);
-      const headers = ["ID","NOME","DESCRIZIONE"];
-      renderTable(headers);
-    }
-
-    function showCreateForm() {
-      document.getElementById("createForm").style.display = "block";
-    }
-
-    function cancelCreate() {
-      document.getElementById("createForm").style.display = "none";
-      document.getElementById("newNome").value = "";
-      document.getElementById("newDescrizione").value = "";
+      html += "</tbody></table>";
+      document.getElementById("table-container").innerHTML = html;
     }
 
     function addRow() {
-      const nome = document.getElementById("newNome").value.trim();
-      const descr = document.getElementById("newDescrizione").value.trim();
-      if (!nome || !descr) return alert("Compila tutti i campi.");
+      const newRow = headers.map(() => "");
+      currentData.push(newRow);
+      renderTable();
+    }
 
-      const newId = currentData.length > 0
-        ? Math.max(...currentData.map(r => parseInt(r.ID) || 0)) + 1
-        : 1;
-
-      currentData.push({ ID: newId.toString(), NOME: nome, DESCRIZIONE: descr });
-
-      const headers = ["ID","NOME","DESCRIZIONE"];
-      renderTable(headers);
-      cancelCreate();
+    function deleteRow(index) {
+      currentData.splice(index, 1);
+      renderTable();
     }
 
     function downloadCSV() {
-      const headers = ["ID","NOME","DESCRIZIONE"];
-      const csv = [headers.join(",")].concat(currentData.map(r => headers.map(h => r[h]).join(","))).join("\n");
+      let csv = headers.join(",") + "\n";
+      document.querySelectorAll("tbody tr").forEach(tr => {
+        const values = Array.from(tr.querySelectorAll("td:not(:last-child)"))
+          .map(td => td.innerText.replace(/,/g, " "));
+        csv += values.join(",") + "\n";
+      });
+
       const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = currentFile;
-      a.click();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = currentFile || "database.csv";
+      link.click();
     }
   </script>
 </body>
