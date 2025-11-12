@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crea Personaggio - LEGO RPG Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lego-yellow: #f7d23e;
+      --lego-red: #e53e3e;
+      --lego-blue: #3182ce;
+      --lego-gray: #f8f8f8;
+    }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--lego-gray);
+      color: #222;
+    }
+    header {
+      background: var(--lego-yellow);
+      padding: 20px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.8em;
+      color: var(--lego-red);
+      text-shadow: 2px 2px 0 #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: var(--lego-blue);
+    }
+    label {
+      font-weight: 600;
+      margin-top: 15px;
+      display: block;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      font-family: inherit;
+    }
+    button {
+      background: var(--lego-blue);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+      display: block;
+      margin: 10px auto;
+    }
+    button:hover {
+      background: #4a9aff;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>Crea Personaggio</header>
+  <main>
+    <h1>Nuovo Personaggio</h1>
+    <form id="pg-form">
+      <label>Nome</label>
+      <input type="text" required>
+      <label>Ruolo / Classe</label>
+      <input type="text">
+      <label>Descrizione</label>
+      <textarea rows="3"></textarea>
+      <label>Bioma di origine</label>
+      <select>
+        <option value="">-- Seleziona --</option>
+        <option>Foresta</option>
+        <option>Deserto</option>
+        <option>Montagna</option>
+      </select>
+      <button type="submit">💾 Crea Personaggio</button>
+    </form>
+  </main>
+  <footer>Creato da MEX · LEGO RPG Manager</footer>
+  <script>
+    document.getElementById("pg-form").addEventListener("submit", e => {
+      e.preventDefault();
+      alert("✅ Personaggio creato con successo (funzione da implementare)");
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>

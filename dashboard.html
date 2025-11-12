@@ -18,9 +18,6 @@
       font-family: 'Montserrat', sans-serif;
       background: var(--lego-gray);
       color: #222;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
 
     header {
@@ -35,15 +32,12 @@
     }
 
     main {
-      flex: 1;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      gap: 25px;
       padding: 40px;
       max-width: 1100px;
-      margin: auto;
-      width: 100%;
-      box-sizing: border-box;
+      margin: 30px auto;
     }
 
     .card {
@@ -74,40 +68,45 @@
       font-size: 0.95em;
     }
 
-    footer {
+    .bottom-buttons {
       text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #777;
-      background: #fff;
-      box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+      margin: 40px 0;
+    }
+
+    .bottom-buttons button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.2s;
     }
 
     .logout {
       background: var(--lego-red);
       color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-      margin-top: 10px;
     }
 
     .logout:hover {
       background: #ff5252;
     }
 
-    @media (max-width: 600px) {
-      header {
-        font-size: 1.4em;
-        padding: 15px;
-      }
+    .back {
+      background: var(--lego-blue);
+      color: white;
+    }
 
-      .card {
-        padding: 25px 15px;
-      }
+    .back:hover {
+      background: #4a9aff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #777;
     }
   </style>
 </head>
@@ -117,23 +116,33 @@
   <main>
     <div class="card" onclick="goTo('game.html')">
       <h2>▶️ Gioca</h2>
-      <p>Gestore della sessione di gioco.</p>
+      <p>Gestisci le sessioni, i combattimenti e le interazioni live.</p>
     </div>
 
     <div class="card" onclick="goTo('archive.html')">
       <h2>📚 Archivio</h2>
-      <p>Gestione completa dei database (visualizza, modifica, aggiungi, scarica).</p>
+      <p>Visualizza e gestisci tutti i database del gioco.</p>
+    </div>
+
+    <div class="card" onclick="goTo('create-pg.html')">
+      <h2>👤 Crea Personaggio</h2>
+      <p>Genera e registra un nuovo personaggio nel database.</p>
     </div>
   </main>
 
-  <footer>
-    Creato da MEX · Versione prototipo<br>
+  <div class="bottom-buttons">
+    <button class="back" onclick="goTo('index.html')">← Torna al Login</button>
     <button class="logout" onclick="logout()">Logout</button>
-  </footer>
+  </div>
+
+  <footer>Creato da MEX · Versione Prototipo</footer>
 
   <script>
+    // controllo login attivo
     const user = JSON.parse(localStorage.getItem("legoUser"));
-    if (!user) window.location.href = "index.html";
+    if (!user) {
+      window.location.href = "index.html";
+    }
 
     function logout() {
       localStorage.removeItem("legoUser");

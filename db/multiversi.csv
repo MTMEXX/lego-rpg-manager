@@ -1,0 +1,10 @@
+﻿ID;NOME;TIPO;Mod_Statistica;Mod_PS_Max;Mod_Vel_Base
+MULT1;City;Umanoide;Nessuno;0;0
+MULT2;Space;Sci-Fi/Creatura;INT +2, CAR -1;2;1
+MULT3;Fantasy (Elfo);Mistico/Magico;DES +2, COS -1;0;1
+MULT4;Fantasy (Mago/Fata);Arcano/Etereo;INT +2, COS -2;-2;1
+MULT5;Fantasy (Guerriero/Nano);Fantasy/Fisico;FOR +2, DES -1;3;-1
+MULT6;Supereroi;Eroe/Potere;PE +4, PV -2;0;0
+MULT7;Ninjago;Agile/Tecnico;DES +3, FOR -1;4;2
+MULT8;Pirati;Civile/Sociale;CAR +2, VOL -1;1;-1
+MULT9;Western (Pioniere);Civile/Resistente;SAG +2, ACU -1;1;0
