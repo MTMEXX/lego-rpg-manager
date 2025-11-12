@@ -12,12 +12,14 @@
       --lego-blue: #3182ce;
       --lego-gray: #f8f8f8;
     }
+
     body {
       margin: 0;
       font-family: 'Montserrat', sans-serif;
       background: var(--lego-gray);
       color: #222;
     }
+
     header {
       background: var(--lego-yellow);
       padding: 20px;
@@ -28,32 +30,36 @@
       text-shadow: 2px 2px 0 #fff;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
+
     main {
-      max-width: 800px;
+      max-width: 900px;
       margin: 40px auto;
       background: white;
       border-radius: 20px;
       padding: 40px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
+
     h1 {
       text-align: center;
       color: var(--lego-blue);
     }
+
     label {
-      font-weight: 600;
-      margin-top: 15px;
       display: block;
+      font-weight: 600;
+      margin: 15px 0 5px;
     }
-    input, textarea, select {
+
+    input, select {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      margin-top: 5px;
       margin-bottom: 15px;
       font-family: inherit;
     }
+
     button {
       background: var(--lego-blue);
       color: white;
@@ -66,9 +72,31 @@
       display: block;
       margin: 10px auto;
     }
+
     button:hover {
       background: #4a9aff;
     }
+
+    .pg-list {
+      margin-top: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background: var(--lego-yellow);
+    }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -78,33 +106,149 @@
   </style>
 </head>
 <body>
-  <header>Crea Personaggio</header>
+  <header>👤 Crea Personaggio</header>
+
   <main>
     <h1>Nuovo Personaggio</h1>
-    <form id="pg-form">
-      <label>Nome</label>
-      <input type="text" required>
-      <label>Ruolo / Classe</label>
-      <input type="text">
-      <label>Descrizione</label>
-      <textarea rows="3"></textarea>
-      <label>Bioma di origine</label>
-      <select>
-        <option value="">-- Seleziona --</option>
-        <option>Foresta</option>
-        <option>Deserto</option>
-        <option>Montagna</option>
-      </select>
-      <button type="submit">💾 Crea Personaggio</button>
-    </form>
+
+    <label>Nome del personaggio</label>
+    <input type="text" id="nome" placeholder="Inserisci nome" required>
+
+    <label>Grado</label>
+    <select id="grado">
+      <option value="">-- Seleziona un grado --</option>
+    </select>
+
+    <label>Livello</label>
+    <select id="livello">
+      <option value="">-- Seleziona un livello --</option>
+    </select>
+
+    <label>Classe</label>
+    <select id="classe">
+      <option value="">-- Seleziona una classe --</option>
+    </select>
+
+    <button onclick="creaPersonaggio()">➕ Aggiungi Personaggio</button>
+    <button onclick="scaricaCSV()">⬇️ Scarica Lista Completa</button>
+
+    <div class="pg-list">
+      <h3>Personaggi Creati</h3>
+      <table id="pgTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Grado</th>
+            <th>Livello</th>
+            <th>Classe</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </main>
+
   <footer>Creato da MEX · LEGO RPG Manager</footer>
+
   <script>
-    document.getElementById("pg-form").addEventListener("submit", e => {
-      e.preventDefault();
-      alert("✅ Personaggio creato con successo (funzione da implementare)");
-      window.location.href = "dashboard.html";
-    });
+    const BASE = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
+    const files = {
+      gradi: "gradi.csv",
+      livelli: "livelli.csv",
+      classi: "classi.csv",
+      pgdb: "pg-database.csv"
+    };
+
+    let gradi = [], livelli = [], classi = [];
+    let pgDatabase = [];
+    let nuoviPG = [];
+
+    async function caricaCSV(file) {
+      const res = await fetch(BASE + encodeURI(file));
+      const text = await res.text();
+      const rows = text.trim().split("\n").map(r => r.split(";"));
+      return rows.slice(1);
+    }
+
+    async function init() {
+      try {
+        [gradi, livelli, classi, pgDatabase] = await Promise.all([
+          caricaCSV(files.gradi),
+          caricaCSV(files.livelli),
+          caricaCSV(files.classi),
+          caricaCSV(files.pgdb)
+        ]);
+
+        popolaSelect("grado", gradi);
+        popolaSelect("livello", livelli);
+        popolaSelect("classe", classi);
+        aggiornaTabella(pgDatabase);
+      } catch (e) {
+        alert("Errore nel caricamento dei dati da GitHub.");
+      }
+    }
+
+    function popolaSelect(id, data) {
+      const select = document.getElementById(id);
+      data.forEach(r => {
+        const opt = document.createElement("option");
+        opt.value = r[0];
+        opt.textContent = r[1];
+        select.appendChild(opt);
+      });
+    }
+
+    function creaPersonaggio() {
+      const nome = document.getElementById("nome").value.trim();
+      const gradoId = document.getElementById("grado").value;
+      const livelloId = document.getElementById("livello").value;
+      const classeId = document.getElementById("classe").value;
+
+      if (!nome || !gradoId || !livelloId || !classeId) {
+        alert("⚠️ Compila tutti i campi.");
+        return;
+      }
+
+      const ultimoId = Math.max(...pgDatabase.map(p => parseInt(p[0]) || 0), 0);
+      const nuovoId = ultimoId + nuoviPG.length + 1;
+
+      const nuovo = [nuovoId, nome, gradoId, livelloId, classeId];
+      nuoviPG.push(nuovo);
+      aggiornaTabella([...pgDatabase, ...nuoviPG]);
+      document.getElementById("nome").value = "";
+    }
+
+    function aggiornaTabella(data) {
+      const tbody = document.querySelector("#pgTable tbody");
+      tbody.innerHTML = "";
+      data.forEach(p => {
+        const grado = trovaNome(gradi, p[2]);
+        const livello = trovaNome(livelli, p[3]);
+        const classe = trovaNome(classi, p[4]);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${p[0]}</td><td>${p[1]}</td><td>${grado}</td><td>${livello}</td><td>${classe}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function trovaNome(tabella, id) {
+      const r = tabella.find(x => x[0] === id);
+      return r ? r[1] : "❓";
+    }
+
+    function scaricaCSV() {
+      const header = "ID;NOME;ID_GRADO;ID_LIVELLO;ID_CLASSE";
+      const righe = [...pgDatabase, ...nuoviPG].map(p => p.join(";")).join("\n");
+      const csv = `${header}\n${righe}`;
+      const blob = new Blob([csv], { type: "text/csv" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "pg-database.csv";
+      link.click();
+    }
+
+    init();
   </script>
 </body>
 </html>
