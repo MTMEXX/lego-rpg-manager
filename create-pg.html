@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crea Personaggio - LEGO RPG Manager</title>
+  <title>LEGO RPG Manager - Crea Personaggio</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -32,223 +32,264 @@
     }
 
     main {
-      max-width: 900px;
-      margin: 40px auto;
+      max-width: 1000px;
+      margin: 30px auto;
       background: white;
       border-radius: 20px;
       padding: 40px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
 
-    h1 {
-      text-align: center;
-      color: var(--lego-blue);
-    }
-
     label {
-      display: block;
       font-weight: 600;
-      margin: 15px 0 5px;
+      margin-top: 10px;
+      display: block;
     }
 
-    input, select {
+    select, input[type="text"], input[type="number"] {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
       margin-bottom: 15px;
-      font-family: inherit;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .stat-row input {
+      width: 70px;
+      text-align: center;
     }
 
     button {
       background: var(--lego-blue);
       color: white;
       border: none;
-      padding: 12px 20px;
+      padding: 12px 24px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       transition: 0.2s;
-      display: block;
-      margin: 10px auto;
+      margin-top: 15px;
     }
 
-    button:hover {
-      background: #4a9aff;
+    button:hover { background: #4a9aff; }
+
+    .bottom-buttons {
+      text-align: center;
+      margin: 30px 0;
     }
 
-    .pg-list {
-      margin-top: 30px;
+    .bottom-buttons button {
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.2s;
     }
+
+    .logout {
+      background: var(--lego-red);
+      color: white;
+    }
+    .logout:hover { background: #ff5252; }
+
+    .back {
+      background: var(--lego-blue);
+      color: white;
+    }
+    .back:hover { background: #4a9aff; }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
+      margin-top: 30px;
     }
-
     th, td {
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: left;
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
     }
-
     th {
       background: var(--lego-yellow);
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #777;
     }
   </style>
 </head>
 <body>
-  <header>👤 Crea Personaggio</header>
 
-  <main>
-    <h1>Nuovo Personaggio</h1>
+<header>LEGO RPG Manager - Crea Personaggio</header>
 
-    <label>Nome del personaggio</label>
-    <input type="text" id="nome" placeholder="Inserisci nome" required>
+<main>
+  <h2>🧱 Crea Nuovo Personaggio</h2>
 
-    <label>Grado</label>
-    <select id="grado">
-      <option value="">-- Seleziona un grado --</option>
-    </select>
+  <label>Nome</label>
+  <input type="text" id="pgNome" placeholder="Inserisci nome del personaggio">
 
-    <label>Livello</label>
-    <select id="livello">
-      <option value="">-- Seleziona un livello --</option>
-    </select>
+  <label>Specie</label>
+  <select id="pgSpecie"></select>
 
-    <label>Classe</label>
-    <select id="classe">
-      <option value="">-- Seleziona una classe --</option>
-    </select>
+  <label>Classe</label>
+  <select id="pgClasse"></select>
 
-    <button onclick="creaPersonaggio()">➕ Aggiungi Personaggio</button>
-    <button onclick="scaricaCSV()">⬇️ Scarica Lista Completa</button>
+  <label>Multiverso</label>
+  <select id="pgMultiverso"></select>
 
-    <div class="pg-list">
-      <h3>Personaggi Creati</h3>
-      <table id="pgTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Grado</th>
-            <th>Livello</th>
-            <th>Classe</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </main>
+  <label>Livello</label>
+  <select id="pgLivello"></select>
 
-  <footer>Creato da MEX · LEGO RPG Manager</footer>
+  <label>Grado</label>
+  <select id="pgGrado" onchange="updatePuntiDisponibili()"></select>
 
-  <script>
-    const BASE = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
-    const files = {
-      gradi: "gradi.csv",
-      livelli: "livelli.csv",
-      classi: "classi.csv",
-      pgdb: "pg-database.csv"
-    };
+  <p><strong>Punti disponibili:</strong> <span id="puntiRimanenti">0</span></p>
 
-    let gradi = [], livelli = [], classi = [];
-    let pgDatabase = [];
-    let nuoviPG = [];
+  <div id="statContainer"></div>
 
-    async function caricaCSV(file) {
-      const res = await fetch(BASE + encodeURI(file));
-      const text = await res.text();
-      const rows = text.trim().split("\n").map(r => r.split(";"));
-      return rows.slice(1);
-    }
+  <button onclick="creaPersonaggio()">➕ Crea Personaggio</button>
 
-    async function init() {
-      try {
-        [gradi, livelli, classi, pgDatabase] = await Promise.all([
-          caricaCSV(files.gradi),
-          caricaCSV(files.livelli),
-          caricaCSV(files.classi),
-          caricaCSV(files.pgdb)
-        ]);
+  <h3>👥 Personaggi Creati</h3>
+  <table id="pgTable"></table>
 
-        popolaSelect("grado", gradi);
-        popolaSelect("livello", livelli);
-        popolaSelect("classe", classi);
-        aggiornaTabella(pgDatabase);
-      } catch (e) {
-        alert("Errore nel caricamento dei dati da GitHub.");
-      }
-    }
+  <button onclick="downloadCSV()">⬇️ Scarica CSV completo</button>
+</main>
 
-    function popolaSelect(id, data) {
-      const select = document.getElementById(id);
-      data.forEach(r => {
-        const opt = document.createElement("option");
-        opt.value = r[0];
-        opt.textContent = r[1];
-        select.appendChild(opt);
-      });
-    }
+<div class="bottom-buttons">
+  <button class="back" onclick="goTo('dashboard.html')">← Dashboard</button>
+  <button class="logout" onclick="logout()">Logout</button>
+</div>
 
-    function creaPersonaggio() {
-      const nome = document.getElementById("nome").value.trim();
-      const gradoId = document.getElementById("grado").value;
-      const livelloId = document.getElementById("livello").value;
-      const classeId = document.getElementById("classe").value;
+<script>
+const baseURL = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
+let specie=[], classi=[], multiversi=[], livelli=[], gradi=[], stats=[], pgList=[];
+let puntiTotali = 0;
+let puntiUsati = 0;
 
-      if (!nome || !gradoId || !livelloId || !classeId) {
-        alert("⚠️ Compila tutti i campi.");
-        return;
-      }
+async function loadCSV(url){
+  const res = await fetch(url);
+  if(!res.ok) throw new Error("Errore nel caricamento: "+url);
+  const text = await res.text();
+  return text.split("\n").slice(1).map(r=>r.split(","));
+}
 
-      const ultimoId = Math.max(...pgDatabase.map(p => parseInt(p[0]) || 0), 0);
-      const nuovoId = ultimoId + nuoviPG.length + 1;
+async function init(){
+  specie = await loadCSV(baseURL+"speci.csv");
+  classi = await loadCSV(baseURL+"classi.csv");
+  multiversi = await loadCSV(baseURL+"multiversi-pg.csv");
+  livelli = await loadCSV(baseURL+"livelli.csv");
+  gradi = await loadCSV(baseURL+"gradi.csv");
+  stats = await loadCSV(baseURL+"statistiche_primarie.csv");
+  pgList = await loadCSV(baseURL+"pg-database.csv");
 
-      const nuovo = [nuovoId, nome, gradoId, livelloId, classeId];
-      nuoviPG.push(nuovo);
-      aggiornaTabella([...pgDatabase, ...nuoviPG]);
-      document.getElementById("nome").value = "";
-    }
+  fillSelect("pgSpecie", specie);
+  fillSelect("pgClasse", classi);
+  fillSelect("pgMultiverso", multiversi);
+  fillSelect("pgLivello", livelli);
+  fillSelect("pgGrado", gradi);
 
-    function aggiornaTabella(data) {
-      const tbody = document.querySelector("#pgTable tbody");
-      tbody.innerHTML = "";
-      data.forEach(p => {
-        const grado = trovaNome(gradi, p[2]);
-        const livello = trovaNome(livelli, p[3]);
-        const classe = trovaNome(classi, p[4]);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${p[0]}</td><td>${p[1]}</td><td>${grado}</td><td>${livello}</td><td>${classe}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
+  renderStats();
+  renderTable();
+}
 
-    function trovaNome(tabella, id) {
-      const r = tabella.find(x => x[0] === id);
-      return r ? r[1] : "❓";
-    }
+function fillSelect(id, data){
+  const s=document.getElementById(id);
+  s.innerHTML='<option value="">-- Seleziona --</option>';
+  data.forEach(r=>{
+    if(r[0] && r[1]) s.innerHTML+=`<option value="${r[0]}">${r[1]}</option>`;
+  });
+}
 
-    function scaricaCSV() {
-      const header = "ID;NOME;ID_GRADO;ID_LIVELLO;ID_CLASSE";
-      const righe = [...pgDatabase, ...nuoviPG].map(p => p.join(";")).join("\n");
-      const csv = `${header}\n${righe}`;
-      const blob = new Blob([csv], { type: "text/csv" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "pg-database.csv";
-      link.click();
-    }
+function renderStats(){
+  const container=document.getElementById("statContainer");
+  container.innerHTML="";
+  stats.forEach(r=>{
+    const name=r[1];
+    const div=document.createElement("div");
+    div.classList.add("stat-row");
+    div.innerHTML=`
+      <label>${name}</label>
+      <input type="number" min="0" value="0" onchange="aggiornaPunti()"
+             data-stat="${name}">
+    `;
+    container.appendChild(div);
+  });
+}
 
-    init();
-  </script>
+function updatePuntiDisponibili(){
+  const gradoID=document.getElementById("pgGrado").value;
+  const grado=gradi.find(g=>g[0]===gradoID);
+  puntiTotali=grado?parseInt(grado[3]||0):0;
+  puntiUsati=0;
+  document.getElementById("puntiRimanenti").textContent=puntiTotali;
+  document.querySelectorAll('#statContainer input').forEach(i=>i.value=0);
+}
+
+function aggiornaPunti(){
+  let tot=0;
+  document.querySelectorAll('#statContainer input').forEach(i=>tot+=parseInt(i.value||0));
+  if(tot>puntiTotali){
+    alert("Hai superato i punti disponibili!");
+    event.target.value=0;
+    aggiornaPunti();
+    return;
+  }
+  puntiUsati=tot;
+  document.getElementById("puntiRimanenti").textContent=puntiTotali-puntiUsati;
+}
+
+function creaPersonaggio(){
+  const nome=document.getElementById("pgNome").value.trim();
+  if(!nome) return alert("Inserisci un nome!");
+  const specieID=document.getElementById("pgSpecie").value;
+  const classeID=document.getElementById("pgClasse").value;
+  const multiID=document.getElementById("pgMultiverso").value;
+  const lvlID=document.getElementById("pgLivello").value;
+  const gradoID=document.getElementById("pgGrado").value;
+
+  const id=pgList.length?parseInt(pgList[pgList.length-1][0])+1:1;
+  const statsValues=[...document.querySelectorAll('#statContainer input')].map(i=>parseInt(i.value||0));
+
+  const newPg=[id,nome,specieID,classeID,multiID,lvlID,gradoID,...statsValues];
+  pgList.push(newPg);
+  renderTable();
+}
+
+function renderTable(){
+  const table=document.getElementById("pgTable");
+  table.innerHTML="";
+  if(pgList.length<1) return;
+  const headers=["ID","Nome","Specie","Classe","Multiverso","Livello","Grado",...stats.map(s=>s[1])];
+  let html="<tr>"+headers.map(h=>`<th>${h}</th>`).join("")+"</tr>";
+  pgList.forEach(r=>{
+    html+="<tr>"+r.map(c=>`<td>${c||""}</td>`).join("")+"</tr>";
+  });
+  table.innerHTML=html;
+}
+
+function downloadCSV(){
+  const headers=["ID","NOME","ID_SPECIE","ID_CLASSE","ID_MULTIVERSO","ID_LIVELLO","ID_GRADO",...stats.map(s=>s[1])];
+  const csv=[headers.join(",")].concat(pgList.map(r=>r.join(","))).join("\n");
+  const blob=new Blob([csv],{type:"text/csv"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="pg-database.csv";
+  a.click();
+}
+
+function logout(){
+  localStorage.removeItem("legoUser");
+  window.location.href="index.html";
+}
+function goTo(page){window.location.href=page;}
+
+init();
+</script>
+
 </body>
 </html>
