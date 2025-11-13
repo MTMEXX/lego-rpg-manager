@@ -40,11 +40,7 @@
       box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
 
-    label {
-      font-weight: 600;
-      margin-top: 10px;
-      display: block;
-    }
+    label { font-weight: 600; margin-top: 10px; display: block; }
 
     select, input[type="text"], input[type="number"] {
       width: 100%;
@@ -54,17 +50,8 @@
       border: 1px solid #ccc;
     }
 
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .stat-row input {
-      width: 70px;
-      text-align: center;
-    }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .stat-row input { width: 70px; text-align: center; }
 
     button {
       background: var(--lego-blue);
@@ -77,7 +64,6 @@
       transition: 0.2s;
       margin-top: 15px;
     }
-
     button:hover { background: #4a9aff; }
 
     .bottom-buttons {
@@ -96,31 +82,14 @@
       transition: 0.2s;
     }
 
-    .logout {
-      background: var(--lego-red);
-      color: white;
-    }
+    .logout { background: var(--lego-red); color: white; }
     .logout:hover { background: #ff5252; }
-
-    .back {
-      background: var(--lego-blue);
-      color: white;
-    }
+    .back { background: var(--lego-blue); color: white; }
     .back:hover { background: #4a9aff; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 30px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: center;
-    }
-    th {
-      background: var(--lego-yellow);
-    }
+    table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: var(--lego-yellow); }
   </style>
 </head>
 <body>
@@ -171,11 +140,20 @@ let specie=[], classi=[], multiversi=[], livelli=[], gradi=[], stats=[], pgList=
 let puntiTotali = 0;
 let puntiUsati = 0;
 
+// ✅ Parser CSV migliorato
+function parseCSV(text){
+  const lines = text.trim().split(/\r?\n/);
+  return lines.slice(1).map(line => {
+    const match = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+    return match ? match.map(v=>v.replace(/^"|"$/g,'')) : [];
+  });
+}
+
 async function loadCSV(url){
   const res = await fetch(url);
   if(!res.ok) throw new Error("Errore nel caricamento: "+url);
   const text = await res.text();
-  return text.split("\n").slice(1).map(r=>r.split(","));
+  return parseCSV(text);
 }
 
 async function init(){
@@ -210,12 +188,12 @@ function renderStats(){
   container.innerHTML="";
   stats.forEach(r=>{
     const name=r[1];
+    if(!name) return;
     const div=document.createElement("div");
     div.classList.add("stat-row");
     div.innerHTML=`
       <label>${name}</label>
-      <input type="number" min="0" value="0" onchange="aggiornaPunti()"
-             data-stat="${name}">
+      <input type="number" min="0" value="0" onchange="aggiornaPunti()" data-stat="${name}">
     `;
     container.appendChild(div);
   });
@@ -282,14 +260,10 @@ function downloadCSV(){
   a.click();
 }
 
-function logout(){
-  localStorage.removeItem("legoUser");
-  window.location.href="index.html";
-}
-function goTo(page){window.location.href=page;}
+function logout(){ localStorage.removeItem("legoUser"); window.location.href="index.html"; }
+function goTo(page){ window.location.href=page; }
 
 init();
 </script>
-
 </body>
 </html>
