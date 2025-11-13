@@ -1,11 +1,11 @@
-﻿ID;NOME;Mod_PV_Base;Mod_PE_Base;Mod_PS_Base
-SPECIE1;Standard (Umanoide);0;0;0
-SPECIE2;Creatura Fantasy;4;-2;2
-SPECIE3;Costrutto Robotico;2;2;-1
-SPECIE4;Ninja (Addestrato);-1;2;4
-SPECIE5;Super-Powered;2;4;0
-SPECIE6;Scienziato Matto;-3;5;-2
-SPECIE7;Creatura Spaziale;1;3;1
-SPECIE8;Cacciatore/Lupo;3;-1;2
-SPECIE9;Magico (Mago/Stregone);-2;6;-1
-SPECIE10;Tecnologico (Cyborg/Armatura);3;1;-1
+﻿ID;NOME;Mod_PV_Base;Mod_PE_Base;Mod_PS_Base;Mod _for;Mod_des;Mod_cos;Mod_int;Mod_sag;Mod_car
+SPECIE1;Standard (Umanoide);1;-2;1;0;0;0;0;0;0
+SPECIE2;Creatura Mitologica;4;-2;2;2;-1;1;-1;0;-1
+SPECIE3;Costrutto Robotico;2;2;-1;1;-1;0;2;0;-2
+SPECIE4;Ninja (Addestrato);-1;2;4;-1;2;-1;0;1;0
+SPECIE5;Super-Powered;2;4;0;2;0;1;-1;0;0
+SPECIE6;Scienziato Matto;-3;5;-2;-2;-1;-2;4;0;0
+SPECIE7;Creatura Spaziale;1;3;1;0;0;-1;1;1;-1
+SPECIE8;Cacciatore/Lupo;3;-1;2;1;0;0;-1;0;0
+SPECIE9;Magico (Stregone);-2;6;-1;-2;0;-1;2;-1;0
+SPECIE10;Tecnologico (Armatura);3;1;-1;1;-1;2;1;0;-1

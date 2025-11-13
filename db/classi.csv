@@ -1,100 +1,100 @@
-﻿ID;NOME;DESCRIZIONE;PV BASE;PE BASE;PS BASE;VEL BASE;GUIDA;COMPETENZE (TS/Skill);TTIPO
-CLASSE1;Cittadino Medio;Abitante generico di LEGO City. Non addestrato, risorsa equilibrata.;8;8;8;6;0;COS, PER;CIVILI
-CLASSE2;Disoccupato/Sbandato;Poca resistenza fisica e risorse, ma abile nell'evitare problemi legali.;6;7;9;7;-1;DES, PER;CIVILI
-CLASSE3;Bambino/Giovane;Punti Vita molto bassi, ma alta curiosità e velocità base.;4;8;8;7;-2;PER, INT;CIVILI
-CLASSE4;Pensionato Anziano;Alta conoscenza (INT) e resistenza mentale (VOL), ma lento e fragile.;6;9;5;5;-1;INT, VOL;CIVILI
-CLASSE5;Turista/Visitatore;Concentrato sulla scoperta e l'osservazione. Facile da distrarre.;7;10;6;6;0;SAG, CAR;CIVILI
-CLASSE6;Fannullone;Specializzato nell'evasione del lavoro e nell'ottenere favori.;6;9;8;6;0;CAR, DES;CIVILI
-CLASSE7;Giornalista;Ricerca di informazioni, spargitore di voci e pettegolezzi.;7;11;6;6;-1;INT, CAR;CIVILI
-CLASSE8;Massaia/Casalinga;Competente nelle abilità di vita quotidiana e nell'organizzazione.;8;8;7;5;0;COS, PER;CIVILI
-CLASSE9;Studente Universitario;Alta abilità nello studio, spesso concentrato su una singola statistica (INT).;6;12;6;6;-1;INT, VOL;CIVILI
-CLASSE10;Agente di Pattuglia;L'agente standard di LEGO City. Addestramento base, buon equilibrio.;10;6;8;6;2;FOR, COS;SERVIZI DELL'ORDINE
-CLASSE11;Detective Investigativo;Specializzato in analisi e raccolta di prove. Meno fisico, più mentale.;8;12;6;6;0;INT, ACU;SERVIZI DELL'ORDINE
-CLASSE12;Ufficiale SWAT;Massima resistenza fisica e focalizzato sul combattimento in ambienti chiusi.;12;4;10;5;1;COS, FOR;SERVIZI DELL'ORDINE
-CLASSE13;Agente della Scientifica;Esperto in chimica, biologia e analisi forense. Debole nel combattimento.;6;14;4;6;-1;INT, SAG;SERVIZI DELL'ORDINE
-CLASSE14;Agente Antidroga;Molto addestrato al combattimento e all'infiltrazione.;9;8;9;7;2;DES, VOL;SERVIZI DELL'ORDINE
-CLASSE15;Negoziatore;Eccellente nella persuasione e nella diplomazia in situazioni di crisi.;7;12;5;6;0;CAR, PER;SERVIZI DELL'ORDINE
-CLASSE16;Guardia Portuale;Resistente, focalizzato sulla sorveglianza e guida di veicoli marittimi.;11;6;7;5;2;FOR, COS;SERVIZI DELL'ORDINE
-CLASSE17;Capo Distretto;Forte leadership e amministrazione. Meno abile sul campo.;8;10;6;6;1;CAR, INT;SERVIZI DELL'ORDINE
-CLASSE18;Agente Federale;Addestrato in indagini complesse e operazioni fuori giurisdizione.;9;10;7;7;3;ACU, DES;SERVIZI DELL'ORDINE
-CLASSE19;Ufficiale Cinofilo;Forte legame con un'unità animale (simulato tramite abilità di supporto).;10;7;9;6;1;PER, DES;SERVIZI DELL'ORDINE
-CLASSE20;Commerciante;Il venditore al dettaglio generico. Bravo nella negoziazione base.;7;11;6;6;0;CAR, INT;COMMERCIANTI
-CLASSE21;Banchiere;Custode delle ricchezze e maestro della finanza (Matematica/INT).;6;14;4;5;-1;INT, VOL;COMMERCIANTI
-CLASSE22;Investitore;Specializzato nell'analisi di rischio e opportunità di mercato.;7;12;5;6;0;ACU, INT;COMMERCIANTI
-CLASSE23;Mercante Girovago;Resiste ai viaggi, ha bisogno di un veicolo e conosce diverse culture.;9;9;8;6;1;COS, SAG;COMMERCIANTI
-CLASSE24;Contrabbandiere;Bravo nella negoziazione illegale e nel trasporto furtivo. Guida evasiva.;8;10;10;7;3;CAR, DES;COMMERCIANTI
-CLASSE25;Agente Immobiliare;Focalizzato su persuasione e conoscenza del territorio (mappe, proprietà).;6;13;5;6;0;CAR, ACU;COMMERCIANTI
-CLASSE26;Proprietario PERorio;Gestione di magazzini e risorse fisiche (più FOR/COS della media).;10;8;6;5;0;COS, INT;COMMERCIANTI
-CLASSE27;Esattore/Ufficiale Tasse;Intimidisce e usa la burocrazia. Alta Volontà (VOL).;9;10;7;6;0;VOL, INT;COMMERCIANTI
-CLASSE28;Barman/Cameriere;Fonte di informazioni, bravo nell'ascolto e nell'PERatia (PER).;7;11;7;6;0;PER, CAR;COMMERCIANTI
-CLASSE29;Banditore d'Aste;Eccellente nella retorica e nell'uso del Carisma (CAR).;6;14;4;6;-1;CAR, SAG;COMMERCIANTI
-CLASSE30;Costruttore Edile;Lavoratore generico per cantieri. Forte e resistente al lavoro manuale.;11;6;9;5;1;FOR, COS;LAVORATORI/ARTIGIANI
-CLASSE31;Minatore;Resistente agli ambienti ostili, specializzato nella raccolta di risorse grezze.;12;4;8;5;0;COS, FOR;LAVORATORI/ARTIGIANI
-CLASSE32;Idraulico/Elettricista;Specializzato nella risoluzione di problemi tecnici complessi (tubi, cavi).;8;12;6;6;1;INT, DES;LAVORATORI/ARTIGIANI
-CLASSE33;Fabbro Armaiolo;Maestro nella lavorazione del metallo, necessita di forza e precisione.;9;10;7;6;0;FOR, INT;LAVORATORI/ARTIGIANI
-CLASSE34;Meccanico Veicoli;Estremamente competente nella riparazione e modifica dei veicoli.;7;13;6;6;2;INT, COS;LAVORATORI/ARTIGIANI
-CLASSE35;Disegnatore/Architetto;Non fisico, ma essenziale per la pianificazione e l'ingegneria (INT pura).;5;14;5;5;-1;INT, SAG;LAVORATORI/ARTIGIANI
-CLASSE36;Programmatore Robot;Lavora con l'elettronica avanzata e la logica, molto cerebrale.;6;13;5;6;0;INT, ACU;LAVORATORI/ARTIGIANI
-CLASSE37;Cameriere d'Albergo;Altissima PERatia e gestione dei rapporti sociali in ambienti formali.;7;10;7;7;0;PER, CAR;LAVORATORI/ARTIGIANI
-CLASSE38;Spazzino/Netturbino;Grande resistenza fisica e immunità a malattie/veleni.;11;6;8;5;1;COS, VOL;LAVORATORI/ARTIGIANI
-CLASSE39;Tessitore/Sarto;Richiede precisione manuale e pazienza (DES e INT).;6;11;9;6;0;DES, INT;LAVORATORI/ARTIGIANI
-CLASSE40;Vigile del Fuoco;"Resistenza al fuoco e al fumo; usa forza e resistenza per salvare vite.";12;5;9;6;2;COS, FOR;SERVIZI DI EMERGENZA
-CLASSE41;Medico (Chirurgo);Massima competenza in medicina (INT) e resistenza allo stress (VOL).;7;14;5;6;0;INT, VOL;SERVIZI DI EMERGENZA
-CLASSE42;Paramedico/Soccorritore;Cura d'emergenza, guida veloce e gestione di situazioni critiche.;9;10;8;7;3;PER, DES;SERVIZI DI EMERGENZA
-CLASSE43;Ingegnere Anti-Catastrofi;Specializzato nella messa in sicurezza di strutture pericolanti (INT).;8;12;6;5;1;INT, COS;SERVIZI DI EMERGENZA
-CLASSE44;Pilota Elicottero/Soccorso;Pilota professionista in condizioni estreme. Basso PV/PS, alta guida.;6;8;8;6;4;DES, ACU;SERVIZI DI EMERGENZA
-CLASSE45;Bagnino/Guardia Costiera;Resistenza in acqua (COS) e percezione del pericolo (SAG).;11;7;8;7;1;COS, SAG;SERVIZI DI EMERGENZA
-CLASSE46;Veterinario;Cura degli animali e comprensione delle creature (PER, SAG).;8;11;7;6;0;PER, SAG;SERVIZI DI EMERGENZA
-CLASSE47;Infermiera/Assistente;Supporto sanitario, alta PERatia e resistenza alla fatica.;9;10;7;6;0;PER, COS;SERVIZI DI EMERGENZA
-CLASSE48;Tecnico Radiologo;Analisi e diagnostica (INT), ma basso profilo sul campo.;6;13;5;5;-1;INT, VOL;SERVIZI DI EMERGENZA
-CLASSE49;Psicologo di Crisi;Supporto mentale, usa PERatia e Carisma per calmare le masse.;7;12;5;6;0;PER, CAR;SERVIZI DI EMERGENZA
-CLASSE50;Scassinatore;Specializzato in serrature, allarmi e furti di precisione.;7;10;12;7;1;DES, INT;CRIMINALI/BANDITI
-CLASSE51;Capobanda di Strada;Leader di piccole bande. Intimidazione e alta resistenza.;10;6;10;6;2;CAR, COS;CRIMINALI/BANDITI
-CLASSE52;Furto d'Auto;Focalizzato su veicoli, smontaggio, riciclaggio e guida evasiva.;8;7;11;8;4;DES, ACU;CRIMINALI/BANDITI
-CLASSE53;Pusher/Spacciatore;Abile nel nascondere oggetti e manipolare le persone per affari illeciti.;6;11;9;7;0;CAR, DES;CRIMINALI/BANDITI
-CLASSE54;Picchiatore;Puro muscolo e intimidazione. Basso PE, alto FOR e COS.;13;4;9;5;-1;FOR, COS;CRIMINALI/BANDITI
-CLASSE55;Truffatore/Mestiere;Maestro dell'inganno e della manipolazione sociale e finanziaria.;6;13;5;6;0;CAR, INT;CRIMINALI/BANDITI
-CLASSE56;Hacker/Cybercriminale;Specializzato in sistemi informatici e frodi digitali. Mente superiore.;5;15;4;5;-2;INT, ACU;CRIMINALI/BANDITI
-CLASSE57;Ricettatore;Conosce il mercato nero, bravo nella negoziazione e nel nascondere beni.;8;10;8;6;1;SAG, CAR;CRIMINALI/BANDITI
-CLASSE58;Assassino a Pagamento;Estremamente furtivo, calmo e specializzato nel danno letale.;7;8;13;8;2;DES, VOL;CRIMINALI/BANDITI
-CLASSE59;Bandito Rurale;Forte e resistente, specializzato in rapine fuori città e in fuoristrada.;11;5;10;6;1;FOR, SAG;CRIMINALI/BANDITI
-CLASSE60;Tiranno Dimensionale;Leader di eserciti intergalattici. Altissima volontà e comando.;12;14;12;7;3;CAR, VOL;SUPERCATTIVI
-CLASSE61;Genius Malvagio;Altissima intelligenza per creare armi e piani diabolici. Bassa resistenza fisica.;8;16;6;6;1;INT, ACU;SUPERCATTIVI
-CLASSE62;Distruttore (Bruto);Forza e resistenza fisiche estreme, focalizzato sul caos.;18;4;14;5;-2;FOR, COS;SUPERCATTIVI
-CLASSE63;Manipolatore Psichico;Poteri mentali devastanti, usa la Saggezza e la Volontà come armi.;10;18;8;6;-1;SAG, VOL;SUPERCATTIVI
-CLASSE64;Doppelgänger;Maestro del travestimento e dell'inganno. Estrema agilità e Carisma.;10;12;14;8;2;DES, CAR;SUPERCATTIVI
-CLASSE65;Scienziato Bio-Armato;Usa la conoscenza per mutare se stesso o i suoi scagnozzi.;14;16;10;6;0;INT, COS;SUPERCATTIVI
-CLASSE66;Ladro Interdimensionale;Velocità e furtività eccezionali per rubare artefatti multiversali.;9;10;18;10;4;DES, ACU;SUPERCATTIVI
-CLASSE67;Maledizione Vivente;Entità incorporea o spettrale che danneggia la salute e la mente.;8;20;4;7;-3;VOL, SAG;SUPERCATTIVI
-CLASSE68;Signore del Crimine Organizzato;Controllo totale delle risorse e delle reti criminali.;11;15;8;6;2;CAR, INT;SUPERCATTIVI
-CLASSE69;Tecnomante;Usa la magia per controllare la tecnologia (Fusione Magia/Tecnologia).;10;16;12;7;3;INT, SAG;SUPERCATTIVI
-CLASSE70;Eroe di Forza;Focalizzato sulla pura potenza fisica (es. Superman, Hulk). Estrema resistenza.;18;8;10;6;1;FOR, COS;SUPEREROI
-CLASSE71;Eroe Tattico;Leader, esperto in strategia, gadgets e abilità non innate (es. Batman, Iron Man).;10;14;12;7;3;INT, ACU;SUPEREROI
-CLASSE72;Eroe Veloce;Velocità sovrumana, necessita di alta agilità (PS) per il controllo.;8;10;20;12;4;DES, PS;SUPEREROI
-CLASSE73;Eroe PERatico/Cura;Focalizzato sul supporto, cura, e scudo energetico.;12;16;6;7;0;PER, SAG;SUPEREROI
-CLASSE74;Arciere/Tiratore Scelto;Precisione estrema con proiettili o energia focalizzata (alta DES/ACU).;8;12;14;8;2;DES, ACU;SUPEREROI
-CLASSE75;Infiltratore (Anti-Eroe);Usa furtività e inganno per operazioni ambigue. Altissima DES e VOL.;9;10;16;9;3;DES, VOL;SUPEREROI
-CLASSE76;Eroe Elementale;Manipola gli elementi (fuoco, ghiaccio, fulmini). Potere puro (PE).;10;18;8;7;0;SAG, COS;SUPEREROI
-CLASSE77;Eroe Tecnologico;Dipende da armature o gadget potenziati (es. Iron Man, Black Panther).;14;14;10;7;3;INT, COS;SUPEREROI
-CLASSE78;Eroe Volante;Eccelle nel movimento aereo e nella sorveglianza.;10;12;16;9;2;ACU, DES;SUPEREROI
-CLASSE79;Apprendista Supereroe;Potenziale elevato, ma ancora in fase di addestramento.;10;10;10;7;1;COS, INT;SUPEREROI
-CLASSE80;Mago di Guerra;Incantatore focalizzato sul danno e il controllo in battaglia.;8;16;6;6;-1;INT, VOL;ARCANI/MISTICI
-CLASSE81;Chierico/Sacerdote;Potere divino, focalizzato sulla cura e l'invocazione.;10;14;6;6;0;SAG, PER;ARCANI/MISTICI
-CLASSE82;Scienziato Pazzo;Genius focalizzato su esperimenti non etici e invenzioni pericolose.;6;18;4;5;1;INT, ACU;ARCANI/MISTICI
-CLASSE83;Crononauta;Manipolatore del tPERo/spazio, usa la Saggezza per calcoli complessi.;7;15;8;7;3;SAG, ACU;ARCANI/MISTICI
-CLASSE84;Alchimista;Usa formule per creare pozioni, veleni e sostanze (INT e DES manuale).;8;12;10;6;0;INT, DES;ARCANI/MISTICI
-CLASSE85;Sciamano/Medium;Connessione con spiriti e forze naturali. Forte PERatia e Saggezza.;9;13;6;6;-1;SAG, PER;ARCANI/MISTICI
-CLASSE86;Invocatore/Evocatore;Specializzato nel richiamare creature o entità multiversali.;6;17;5;5;-2;INT, VOL;ARCANI/MISTICI
-CLASSE87;Cacciatore di Demoni;Specializzato nel combattere entità mistiche. Richiede resistenza e conoscenza.;11;10;9;7;1;COS, SAG;ARCANI/MISTICI
-CLASSE88;Biotecnologo;Scienziato focalizzato su mutazioni, virus e potenziamento biologico.;7;16;7;6;0;INT, COS;ARCANI/MISTICI
-CLASSE89;Psionico;Usa il potere della mente pura per influenzare il mondo (VOL come risorsa).;8;15;7;6;-1;VOL, ACU;ARCANI/MISTICI
-CLASSE90;Funzionario Pubblico;Gestisce la burocrazia e le procedure. Basso profilo, alta conoscenza dei sistemi.;7;11;6;6;-1;INT, VOL;GOVERNO/ISTITUZIONALE
-CLASSE91;Giudice;Autorità legale suprema. Richiede saggezza, intelligenza e imparzialità.;6;13;5;5;-2;SAG, INT;GOVERNO/ISTITUZIONALE
-CLASSE92;Avvocato;Maestro della retorica, negoziazione e conoscenza delle leggi.;5;14;5;6;-1;CAR, INT;GOVERNO/ISTITUZIONALE
-CLASSE93;Governatore/Sindaco;Leader politico della città. Massima autorità e Carisma.;8;12;6;6;0;CAR, VOL;GOVERNO/ISTITUZIONALE
-CLASSE94;Agente Tributario;Forza della legge nell'ambito fiscale. Intimidazione e conoscenza contabile.;9;10;7;6;0;INT, VOL;GOVERNO/ISTITUZIONALE
-CLASSE95;Diplomatico/Ambasciatore;Gestisce i rapporti con fazioni esterne o altri multiversi. PERatia e Carisma.;6;12;6;6;1;CAR, PER;GOVERNO/ISTITUZIONALE
-CLASSE96;Ispettore Edilizio;Verifica la conformità delle costruzioni. Richiede INT, COS e conoscenza tecnica.;10;9;7;5;0;INT, COS;GOVERNO/ISTITUZIONALE
-CLASSE97;Guardia del Corpo;Protezione fisica di figure di alto rango. Alto PV e PS.;13;4;11;7;2;FOR, COS;GOVERNO/ISTITUZIONALE
-CLASSE98;Consulente Legale;Non sul campo, usa l'Acume per trovare scappatoie legali.;6;13;5;6;-1;ACU, INT;GOVERNO/ISTITUZIONALE
-CLASSE99;Reclutatore/Funzionario Militare;Usa Carisma e Volontà per mobilitare personale.;9;10;8;6;1;CAR, VOL;GOVERNO/ISTITUZIONALE
+﻿ID;NOME;DESCRIZIONE;PV BASE;PE BASE;PS BASE;VEL BASE;GUIDA;COMPETENZE (TS/Skill);TTIPO;Mod _for;Mod_des;Mod_cos;Mod_int;Mod_sag;Mod_car
+CLASSE1;Cittadino Medio;Abitante generico di LEGO City. Non addestrato, risorsa equilibrata.;8;8;8;6;0;COS, PER;CIVILI;1;0;2;0;0;0
+CLASSE2;Disoccupato/Sbandato;Poca resistenza fisica e risorse, ma abile nell'evitare problemi legali.;6;7;9;7;-1;DES, PER;CIVILI;2;1;1;0;0;0
+CLASSE3;Bambino/Giovane;Punti Vita molto bassi, ma alta curiosità e velocità base.;4;8;8;7;-2;PER, INT;CIVILI;3;2;2;0;0;0
+CLASSE4;Pensionato Anziano;Alta conoscenza (INT) e resistenza mentale (VOL), ma lento e fragile.;6;9;5;5;-1;INT, VOL;CIVILI;4;3;0;1;0;0
+CLASSE5;Turista/Visitatore;Concentrato sulla scoperta e l'osservazione. Facile da distrarre.;7;10;6;6;0;SAG, CAR;CIVILI;1;1;0;0;0;0
+CLASSE6;Fannullone;Specializzato nell'evasione del lavoro e nell'ottenere favori.;6;9;8;6;0;CAR, DES;CIVILI;2,8;2;-0,5;0;0;0
+CLASSE7;Giornalista;Ricerca di informazioni, spargitore di voci e pettegolezzi.;7;11;6;6;-1;INT, CAR;CIVILI;3;3;-1;0;0;0
+CLASSE8;Massaia/Casalinga;Competente nelle abilità di vita quotidiana e nell'organizzazione.;8;8;7;5;0;COS, PER;CIVILI;3,2;2,8;-1,5;0;0;0
+CLASSE9;Studente Universitario;Alta abilità nello studio, spesso concentrato su una singola statistica (INT).;6;12;6;6;-1;INT, VOL;CIVILI;3,4;3,028571429;-2;0;0;0
+CLASSE10;Agente di Pattuglia;L'agente standard di LEGO City. Addestramento base, buon equilibrio.;10;6;8;6;2;FOR, COS;SERVIZI DELL'ORDINE;3,6;3,257142857;-2,5;0;0;0
+CLASSE11;Detective Investigativo;Specializzato in analisi e raccolta di prove. Meno fisico, più mentale.;8;12;6;6;0;INT, ACU;SERVIZI DELL'ORDINE;3,8;3,485714286;-3;0;0;0
+CLASSE12;Ufficiale SWAT;Massima resistenza fisica e focalizzato sul combattimento in ambienti chiusi.;12;4;10;5;1;COS, FOR;SERVIZI DELL'ORDINE;4;3,714285714;-3,5;0;0;0
+CLASSE13;Agente della Scientifica;Esperto in chimica, biologia e analisi forense. Debole nel combattimento.;6;14;4;6;-1;INT, SAG;SERVIZI DELL'ORDINE;4,2;3,942857143;-4;0;0;0
+CLASSE14;Agente Antidroga;Molto addestrato al combattimento e all'infiltrazione.;9;8;9;7;2;DES, VOL;SERVIZI DELL'ORDINE;4,4;4,171428571;-4,5;0;0;0
+CLASSE15;Negoziatore;Eccellente nella persuasione e nella diplomazia in situazioni di crisi.;7;12;5;6;0;CAR, PER;SERVIZI DELL'ORDINE;4,6;4,4;-5;0;0;0
+CLASSE16;Guardia Portuale;Resistente, focalizzato sulla sorveglianza e guida di veicoli marittimi.;11;6;7;5;2;FOR, COS;SERVIZI DELL'ORDINE;4,8;4,628571429;-5,5;0;0;0
+CLASSE17;Capo Distretto;Forte leadership e amministrazione. Meno abile sul campo.;8;10;6;6;1;CAR, INT;SERVIZI DELL'ORDINE;5;4,857142857;-6;0;0;0
+CLASSE18;Agente Federale;Addestrato in indagini complesse e operazioni fuori giurisdizione.;9;10;7;7;3;ACU, DES;SERVIZI DELL'ORDINE;5,2;5,085714286;-6,5;0;0;0
+CLASSE19;Ufficiale Cinofilo;Forte legame con un'unità animale (simulato tramite abilità di supporto).;10;7;9;6;1;PER, DES;SERVIZI DELL'ORDINE;5,4;5,314285714;-7;0;0;0
+CLASSE20;Commerciante;Il venditore al dettaglio generico. Bravo nella negoziazione base.;7;11;6;6;0;CAR, INT;COMMERCIANTI;5,6;5,542857143;-7,5;0;0;0
+CLASSE21;Banchiere;Custode delle ricchezze e maestro della finanza (Matematica/INT).;6;14;4;5;-1;INT, VOL;COMMERCIANTI;5,8;5,771428571;-8;0;0;0
+CLASSE22;Investitore;Specializzato nell'analisi di rischio e opportunità di mercato.;7;12;5;6;0;ACU, INT;COMMERCIANTI;6;6;-8,5;0;0;0
+CLASSE23;Mercante Girovago;Resiste ai viaggi, ha bisogno di un veicolo e conosce diverse culture.;9;9;8;6;1;COS, SAG;COMMERCIANTI;6,2;6,228571429;-9;0;0;0
+CLASSE24;Contrabbandiere;Bravo nella negoziazione illegale e nel trasporto furtivo. Guida evasiva.;8;10;10;7;3;CAR, DES;COMMERCIANTI;6,4;6,457142857;-9,5;0;0;0
+CLASSE25;Agente Immobiliare;Focalizzato su persuasione e conoscenza del territorio (mappe, proprietà).;6;13;5;6;0;CAR, ACU;COMMERCIANTI;6,6;6,685714286;-10;0;0;0
+CLASSE26;Proprietario PERorio;Gestione di magazzini e risorse fisiche (più FOR/COS della media).;10;8;6;5;0;COS, INT;COMMERCIANTI;6,8;6,914285714;-10,5;0;0;0
+CLASSE27;Esattore/Ufficiale Tasse;Intimidisce e usa la burocrazia. Alta Volontà (VOL).;9;10;7;6;0;VOL, INT;COMMERCIANTI;7;7,142857143;-11;0;0;0
+CLASSE28;Barman/Cameriere;Fonte di informazioni, bravo nell'ascolto e nell'PERatia (PER).;7;11;7;6;0;PER, CAR;COMMERCIANTI;7,2;7,371428571;-11,5;0;0;0
+CLASSE29;Banditore d'Aste;Eccellente nella retorica e nell'uso del Carisma (CAR).;6;14;4;6;-1;CAR, SAG;COMMERCIANTI;7,4;7,6;-12;0;0;0
+CLASSE30;Costruttore Edile;Lavoratore generico per cantieri. Forte e resistente al lavoro manuale.;11;6;9;5;1;FOR, COS;LAVORATORI/ARTIGIANI;7,6;7,828571429;-12,5;0;0;0
+CLASSE31;Minatore;Resistente agli ambienti ostili, specializzato nella raccolta di risorse grezze.;12;4;8;5;0;COS, FOR;LAVORATORI/ARTIGIANI;7,8;8,057142857;-13;0;0;0
+CLASSE32;Idraulico/Elettricista;Specializzato nella risoluzione di problemi tecnici complessi (tubi, cavi).;8;12;6;6;1;INT, DES;LAVORATORI/ARTIGIANI;8;8,285714286;-13,5;0;0;0
+CLASSE33;Fabbro Armaiolo;Maestro nella lavorazione del metallo, necessita di forza e precisione.;9;10;7;6;0;FOR, INT;LAVORATORI/ARTIGIANI;8,2;8,514285714;-14;0;0;0
+CLASSE34;Meccanico Veicoli;Estremamente competente nella riparazione e modifica dei veicoli.;7;13;6;6;2;INT, COS;LAVORATORI/ARTIGIANI;8,4;8,742857143;-14,5;0;0;0
+CLASSE35;Disegnatore/Architetto;Non fisico, ma essenziale per la pianificazione e l'ingegneria (INT pura).;5;14;5;5;-1;INT, SAG;LAVORATORI/ARTIGIANI;8,6;8,971428571;-15;0;0;0
+CLASSE36;Programmatore Robot;Lavora con l'elettronica avanzata e la logica, molto cerebrale.;6;13;5;6;0;INT, ACU;LAVORATORI/ARTIGIANI;8,8;9,2;-15,5;0;0;0
+CLASSE37;Cameriere d'Albergo;Altissima PERatia e gestione dei rapporti sociali in ambienti formali.;7;10;7;7;0;PER, CAR;LAVORATORI/ARTIGIANI;9;9,428571429;-16;0;0;0
+CLASSE38;Spazzino/Netturbino;Grande resistenza fisica e immunità a malattie/veleni.;11;6;8;5;1;COS, VOL;LAVORATORI/ARTIGIANI;9,2;9,657142857;-16,5;0;0;0
+CLASSE39;Tessitore/Sarto;Richiede precisione manuale e pazienza (DES e INT).;6;11;9;6;0;DES, INT;LAVORATORI/ARTIGIANI;9,4;9,885714286;-17;0;0;0
+CLASSE40;Vigile del Fuoco;"Resistenza al fuoco e al fumo; usa forza e resistenza per salvare vite.";12;5;9;6;2;COS, FOR;SERVIZI DI EMERGENZA;9,6;10,11428571;-17,5;0;0;0
+CLASSE41;Medico (Chirurgo);Massima competenza in medicina (INT) e resistenza allo stress (VOL).;7;14;5;6;0;INT, VOL;SERVIZI DI EMERGENZA;9,8;10,34285714;-18;0;0;0
+CLASSE42;Paramedico/Soccorritore;Cura d'emergenza, guida veloce e gestione di situazioni critiche.;9;10;8;7;3;PER, DES;SERVIZI DI EMERGENZA;10;10,57142857;-18,5;0;0;0
+CLASSE43;Ingegnere Anti-Catastrofi;Specializzato nella messa in sicurezza di strutture pericolanti (INT).;8;12;6;5;1;INT, COS;SERVIZI DI EMERGENZA;10,2;10,8;-19;0;0;0
+CLASSE44;Pilota Elicottero/Soccorso;Pilota professionista in condizioni estreme. Basso PV/PS, alta guida.;6;8;8;6;4;DES, ACU;SERVIZI DI EMERGENZA;10,4;11,02857143;-19,5;0;0;0
+CLASSE45;Bagnino/Guardia Costiera;Resistenza in acqua (COS) e percezione del pericolo (SAG).;11;7;8;7;1;COS, SAG;SERVIZI DI EMERGENZA;10,6;11,25714286;-20;0;0;0
+CLASSE46;Veterinario;Cura degli animali e comprensione delle creature (PER, SAG).;8;11;7;6;0;PER, SAG;SERVIZI DI EMERGENZA;10,8;11,48571429;-20,5;0;0;0
+CLASSE47;Infermiera/Assistente;Supporto sanitario, alta PERatia e resistenza alla fatica.;9;10;7;6;0;PER, COS;SERVIZI DI EMERGENZA;11;11,71428571;-21;0;0;0
+CLASSE48;Tecnico Radiologo;Analisi e diagnostica (INT), ma basso profilo sul campo.;6;13;5;5;-1;INT, VOL;SERVIZI DI EMERGENZA;11,2;11,94285714;-21,5;0;0;0
+CLASSE49;Psicologo di Crisi;Supporto mentale, usa PERatia e Carisma per calmare le masse.;7;12;5;6;0;PER, CAR;SERVIZI DI EMERGENZA;11,4;12,17142857;-22;0;0;0
+CLASSE50;Scassinatore;Specializzato in serrature, allarmi e furti di precisione.;7;10;12;7;1;DES, INT;CRIMINALI/BANDITI;11,6;12,4;-22,5;0;0;0
+CLASSE51;Capobanda di Strada;Leader di piccole bande. Intimidazione e alta resistenza.;10;6;10;6;2;CAR, COS;CRIMINALI/BANDITI;11,8;12,62857143;-23;0;0;0
+CLASSE52;Furto d'Auto;Focalizzato su veicoli, smontaggio, riciclaggio e guida evasiva.;8;7;11;8;4;DES, ACU;CRIMINALI/BANDITI;12;12,85714286;-23,5;0;0;0
+CLASSE53;Pusher/Spacciatore;Abile nel nascondere oggetti e manipolare le persone per affari illeciti.;6;11;9;7;0;CAR, DES;CRIMINALI/BANDITI;12,2;13,08571429;-24;0;0;0
+CLASSE54;Picchiatore;Puro muscolo e intimidazione. Basso PE, alto FOR e COS.;13;4;9;5;-1;FOR, COS;CRIMINALI/BANDITI;12,4;13,31428571;-24,5;0;0;0
+CLASSE55;Truffatore/Mestiere;Maestro dell'inganno e della manipolazione sociale e finanziaria.;6;13;5;6;0;CAR, INT;CRIMINALI/BANDITI;12,6;13,54285714;-25;0;0;0
+CLASSE56;Hacker/Cybercriminale;Specializzato in sistemi informatici e frodi digitali. Mente superiore.;5;15;4;5;-2;INT, ACU;CRIMINALI/BANDITI;12,8;13,77142857;-25,5;0;0;0
+CLASSE57;Ricettatore;Conosce il mercato nero, bravo nella negoziazione e nel nascondere beni.;8;10;8;6;1;SAG, CAR;CRIMINALI/BANDITI;13;14;-26;0;0;0
+CLASSE58;Assassino a Pagamento;Estremamente furtivo, calmo e specializzato nel danno letale.;7;8;13;8;2;DES, VOL;CRIMINALI/BANDITI;13,2;14,22857143;-26,5;0;0;0
+CLASSE59;Bandito Rurale;Forte e resistente, specializzato in rapine fuori città e in fuoristrada.;11;5;10;6;1;FOR, SAG;CRIMINALI/BANDITI;13,4;14,45714286;-27;0;0;0
+CLASSE60;Tiranno Dimensionale;Leader di eserciti intergalattici. Altissima volontà e comando.;12;14;12;7;3;CAR, VOL;SUPERCATTIVI;13,6;14,68571429;-27,5;0;0;0
+CLASSE61;Genius Malvagio;Altissima intelligenza per creare armi e piani diabolici. Bassa resistenza fisica.;8;16;6;6;1;INT, ACU;SUPERCATTIVI;13,8;14,91428571;-28;0;0;0
+CLASSE62;Distruttore (Bruto);Forza e resistenza fisiche estreme, focalizzato sul caos.;18;4;14;5;-2;FOR, COS;SUPERCATTIVI;14;15,14285714;-28,5;0;0;0
+CLASSE63;Manipolatore Psichico;Poteri mentali devastanti, usa la Saggezza e la Volontà come armi.;10;18;8;6;-1;SAG, VOL;SUPERCATTIVI;14,2;15,37142857;-29;0;0;0
+CLASSE64;Doppelgänger;Maestro del travestimento e dell'inganno. Estrema agilità e Carisma.;10;12;14;8;2;DES, CAR;SUPERCATTIVI;14,4;15,6;-29,5;0;0;0
+CLASSE65;Scienziato Bio-Armato;Usa la conoscenza per mutare se stesso o i suoi scagnozzi.;14;16;10;6;0;INT, COS;SUPERCATTIVI;14,6;15,82857143;-30;0;0;0
+CLASSE66;Ladro Interdimensionale;Velocità e furtività eccezionali per rubare artefatti multiversali.;9;10;18;10;4;DES, ACU;SUPERCATTIVI;14,8;16,05714286;-30,5;0;0;0
+CLASSE67;Maledizione Vivente;Entità incorporea o spettrale che danneggia la salute e la mente.;8;20;4;7;-3;VOL, SAG;SUPERCATTIVI;15;16,28571429;-31;0;0;0
+CLASSE68;Signore del Crimine Organizzato;Controllo totale delle risorse e delle reti criminali.;11;15;8;6;2;CAR, INT;SUPERCATTIVI;15,2;16,51428571;-31,5;0;0;0
+CLASSE69;Tecnomante;Usa la magia per controllare la tecnologia (Fusione Magia/Tecnologia).;10;16;12;7;3;INT, SAG;SUPERCATTIVI;15,4;16,74285714;-32;0;0;0
+CLASSE70;Eroe di Forza;Focalizzato sulla pura potenza fisica (es. Superman, Hulk). Estrema resistenza.;18;8;10;6;1;FOR, COS;SUPEREROI;15,6;16,97142857;-32,5;0;0;0
+CLASSE71;Eroe Tattico;Leader, esperto in strategia, gadgets e abilità non innate (es. Batman, Iron Man).;10;14;12;7;3;INT, ACU;SUPEREROI;15,8;17,2;-33;0;0;0
+CLASSE72;Eroe Veloce;Velocità sovrumana, necessita di alta agilità (PS) per il controllo.;8;10;20;12;4;DES, PS;SUPEREROI;16;17,42857143;-33,5;0;0;0
+CLASSE73;Eroe PERatico/Cura;Focalizzato sul supporto, cura, e scudo energetico.;12;16;6;7;0;PER, SAG;SUPEREROI;16,2;17,65714286;-34;0;0;0
+CLASSE74;Arciere/Tiratore Scelto;Precisione estrema con proiettili o energia focalizzata (alta DES/ACU).;8;12;14;8;2;DES, ACU;SUPEREROI;16,4;17,88571429;-34,5;0;0;0
+CLASSE75;Infiltratore (Anti-Eroe);Usa furtività e inganno per operazioni ambigue. Altissima DES e VOL.;9;10;16;9;3;DES, VOL;SUPEREROI;16,6;18,11428571;-35;0;0;0
+CLASSE76;Eroe Elementale;Manipola gli elementi (fuoco, ghiaccio, fulmini). Potere puro (PE).;10;18;8;7;0;SAG, COS;SUPEREROI;16,8;18,34285714;-35,5;0;0;0
+CLASSE77;Eroe Tecnologico;Dipende da armature o gadget potenziati (es. Iron Man, Black Panther).;14;14;10;7;3;INT, COS;SUPEREROI;17;18,57142857;-36;0;0;0
+CLASSE78;Eroe Volante;Eccelle nel movimento aereo e nella sorveglianza.;10;12;16;9;2;ACU, DES;SUPEREROI;17,2;18,8;-36,5;0;0;0
+CLASSE79;Apprendista Supereroe;Potenziale elevato, ma ancora in fase di addestramento.;10;10;10;7;1;COS, INT;SUPEREROI;17,4;19,02857143;-37;0;0;0
+CLASSE80;Mago di Guerra;Incantatore focalizzato sul danno e il controllo in battaglia.;8;16;6;6;-1;INT, VOL;ARCANI/MISTICI;17,6;19,25714286;-37,5;0;0;0
+CLASSE81;Chierico/Sacerdote;Potere divino, focalizzato sulla cura e l'invocazione.;10;14;6;6;0;SAG, PER;ARCANI/MISTICI;17,8;19,48571429;-38;0;0;0
+CLASSE82;Scienziato Pazzo;Genius focalizzato su esperimenti non etici e invenzioni pericolose.;6;18;4;5;1;INT, ACU;ARCANI/MISTICI;18;19,71428571;-38,5;0;0;0
+CLASSE83;Crononauta;Manipolatore del tPERo/spazio, usa la Saggezza per calcoli complessi.;7;15;8;7;3;SAG, ACU;ARCANI/MISTICI;18,2;19,94285714;-39;0;0;0
+CLASSE84;Alchimista;Usa formule per creare pozioni, veleni e sostanze (INT e DES manuale).;8;12;10;6;0;INT, DES;ARCANI/MISTICI;18,4;20,17142857;-39,5;0;0;0
+CLASSE85;Sciamano/Medium;Connessione con spiriti e forze naturali. Forte PERatia e Saggezza.;9;13;6;6;-1;SAG, PER;ARCANI/MISTICI;18,6;20,4;-40;0;0;0
+CLASSE86;Invocatore/Evocatore;Specializzato nel richiamare creature o entità multiversali.;6;17;5;5;-2;INT, VOL;ARCANI/MISTICI;18,8;20,62857143;-40,5;0;0;0
+CLASSE87;Cacciatore di Demoni;Specializzato nel combattere entità mistiche. Richiede resistenza e conoscenza.;11;10;9;7;1;COS, SAG;ARCANI/MISTICI;19;20,85714286;-41;0;0;0
+CLASSE88;Biotecnologo;Scienziato focalizzato su mutazioni, virus e potenziamento biologico.;7;16;7;6;0;INT, COS;ARCANI/MISTICI;19,2;21,08571429;-41,5;0;0;0
+CLASSE89;Psionico;Usa il potere della mente pura per influenzare il mondo (VOL come risorsa).;8;15;7;6;-1;VOL, ACU;ARCANI/MISTICI;19,4;21,31428571;-42;0;0;0
+CLASSE90;Funzionario Pubblico;Gestisce la burocrazia e le procedure. Basso profilo, alta conoscenza dei sistemi.;7;11;6;6;-1;INT, VOL;GOVERNO/ISTITUZIONALE;19,6;21,54285714;-42,5;0;0;0
+CLASSE91;Giudice;Autorità legale suprema. Richiede saggezza, intelligenza e imparzialità.;6;13;5;5;-2;SAG, INT;GOVERNO/ISTITUZIONALE;19,8;21,77142857;-43;0;0;0
+CLASSE92;Avvocato;Maestro della retorica, negoziazione e conoscenza delle leggi.;5;14;5;6;-1;CAR, INT;GOVERNO/ISTITUZIONALE;20;22;-43,5;0;0;0
+CLASSE93;Governatore/Sindaco;Leader politico della città. Massima autorità e Carisma.;8;12;6;6;0;CAR, VOL;GOVERNO/ISTITUZIONALE;20,2;22,22857143;-44;0;0;0
+CLASSE94;Agente Tributario;Forza della legge nell'ambito fiscale. Intimidazione e conoscenza contabile.;9;10;7;6;0;INT, VOL;GOVERNO/ISTITUZIONALE;20,4;22,45714286;-44,5;0;0;0
+CLASSE95;Diplomatico/Ambasciatore;Gestisce i rapporti con fazioni esterne o altri multiversi. PERatia e Carisma.;6;12;6;6;1;CAR, PER;GOVERNO/ISTITUZIONALE;20,6;22,68571429;-45;0;0;0
+CLASSE96;Ispettore Edilizio;Verifica la conformità delle costruzioni. Richiede INT, COS e conoscenza tecnica.;10;9;7;5;0;INT, COS;GOVERNO/ISTITUZIONALE;20,8;22,91428571;-45,5;0;0;0
+CLASSE97;Guardia del Corpo;Protezione fisica di figure di alto rango. Alto PV e PS.;13;4;11;7;2;FOR, COS;GOVERNO/ISTITUZIONALE;21;23,14285714;-46;0;0;0
+CLASSE98;Consulente Legale;Non sul campo, usa l'Acume per trovare scappatoie legali.;6;13;5;6;-1;ACU, INT;GOVERNO/ISTITUZIONALE;21,2;23,37142857;-46,5;0;0;0
+CLASSE99;Reclutatore/Funzionario Militare;Usa Carisma e Volontà per mobilitare personale.;9;10;8;6;1;CAR, VOL;GOVERNO/ISTITUZIONALE;21,4;23,6;-47;0;0;0

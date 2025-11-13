@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LEGO RPG Manager - Crea Personaggio</title>
+  <title>Crea Personaggio - LEGO RPG Manager</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --lego-yellow: #f7d23e;
@@ -29,78 +30,101 @@
       color: var(--lego-red);
       text-shadow: 2px 2px 0 #fff;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
     }
 
-    main {
-      max-width: 1000px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-
-    label { font-weight: 600; margin-top: 10px; display: block; }
-
-    select, input[type="text"], input[type="number"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .stat-row input { width: 70px; text-align: center; }
-
-    button {
+    .logout, .back {
+      position: absolute;
+      top: 20px;
       background: var(--lego-blue);
       color: white;
       border: none;
-      padding: 12px 24px;
+      padding: 8px 16px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       transition: 0.2s;
+    }
+
+    .back { left: 20px; }
+    .logout { right: 20px; background: var(--lego-red); }
+
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 { color: var(--lego-blue); }
+
+    label {
+      font-weight: 600;
       margin-top: 15px;
-    }
-    button:hover { background: #4a9aff; }
-
-    .bottom-buttons {
-      text-align: center;
-      margin: 30px 0;
+      display: block;
     }
 
-    .bottom-buttons button {
-      padding: 10px 20px;
-      margin: 10px;
-      border: none;
+    select, input {
+      width: 100%;
+      padding: 10px;
       border-radius: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    #modTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    #modTable th, #modTable td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #createdPGs {
+      margin-top: 30px;
+    }
+
+    .save-btn {
+      margin-top: 25px;
+      background: var(--lego-blue);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 10px;
+      cursor: pointer;
       font-weight: 600;
       font-size: 1em;
-      cursor: pointer;
-      transition: 0.2s;
     }
-
-    .logout { background: var(--lego-red); color: white; }
-    .logout:hover { background: #ff5252; }
-    .back { background: var(--lego-blue); color: white; }
-    .back:hover { background: #4a9aff; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 30px; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-    th { background: var(--lego-yellow); }
   </style>
 </head>
+
 <body>
 
-<header>LEGO RPG Manager - Crea Personaggio</header>
+<header>
+  Crea Personaggio
+  <button class="back" onclick="window.location.href='dashboard.html'">← Dashboard</button>
+  <button class="logout" onclick="logout()">Logout</button>
+</header>
 
 <main>
-  <h2>🧱 Crea Nuovo Personaggio</h2>
+  <h2>Dati Base</h2>
 
-  <label>Nome</label>
-  <input type="text" id="pgNome" placeholder="Inserisci nome del personaggio">
+  <label>Nome del personaggio</label>
+  <input type="text" id="pgNome">
 
   <label>Specie</label>
   <select id="pgSpecie"></select>
@@ -109,161 +133,186 @@
   <select id="pgClasse"></select>
 
   <label>Multiverso</label>
-  <select id="pgMultiverso"></select>
+  <select id="pgMulti"></select>
 
   <label>Livello</label>
   <select id="pgLivello"></select>
 
   <label>Grado</label>
-  <select id="pgGrado" onchange="updatePuntiDisponibili()"></select>
+  <select id="pgGrado"></select>
 
-  <p><strong>Punti disponibili:</strong> <span id="puntiRimanenti">0</span></p>
-
+  <h2>Statistiche Primarie</h2>
+  <p>Punti disponibili: <b id="puntiRimanenti">0</b></p>
   <div id="statContainer"></div>
 
-  <button onclick="creaPersonaggio()">➕ Crea Personaggio</button>
+  <h2>Modificatori</h2>
+  <table id="modTable">
+    <tr><th>Stat</th><th>Mod Totale</th></tr>
+  </table>
 
-  <h3>👥 Personaggi Creati</h3>
-  <table id="pgTable"></table>
+  <button class="save-btn" onclick="aggiungiPG()">Aggiungi PG</button>
 
-  <button onclick="downloadCSV()">⬇️ Scarica CSV completo</button>
+  <div id="createdPGs">
+    <h2>PG Creati</h2>
+    <table id="pgTable">
+      <tr><th>ID</th><th>Nome</th><th>Specie</th><th>Classe</th></tr>
+    </table>
+    <button class="save-btn" onclick="scaricaCSV()">Scarica CSV PG</button>
+  </div>
 </main>
 
-<div class="bottom-buttons">
-  <button class="back" onclick="goTo('dashboard.html')">← Dashboard</button>
-  <button class="logout" onclick="logout()">Logout</button>
-</div>
-
 <script>
-const baseURL = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
-let specie=[], classi=[], multiversi=[], livelli=[], gradi=[], stats=[], pgList=[];
+const BASE = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
+
+let specie = [], classi = [], multi = [], livelli = [], gradi = [], stats = [];
 let puntiTotali = 0;
 let puntiUsati = 0;
+let pgCreati = [];
 
-// ✅ Parser CSV migliorato
-function parseCSV(text){
-  const lines = text.trim().split(/\r?\n/);
-  return lines.slice(1).map(line => {
-    const match = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-    return match ? match.map(v=>v.replace(/^"|"$/g,'')) : [];
-  });
-}
-
-async function loadCSV(url){
+// --- CARICA CSV ---
+async function loadCSV(url) {
   const res = await fetch(url);
-  if(!res.ok) throw new Error("Errore nel caricamento: "+url);
-  const text = await res.text();
-  return parseCSV(text);
+  const txt = await res.text();
+  return txt.split("\n").map(r => r.split(";"));
 }
 
-async function init(){
-  specie = await loadCSV(baseURL+"speci.csv");
-  classi = await loadCSV(baseURL+"classi.csv");
-  multiversi = await loadCSV(baseURL+"multiversi-pg.csv");
-  livelli = await loadCSV(baseURL+"livelli.csv");
-  gradi = await loadCSV(baseURL+"gradi.csv");
-  stats = await loadCSV(baseURL+"statistiche_primarie.csv");
-  pgList = await loadCSV(baseURL+"pg-database.csv");
+// --- INITIAL LOAD ---
+(async function init() {
+  specie = await loadCSV(BASE + "speci.csv");
+  classi = await loadCSV(BASE + "classi.csv");
+  livelli = await loadCSV(BASE + "livelli.csv");
+  gradi = await loadCSV(BASE + "gradi.csv");
+  multi = await loadCSV(BASE + "multiversi-pg.csv");
+  stats = await loadCSV(BASE + "statistiche_primarie.csv");
 
   fillSelect("pgSpecie", specie);
   fillSelect("pgClasse", classi);
-  fillSelect("pgMultiverso", multiversi);
   fillSelect("pgLivello", livelli);
   fillSelect("pgGrado", gradi);
+  fillSelect("pgMulti", multi);
 
   renderStats();
-  renderTable();
-}
+  updateModifiers();
+})();
 
-function fillSelect(id, data){
-  const s=document.getElementById(id);
-  s.innerHTML='<option value="">-- Seleziona --</option>';
-  data.forEach(r=>{
-    if(r[0] && r[1]) s.innerHTML+=`<option value="${r[0]}">${r[1]}</option>`;
+function fillSelect(id, arr) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = "<option value=''>-- Seleziona --</option>";
+  arr.forEach(r => {
+    if (r[0] && r[1])
+      sel.innerHTML += `<option value="${r[0]}">${r[1]}</option>`;
   });
 }
 
-function renderStats(){
-  const container=document.getElementById("statContainer");
-  container.innerHTML="";
-  stats.forEach(r=>{
-    const name=r[1];
-    if(!name) return;
-    const div=document.createElement("div");
-    div.classList.add("stat-row");
-    div.innerHTML=`
-      <label>${name}</label>
-      <input type="number" min="0" value="0" onchange="aggiornaPunti()" data-stat="${name}">
-    `;
-    container.appendChild(div);
+// --- RENDER STAT PRIMARIE ---
+function renderStats() {
+  const container = document.getElementById("statContainer");
+  container.innerHTML = "";
+  const gradoID = document.getElementById("pgGrado").value;
+  const gradoRow = gradi.find(g => g[0] === gradoID);
+  puntiTotali = gradoRow ? parseInt(gradoRow[3]) : 0;
+  
+  document.getElementById("puntiRimanenti").textContent = puntiTotali;
+
+  stats.forEach((s, idx) => {
+    if (!s[1]) return;
+    container.innerHTML += `
+      <div class="stat-row">
+        <span>${s[1]}</span>
+        <input type="number" min="0" value="0" data-index="${idx}" onchange="aggiornaPunti()">
+      </div>`;
   });
 }
 
-function updatePuntiDisponibili(){
-  const gradoID=document.getElementById("pgGrado").value;
-  const grado=gradi.find(g=>g[0]===gradoID);
-  puntiTotali=grado?parseInt(grado[3]||0):0;
-  puntiUsati=0;
-  document.getElementById("puntiRimanenti").textContent=puntiTotali;
-  document.querySelectorAll('#statContainer input').forEach(i=>i.value=0);
-}
+// --- AGGIORNA PUNTI ---
+function aggiornaPunti() {
+  let tot = 0;
+  document.querySelectorAll("#statContainer input").forEach(i => {
+    tot += parseInt(i.value || 0);
+  });
 
-function aggiornaPunti(){
-  let tot=0;
-  document.querySelectorAll('#statContainer input').forEach(i=>tot+=parseInt(i.value||0));
-  if(tot>puntiTotali){
+  if (tot > puntiTotali) {
     alert("Hai superato i punti disponibili!");
-    event.target.value=0;
+    event.target.value = 0;
     aggiornaPunti();
     return;
   }
-  puntiUsati=tot;
-  document.getElementById("puntiRimanenti").textContent=puntiTotali-puntiUsati;
+
+  puntiUsati = tot;
+  document.getElementById("puntiRimanenti").textContent = puntiTotali - tot;
+  updateModifiers();
 }
 
-function creaPersonaggio(){
-  const nome=document.getElementById("pgNome").value.trim();
-  if(!nome) return alert("Inserisci un nome!");
-  const specieID=document.getElementById("pgSpecie").value;
-  const classeID=document.getElementById("pgClasse").value;
-  const multiID=document.getElementById("pgMultiverso").value;
-  const lvlID=document.getElementById("pgLivello").value;
-  const gradoID=document.getElementById("pgGrado").value;
+// --- CALCOLO MODIFICATORI ---
+function updateModifiers() {
+  const modTable = document.getElementById("modTable");
+  modTable.innerHTML = `<tr><th>Stat</th><th>Mod Totale</th></tr>`;
 
-  const id=pgList.length?parseInt(pgList[pgList.length-1][0])+1:1;
-  const statsValues=[...document.querySelectorAll('#statContainer input')].map(i=>parseInt(i.value||0));
+  const specieID = document.getElementById("pgSpecie").value;
+  const classeID = document.getElementById("pgClasse").value;
 
-  const newPg=[id,nome,specieID,classeID,multiID,lvlID,gradoID,...statsValues];
-  pgList.push(newPg);
-  renderTable();
-}
+  const rowSp = specie.find(s => s[0] === specieID);
+  const rowCl = classi.find(c => c[0] === classeID);
 
-function renderTable(){
-  const table=document.getElementById("pgTable");
-  table.innerHTML="";
-  if(pgList.length<1) return;
-  const headers=["ID","Nome","Specie","Classe","Multiverso","Livello","Grado",...stats.map(s=>s[1])];
-  let html="<tr>"+headers.map(h=>`<th>${h}</th>`).join("")+"</tr>";
-  pgList.forEach(r=>{
-    html+="<tr>"+r.map(c=>`<td>${c||""}</td>`).join("")+"</tr>";
+  const modSp = rowSp ? rowSp.slice(5, 11).map(Number) : [0,0,0,0,0,0];
+  const modCl = rowCl ? rowCl.slice(10, 16).map(Number) : [0,0,0,0,0,0];
+
+  document.querySelectorAll("#statContainer input").forEach((input, idx) => {
+    const val = parseInt(input.value || 0);
+    const base = Math.floor((val - 10) / 2);
+    const tot = base + modSp[idx] + modCl[idx];
+
+    modTable.innerHTML += `
+      <tr>
+        <td>${stats[idx][1]}</td>
+        <td>${tot >= 0 ? "+" + tot : tot}</td>
+      </tr>`;
   });
-  table.innerHTML=html;
 }
 
-function downloadCSV(){
-  const headers=["ID","NOME","ID_SPECIE","ID_CLASSE","ID_MULTIVERSO","ID_LIVELLO","ID_GRADO",...stats.map(s=>s[1])];
-  const csv=[headers.join(",")].concat(pgList.map(r=>r.join(","))).join("\n");
-  const blob=new Blob([csv],{type:"text/csv"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="pg-database.csv";
-  a.click();
+// --- CREA PG ---
+function aggiungiPG() {
+  const nome = document.getElementById("pgNome").value;
+  if (!nome) return alert("Inserisci un nome!");
+
+  const id = pgCreati.length + 1;
+
+  pgCreati.push({
+    id,
+    nome,
+    specie: document.getElementById("pgSpecie").value,
+    classe: document.getElementById("pgClasse").value
+  });
+
+  document.getElementById("pgTable").innerHTML += `
+    <tr>
+      <td>${id}</td>
+      <td>${nome}</td>
+      <td>${document.getElementById("pgSpecie").value}</td>
+      <td>${document.getElementById("pgClasse").value}</td>
+    </tr>
+  `;
 }
 
-function logout(){ localStorage.removeItem("legoUser"); window.location.href="index.html"; }
-function goTo(page){ window.location.href=page; }
+// --- DOWNLOAD CSV COMPLETO ---
+function scaricaCSV() {
+  let csv = "ID;NOME;SPECIE;CLASSE\n";
+  pgCreati.forEach(pg => {
+    csv += `${pg.id};${pg.nome};${pg.specie};${pg.classe}\n`;
+  });
 
-init();
+  const blob = new Blob([csv], { type: "text/csv" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "pg-database.csv";
+  link.click();
+}
+
+function logout() {
+  localStorage.removeItem("legoUser");
+  window.location.href = "index.html";
+}
 </script>
+
 </body>
 </html>
