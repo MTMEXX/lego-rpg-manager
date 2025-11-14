@@ -1,13 +1,15 @@
-﻿ID;NOME;FORMULA;DESCRIZIONE;ATTRIBUTO
-STSEC1;Punti Vita Massimi (PV Max);PVclasse + (Modificatore Costituzione x Livello) + Bonus Oggetti;Determina la quantità massima di danno che il personaggio può subire prima di morire o cadere.;PV_Max
-STSEC2;Punti Energia Massimi (PE Max);PEclasse + Modificatore Intelligenza x Livello + Bonus Classe;Determina la quantità massima di risorse utilizzabili per incantesimi o abilità speciali.;PM_Max
-STSEC3;Punti Stamina Massimi (PS Max);PSclasse + Modificatore Costituzione + Modificatore Forza;Determina la capacità di eseguire azioni fisiche ripetute (corsa, attacchi multipli).;PS_Max
-STSEC4;Classe Armatura (CA);10 + Modificatore Destrezza + Bonus Armatura + Bonus Scudo;Il valore che un avversario deve eguagliare o superare con un tiro d'attacco per colpire.;CA_Totale
-STSEC5;Iniziativa;Modificatore Destrezza + bonus ;Determina l'ordine in cui i personaggi agiscono durante il combattimento a turni.;Iniziativa
-STSEC6;Bonus Attacco Fisico;Modificatore Forza o Destrezza (in base all'arma) + Competenza Base + Bonus Arma;Bonus aggiunto al tiro $d20$ per colpire un bersaglio con armi fisiche.;BonusAttaccoFisico
-STSEC7;Bonus Attacco Magico;Modificatore Intelligenza o Saggezza (in base all'arma) + Competenza Base + Bonus Focus Magico;Bonus aggiunto al tiro $d20$ o alla difficoltà (CD) degli incantesimi.;BonusAttaccoMagico
-STSEC8;Tiro Salvezza Magico (TS Magico);Modificatore Saggezza + Bonus Oggetti e Stati;Resistenza contro effetti magici.;TS_Magico
-STSEC9;Tiro Salvezza Fisico (TS Fisico);Modificatore Costituzione + Bonus Oggetti e Stati;Resistenza contro veleni, malattie e effetti di trauma fisico.;TS_Fisico
-STSEC10;Velocità (Movimento Base);Velocità Base Classe + Modificatori Razza - Malus Armatura e Peso;Quanti metri/caselle il personaggio può muovere per turno.;Velocita_Base
-STSEC11;Capacità di Trasporto;Forza x  5 (varia per sistema);Il peso massimo di oggetti che il personaggio può trasportare senza penalità.;CapacitaTrasporto
-STSEC12;Percezione Passiva;10 + Modificatore Saggezza + Bonus;La capacità automatica di notare pericoli o dettagli nascosti senza un tiro attivo.;PercezionePassiva
+﻿ID;NOME;FORMULA BASE;FORMULA COMPLETA;DESCRIZIONE;ATTRIBUTO
+STSEC1;Punti Vita Massimi (PV Max);PVclasse + Modificatore Costituzione x Livello;PVclasse + Modificatore Costituzione x Livello + Bonus Oggetti;Determina la quantità massima di danno che il personaggio può subire prima di morire o cadere.;PV_Max
+STSEC2;Punti Energia Massimi (PE Max);PEclasse + Modificatore Intelligenza x Livello;PEclasse + Modificatore Intelligenza x Livello + Bonus Oggetti;Determina la quantità massima di risorse utilizzabili per incantesimi o abilità speciali.;PM_Max
+STSEC3;Punti Stamina Massimi (PS Max);PSclasse + Modificatore Costituzione + Modificatore Forza;PSclasse + Modificatore Costituzione + Modificatore Forza;Determina la capacità di eseguire azioni fisiche ripetute (corsa, attacchi multipli).;PS_Max
+STSEC4;Classe Armatura (CA);10 + Modificatore Destrezza;10 + Modificatore Destrezza + Bonus Armatura + Bonus Scudo;Il valore che un avversario deve eguagliare o superare con un tiro d'attacco per colpire.;CA_Totale
+STSEC5;Iniziativa;Modificatore Destrezza;Modificatore Destrezza + bonus ;Determina l'ordine in cui i personaggi agiscono durante il combattimento a turni.;Iniziativa
+STSEC6;Bonus Attacco Fisico;Modificatore Forza;Modificatore Forza + Competenza Base + Bonus Arma;Bonus aggiunto al tiro $d20$ per colpire un bersaglio con armi fisiche.;BonusAttaccoFisico
+STSEC7;Bonus Attacco Perforante;Modificatore Destrezza;Modificatore Destrezza + Competenza Base + Bonus Arma;Bonus aggiunto al tiro $d20$ per colpire un bersaglio con armi fisiche.;BonusAttaccoPerforante
+STSEC8;Bonus Attacco Magico;Modificatore Intelligenza;Modificatore Intelligenza + Competenza Base + Bonus Focus Magico;Bonus aggiunto al tiro $d20$ o alla difficoltà (CD) degli incantesimi.;BonusAttaccoMagico
+STSEC9;Bonus Stregonerie;Modificatore Saggezza;Modificatore Saggezza + Competenza Base + Bonus Focus Magico;Bonus aggiunto al tiro $d20$ o alla difficoltà (CD) degli incantesimi.;BonusStregonerie
+STSEC10;Tiro Salvezza Magico (TS Magico);Modificatore Saggezza;Modificatore Saggezza + Bonus Oggetti e Stati;Resistenza contro effetti magici.;TS_Magico
+STSEC11;Tiro Salvezza Fisico (TS Fisico);Modificatore Costituzione;Modificatore Costituzione + Bonus Oggetti e Stati;Resistenza contro veleni, malattie e effetti di trauma fisico.;TS_Fisico
+STSEC12;Velocità (Movimento Base);Velocità Base Classe;Velocità Base Classe - Malus Armatura e Peso;Quanti metri/caselle il personaggio può muovere per turno.;Velocita_Base
+STSEC13;Capacità di Trasporto;Forza x  5;Forza x  5 ;Il peso massimo di oggetti che il personaggio può trasportare senza penalità.;CapacitaTrasporto
+STSEC14;Percezione Passiva;10 + Modificatore Saggezza;10 + Modificatore Saggezza + Bonus;La capacità automatica di notare pericoli o dettagli nascosti senza un tiro attivo.;PercezionePassiva

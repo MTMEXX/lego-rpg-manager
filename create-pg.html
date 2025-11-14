@@ -4,90 +4,118 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>LEGO RPG Manager - Crea Personaggio</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --lego-yellow:#f7d23e; --lego-red:#e53e3e; --lego-blue:#3182ce; --lego-gray:#f8f8f8;
 }
-body{margin:0;font-family:Montserrat, sans-serif;background:var(--lego-gray);color:#222;}
-header{background:var(--lego-yellow);padding:18px;text-align:center;font-weight:800;color:var(--lego-red);box-shadow:0 4px 10px rgba(0,0,0,.15);}
-main{max-width:1000px;margin:24px auto;background:#fff;border-radius:14px;padding:28px;box-shadow:0 6px 20px rgba(0,0,0,.08);}
-label{display:block;font-weight:600;margin-top:12px;}
-select,input[type="text"],input[type="number"]{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-top:6px;}
-.stat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding:6px 4px;border-bottom:1px solid #f0f0f0;}
-.stat-row input{width:84px;text-align:center;}
-#modTable,#pgTable{width:100%;border-collapse:collapse;margin-top:12px;}
-#modTable th,#modTable td,#pgTable th,#pgTable td{border:1px solid #ddd;padding:8px;text-align:center;}
-#modTable th,#pgTable th{background:var(--lego-yellow);}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.btn{background:var(--lego-blue);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer;}
-.btn.red{background:var(--lego-red);}
-.footer-buttons{text-align:center;margin-top:18px;}
-small.note{color:#666}
+*{box-sizing:border-box}
+body{margin:0;font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:var(--lego-gray);color:#222}
+header{background:var(--lego-yellow);padding:14px 18px;color:var(--lego-red);font-weight:800;text-align:center;position:relative;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+.header-btn{position:absolute;top:12px;padding:8px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+#backBtn{left:14px;background:var(--lego-blue);color:#fff}
+#logoutBtn{right:14px;background:var(--lego-red);color:#fff}
+main{max-width:1100px;margin:26px auto;background:#fff;padding:22px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.06)}
+h1{color:var(--lego-blue);margin:0 0 10px;font-size:1.4rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.form-row.single{grid-template-columns:1fr}
+label{display:block;font-weight:700;margin-bottom:6px}
+select,input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid #dcdcdc}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:14px}
+.stat-item{background:#fafafa;border-radius:10px;padding:10px;border-top:6px solid var(--lego-yellow)}
+.stat-item .row{display:flex;justify-content:space-between;align-items:center}
+.small{font-size:.9rem;color:#444}
+.preview{margin-top:18px;padding:14px;border-radius:10px;background:#f2f7ff;border-left:8px solid var(--lego-blue)}
+.mod-table, .pg-table{width:100%;border-collapse:collapse;margin-top:12px}
+.mod-table th,.mod-table td,.pg-table th,.pg-table td{border:1px solid #e6e6e6;padding:8px;text-align:center}
+.mod-table th,.pg-table th{background:var(--lego-yellow)}
+.btn{background:var(--lego-blue);color:#fff;padding:10px 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+.btn.red{background:var(--lego-red)}
+.footer{display:flex;gap:10px;justify-content:center;margin-top:18px}
+.note{font-size:.85rem;color:#666;margin-top:8px}
+@media (max-width:720px){ .form-row{grid-template-columns:1fr} header{font-size:1rem} }
 </style>
 </head>
 <body>
-<header>LEGO RPG Manager — Crea Personaggio</header>
+<header>
+  Crea Personaggio
+  <button id="backBtn" class="header-btn" onclick="location.href='dashboard.html'">← Dashboard</button>
+  <button id="logoutBtn" class="header-btn" onclick="logout()">Logout</button>
+</header>
 
 <main>
-  <h2>Dati Personaggio</h2>
+  <h1>Generatore Personaggio — Crea & Test</h1>
 
-  <label>Nome</label>
-  <input id="pgNome" type="text" placeholder="Nome personaggio">
+  <div class="form-row single">
+    <div>
+      <label for="name">Nome</label>
+      <input id="name" type="text" placeholder="Nome personaggio">
+    </div>
+  </div>
 
-  <label>Specie</label>
-  <select id="selSpecie"></select>
+  <div class="form-row">
+    <div>
+      <label for="sel-specie">Specie</label>
+      <select id="sel-specie"></select>
+    </div>
+    <div>
+      <label for="sel-classe">Classe</label>
+      <select id="sel-classe"></select>
+    </div>
+  </div>
 
-  <label>Classe</label>
-  <select id="selClasse"></select>
+  <div class="form-row">
+    <div>
+      <label for="sel-multi">Multiverso</label>
+      <select id="sel-multi"></select>
+    </div>
+    <div>
+      <label for="sel-liv">Livello</label>
+      <select id="sel-liv"></select>
+    </div>
+  </div>
 
-  <label>Multiverso</label>
-  <select id="selMulti"></select>
+  <div class="form-row">
+    <div>
+      <label for="sel-grado">Grado</label>
+      <select id="sel-grado"></select>
+    </div>
+    <div>
+      <label>Punti disponibili</label>
+      <div class="small" id="punti-info">0 usati / 0 disponibili</div>
+    </div>
+  </div>
 
-  <label>Livello</label>
-  <select id="selLivello"></select>
+  <p class="note">Distribuisci i punti alle statistiche primarie. I modificatori si aggiornano in tempo reale (base + specie + classe).</p>
 
-  <label>Grado</label>
-  <select id="selGrado" onchange="onGradoChange()"></select>
+  <div class="stat-grid" id="stat-grid">
+    <!-- stats injected here -->
+  </div>
 
-  <p><small class="note">Il valore "BUDGET PUNTI STATISTICHE INIZIALI" viene letto dalla colonna del CSV dei gradi.</small></p>
+  <h3 style="margin-top:16px">Modificatori</h3>
+  <table class="mod-table" id="mod-table">
+    <thead><tr><th>Stat</th><th>Mod Totale</th></tr></thead>
+    <tbody></tbody>
+  </table>
 
-  <h3 style="margin-top:18px">Statistiche primarie (distribuisci i punti)</h3>
-  <p>Punti disponibili: <strong id="puntiDisponibili">0</strong> — usati: <strong id="puntiUsati">0</strong></p>
-  <div id="statContainer"></div>
+  <div class="preview" id="preview">
+    <!-- preview injected here -->
+  </div>
 
-  <h3>Modificatori (in tempo reale)</h3>
-  <table id="modTable"><tr><th>Stat</th><th>Modificatore</th></tr></table>
-
-  <div style="margin-top:16px" class="controls">
-    <button class="btn" onclick="aggiungiPG()">➕ Aggiungi PG</button>
-    <button class="btn" onclick="scaricaCSV()">⬇ Scarica pg-database.csv</button>
+  <div class="footer">
+    <button class="btn" onclick="aggiungiPG()">Aggiungi PG (in lista)</button>
+    <button class="btn" onclick="scaricaCSV()">Scarica pg-database.csv</button>
     <button class="btn red" onclick="resetNuovi()">Reset nuovi</button>
   </div>
 
-  <h3 style="margin-top:22px">PG (esistenti + nuovi)</h3>
-  <table id="pgTable">
-    <tr><th>ID</th><th>NOME</th><th>SPECIE(ID)</th><th>CLASSE(ID)</th><th>MULTI(ID)</th><th>LV(ID)</th><th>GRADO(ID)</th><!-- stat headers aggiunti dinamicamente --></tr>
-  </table>
+  <h3 style="margin-top:18px">Tabella PG (esistenti + nuovi)</h3>
+  <table class="pg-table" id="pg-table"><thead></thead><tbody></tbody></table>
 </main>
 
 <script>
-/*
-  Robust create-pg page:
-  - parses ; separated CSV (handles quotes lightly)
-  - uses header normalization to find needed columns
-  - populates selects showing only NOME column
-  - renders stat inputs and calculates modifiers live:
-      base = floor((stat - 10)/2)
-      final = base + specieMod + classeMod
-  - collects existing pg-database if present, computes next ID
-  - lets you add multiple PG and download merged CSV
-*/
-
-// --- config: base path to your db folder raw github
+/* ------------- CONFIG ------------- */
 const BASE = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
-
-// filenames expected (as you confirmed)
 const FILES = {
   speci: "speci.csv",
   classi: "classi.csv",
@@ -98,426 +126,334 @@ const FILES = {
   pgdb: "pg-database.csv"
 };
 
-// storage
+/* ------------- STATE ------------- */
+let RAW = {};
 let SPECIE = [], CLASSI = [], MULTI = [], LIVELLI = [], GRADI = [], STATS = [], PGDB = [];
-let NUOVI_PG = []; // array of arrays for CSV rows (will be appened)
-let headerMap = {}; // for pg-database existing header if needed
+let NUOVI = []; // new created rows arrays
 let statNames = [];
+let puntiDisponibili = 0;
+let puntiUsati = 0;
 
-// UTIL: parse CSV line with semicolon, rudimentary handling of quotes
-function splitSemicolonSafe(line) {
-  const out = [];
-  let cur = "";
-  let inQuote = false;
-  for (let i=0;i<line.length;i++){
-    const ch = line[i];
-    if (ch === '"' ) {
-      inQuote = !inQuote;
-      continue; // remove quotes
-    }
-    if (!inQuote && ch === ';') {
-      out.push(cur);
-      cur = "";
-    } else {
-      cur += ch;
-    }
+/* ------------- CSV PARSER ; safe for quotes ------------- */
+function splitSemicolonSafe(line){
+  let res=[]; let cur=""; let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch === '"'){ inQ=!inQ; continue; }
+    if(!inQ && ch === ';'){ res.push(cur); cur=""; } else cur+=ch;
   }
-  out.push(cur);
-  return out.map(s => s.trim());
+  res.push(cur);
+  return res.map(s=>s.trim());
+}
+function parseCSV(text){
+  return text.replace(/\r/g,"").split("\n").filter(l=>l.trim()!=="").map(l=>splitSemicolonSafe(l));
 }
 
-// Parse entire CSV text: returns array of rows (each row array of columns)
-function parseCSVSemicolon(text){
-  const lines = text.replace(/\r/g,"").split("\n").filter(l=>l.trim()!=="");
-  const rows = lines.map(l => splitSemicolonSafe(l));
-  return rows;
-}
-
-// fetch+parse helper
-async function fetchCSV(name){
+/* ------------- LOAD ALL CSV ------------- */
+async function fetchCSV(path){
   try {
-    const r = await fetch(BASE + name);
-    if (!r.ok) {
-      // console.warn("file not found:", name);
-      return null;
-    }
-    const txt = await r.text();
-    return parseCSVSemicolon(txt);
-  } catch(e){
-    console.error("fetch error", e);
-    return null;
+    const r = await fetch(path);
+    if(!r.ok) return null;
+    const t = await r.text();
+    return parseCSV(t);
+  } catch(e){ console.error("fetch",e); return null; }
+}
+
+async function init(){
+  RAW.speci = await fetchCSV(BASE + FILES.speci) || [];
+  RAW.classi = await fetchCSV(BASE + FILES.classi) || [];
+  RAW.multiversi = await fetchCSV(BASE + FILES.multiversi) || [];
+  RAW.livelli = await fetchCSV(BASE + FILES.livelli) || [];
+  RAW.gradi = await fetchCSV(BASE + FILES.gradi) || [];
+  RAW.stats = await fetchCSV(BASE + FILES.stats) || [];
+  RAW.pgdb = await fetchCSV(BASE + FILES.pgdb) || [];
+
+  // strip headers when present (detect header by presence of "nome" in first row)
+  function stripHeader(arr){
+    if(!arr || arr.length===0) return [];
+    const first = arr[0].map(c=> (c||"").toString().toLowerCase());
+    if(first.some(x=>x.includes("nome")||x.includes("id"))) return arr.slice(1);
+    return arr;
   }
-}
 
-// normalize header key (remove spaces, underscores, lowercase)
-function norm(h) {
-  return h ? h.toString().replace(/[^a-zA-Z0-9]/g,"").toLowerCase() : "";
-}
+  SPECIE = stripHeader(RAW.speci);
+  CLASSI = stripHeader(RAW.classi);
+  MULTI = stripHeader(RAW.multiversi);
+  LIVELLI = stripHeader(RAW.livelli);
+  GRADI = stripHeader(RAW.gradi);
+  STATS = stripHeader(RAW.stats);
+  PGDB = stripHeader(RAW.pgdb);
 
-// build map from header row array
-function buildHeaderMap(headerRow) {
-  const m = {};
-  headerRow.forEach((h,i)=> m[norm(h)] = i);
-  return m;
-}
-
-// fill a select element with rows: uses column "nome" (case-insensitive)
-function fillSelectFromRows(selId, rows) {
-  const sel = document.getElementById(selId);
-  sel.innerHTML = "<option value=''>-- Seleziona --</option>";
-  if (!rows) return;
-  // header may be included? our parse returns all rows; assume first row is header if it contains text 'nome' at some column
-  let header = rows[0];
-  let startIndex = 0;
-  if (header && header.some(c => c && c.toLowerCase().includes("nome"))) {
-    // skip header row
-    startIndex = 1;
-  }
-  for (let i = startIndex; i < rows.length; i++){
-    const r = rows[i];
-    if (!r) continue;
-    const id = r[0] || "";
-    const name = r[1] || r[2] || r[0] || "";
-    sel.add(new Option(name, id));
-  }
-}
-
-// read modifier arrays from a row using normalized keys
-// expected: specie rows have columns "Mod _for", "Mod_des", ... but names vary; we rely on header mapping
-function getModifierArrayFromRow(row, headerMapRow) {
-  // headerMapRow maps normalized header->index
-  // mapping we expect (from your header description):
-  // specie: Mod _for (col F), Mod_des (G), Mod_cos(H), Mod_int(I), Mod_sag(J), Mod_car(K)
-  // classi: Mod _for (K), Mod_des(L), Mod_cos(M), Mod_int(N), Mod_sag(O), Mod_car(P)
-  // But to be robust, we'll look for keys containing 'mod'+'for' etc.
-  const keys = Object.keys(headerMapRow);
-  const lookup = name => {
-    // try direct normalized name
-    const n = norm(name);
-    if (n in headerMapRow) return headerMapRow[n];
-    // try find by contains
-    const found = keys.find(k => k.includes(name.replace(/[^a-zA-Z]/g,"").toLowerCase()));
-    return found ? headerMapRow[found] : -1;
-  };
-  const idxFor = lookup("modfor") !== -1 ? lookup("modfor") : lookup("mod_for");
-  const idxDes = lookup("moddes") !== -1 ? lookup("moddes") : lookup("mod_des");
-  const idxCos = lookup("modcos") !== -1 ? lookup("modcos") : lookup("mod_cos");
-  const idxInt = lookup("modint") !== -1 ? lookup("modint") : lookup("mod_int");
-  const idxSag = lookup("modsag") !== -1 ? lookup("modsag") : lookup("mod_sag");
-  const idxCar = lookup("modcar") !== -1 ? lookup("modcar") : lookup("mod_car");
-
-  const arr = [];
-  arr.push(idxFor>=0 ? Number(row[idxFor]||0) : 0);
-  arr.push(idxDes>=0 ? Number(row[idxDes]||0) : 0);
-  arr.push(idxCos>=0 ? Number(row[idxCos]||0) : 0);
-  arr.push(idxInt>=0 ? Number(row[idxInt]||0) : 0);
-  arr.push(idxSag>=0 ? Number(row[idxSag]||0) : 0);
-  arr.push(idxCar>=0 ? Number(row[idxCar]||0) : 0);
-  return arr;
-}
-
-// ---- main init
-(async function mainInit(){
-  // fetch all CSVs (returns array-of-rows including header)
-  const [
-    rawSpecie, rawClassi, rawMulti, rawLivelli, rawGradi, rawStats, rawPGDB
-  ] = await Promise.all([
-    fetchCSV(FILES.speci),
-    fetchCSV(FILES.classi),
-    fetchCSV(FILES.multiversi),
-    fetchCSV(FILES.livelli),
-    fetchCSV(FILES.gradi),
-    fetchCSV(FILES.stats),
-    fetchCSV(FILES.pgdb)
-  ]);
-
-  // store raw arrays
-  SPECIE = rawSpecie || [];
-  CLASSI = rawClassi || [];
-  MULTI = rawMulti || [];
-  LIVELLI = rawLivelli || [];
-  GRADI = rawGradi || [];
-  STATS = rawStats || [];
-  PGDB = rawPGDB || [];
-
-  // build header maps for specie/classi/gradi etc (if present)
-  const specieHeaderMap = SPECIE.length ? buildHeaderMap(SPECIE[0]) : {};
-  const classiHeaderMap = CLASSI.length ? buildHeaderMap(CLASSI[0]) : {};
-  const gradiHeaderMap = GRADI.length ? buildHeaderMap(GRADI[0]) : {};
-  const statsHeaderMap = STATS.length ? buildHeaderMap(STATS[0]) : {};
-  const pgHeaderMap = PGDB.length ? buildHeaderMap(PGDB[0]) : {};
-
-  // remove header rows from arrays for simpler handling but keep header maps
-  if (SPECIE.length && SPECIE[0].some(c => (c||"").toLowerCase().includes("nome"))) SPECIE = SPECIE.slice(1);
-  if (CLASSI.length && CLASSI[0].some(c => (c||"").toLowerCase().includes("nome"))) CLASSI = CLASSI.slice(1);
-  if (MULTI.length && MULTI[0].some(c => (c||"").toLowerCase().includes("nome"))) MULTI = MULTI.slice(1);
-  if (LIVELLI.length && LIVELLI[0].some(c => (c||"").toLowerCase().includes("nome"))) LIVELLI = LIVELLI.slice(1);
-  if (GRADI.length && GRADI[0].some(c => (c||"").toLowerCase().includes("nome"))) GRADI = GRADI.slice(1);
-  if (STATS.length && STATS[0].some(c => (c||"").toLowerCase().includes("nome"))) STATS = STATS.slice(1);
-  if (PGDB.length && PGDB[0].some(c => (c||"").toLowerCase().includes("nome"))) PGDB = PGDB.slice(1);
-
-  // stat names
   statNames = STATS.map(r => r[1] || r[0]);
 
-  // fill selects (only show Nome)
-  function fillSelectFromRaw(selId, raw, headerMap){
-    const sel = document.getElementById(selId);
-    sel.innerHTML = "<option value=''>-- Seleziona --</option>";
-    raw.forEach(r => {
-      const id = r[0] || "";
-      const name = r[1] || id;
-      sel.add(new Option(name, id));
-    });
-  }
+  buildSelect("sel-specie", SPECIE);
+  buildSelect("sel-classe", CLASSI);
+  buildSelect("sel-multi", MULTI);
+  buildSelect("sel-liv", LIVELLI);
+  buildSelect("sel-grado", GRADI);
 
-  fillSelectFromRaw("selSpecie", SPECIE, specieHeaderMap);
-  fillSelectFromRaw("selClasse", CLASSI, classiHeaderMap);
-  fillSelectFromRaw("selMulti", MULTI, {});
-  fillSelectFromRaw("selLivello", LIVELLI, {});
-  fillSelectFromRaw("selGrado", GRADI, {});
-
-  // render stat inputs
   renderStatInputs();
-
-  // build initial PG table (existing PGs read from pg-database if present)
   buildPGTable();
+  attachLiveEvents();
+  recalcAll(); // initial
+}
 
-  // attach listeners to recalc modifiers on select changes
-  ["selSpecie","selClasse"].forEach(id=>{
-    document.getElementById(id).addEventListener("change", updateAllModifiers);
+/* ------------- UI BUILDERS ------------- */
+function buildSelect(id, rows){
+  const sel = document.getElementById(id);
+  sel.innerHTML = "<option value=''>-- Seleziona --</option>";
+  rows.forEach(r=>{
+    const opt = document.createElement("option");
+    opt.value = r[0] || "";
+    opt.textContent = r[1] || r[0] || "";
+    sel.appendChild(opt);
   });
-})();
+  sel.addEventListener("change", () => { onGradeChangeIfNeeded(); recalcAll(); updatePreview(); });
+}
 
-// render stat inputs area
 function renderStatInputs(){
-  const cont = document.getElementById("statContainer");
-  cont.innerHTML = "";
-  statNames.forEach((s, idx)=>{
-    const div = document.createElement("div");
-    div.className = "stat-row";
-    div.innerHTML = `<div style="flex:1">${s}</div>
-      <div style="width:96px"><input type="number" min="0" value="0" data-idx="${idx}" onchange="onStatChange(event)"></div>`;
-    cont.appendChild(div);
+  const container = document.getElementById("stat-grid");
+  container.innerHTML = "";
+  statNames.forEach((name, idx)=>{
+    const card = document.createElement("div");
+    card.className = "stat-item";
+    card.innerHTML = `
+      <div style="font-weight:700">${name}</div>
+      <div class="row" style="margin-top:8px">
+        <div class="small">Valore</div>
+        <input data-idx="${idx}" type="number" min="0" value="8" style="width:72px;padding:8px;border-radius:6px;border:1px solid #ccc">
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div class="small">Base mod</div>
+        <div id="base-${idx}">-1</div>
+      </div>
+    `;
+    container.appendChild(card);
   });
-  // reset points info
-  document.getElementById("puntiDisponibili").textContent = "0";
-  document.getElementById("puntiUsati").textContent = "0";
+  // ensure event listeners
+  document.querySelectorAll("#stat-grid input").forEach(inp=>{
+    inp.addEventListener("change", onStatInputChange);
+  });
 }
 
-// when selecting a grado, update points available (uses GRADI header)
-function onGradoChange(){
-  // find selected grado row
-  const selVal = document.getElementById("selGrado").value;
-  let punti = 0;
-  // GRADI structure: header includes "BUDGET PUNTI STATISTICHE INIZIALI" in column D (index 3),
-  // but to be robust search header names
-  if (GRADI && GRADI.length){
-    // find header index by normalizing header row from the original raw (if we had header)
-    // We don't have header now since we sliced, but we can infer field by position per your description:
-    // ID (0), NOME (1), DESCRIZIONE (2), BUDGET... (3)
-    const found = GRADI.find(r => r[0] === selVal);
-    if (found) {
-      punti = Number(found[3] || 0);
-    }
-  }
-  document.getElementById("puntiDisponibili").textContent = punti;
-  document.getElementById("puntiUsati").textContent = 0;
-  // reset stat inputs to 0
-  document.querySelectorAll("#statContainer input").forEach(i => i.value = 0);
-  updateAllModifiers();
-}
-
-// stat change handler
-function onStatChange(e){
-  // recalc used points
-  const inputs = Array.from(document.querySelectorAll("#statContainer input"));
-  const used = inputs.reduce((s,i)=> s + (Number(i.value) || 0), 0);
-  const avail = Number(document.getElementById("puntiDisponibili").textContent) || 0;
-  if (used > avail){
-    // prevent over-assign
-    alert("Hai superato i punti disponibili!");
-    e.target.value = 0;
-    return onStatChange(e);
-  }
-  document.getElementById("puntiUsati").textContent = used;
-  updateAllModifiers();
-}
-
-// compute modifier base for a stat value
-function baseModifier(statValue){
-  const v = Number(statValue) || 0;
-  return Math.floor((v - 10)/2);
-}
-
-// helper to get modifier arrays for selected specie/class (6 values order: for,des,cos,int,sag,car)
-function getSpecieMods(){
-  const sel = document.getElementById("selSpecie").value;
-  if (!SPECIE || !SPECIE.length) return [0,0,0,0,0,0];
-  const found = SPECIE.find(r => r[0] === sel);
-  if (!found) return [0,0,0,0,0,0];
-  // from your header: speci columns: ID(0), NOME(1), Mod_PV_Base(2), Mod_PE_Base(3), Mod_PS_Base(4), Mod _for(5), Mod_des(6), Mod_cos(7), Mod_int(8), Mod_sag(9), Mod_car(10)
-  // so modifiers start at index 5..10
+/* ------------- HELPERS: find modifier arrays ------------- */
+/*
+  From your headers:
+  SPECIE columns: ID;NOME;Mod_PV_Base;Mod_PE_Base;Mod_PS_Base;Mod _for;Mod_des;Mod_cos;Mod_int;Mod_sag;Mod_car
+  CLASSI columns: ID;NOME;...; Mod_for (col K);Mod_des;Mod_cos;Mod_int;Mod_sag;Mod_car (K..P)
+  We'll read using index positions but try to be robust:
+*/
+function getSpecieModsByRow(row){
+  // try to read indexes 5..10, fallback to zeros
   const mods = [];
-  for (let i=5;i<=10;i++){
-    mods.push(Number(found[i] || 0));
+  for(let i=5;i<=10;i++){
+    mods.push(Number(row[i] || 0));
   }
   return mods;
 }
-function getClasseMods(){
-  const sel = document.getElementById("selClasse").value;
-  if (!CLASSI || !CLASSI.length) return [0,0,0,0,0,0];
-  const found = CLASSI.find(r => r[0] === sel);
-  if (!found) return [0,0,0,0,0,0];
-  // from classi header: ID(0),NOME(1),DESCR(2),PV base(3),PE(4),PS(5),VEL(6),GUIDA(7),COMP(8),TTIPO(9),Mod_for(10),Mod_des(11),Mod_cos(12),Mod_int(13),Mod_sag(14),Mod_car(15)
+function getClasseModsByRow(row){
+  // try indexes 10..15
   const mods=[];
-  for (let i=10;i<=15;i++){
-    mods.push(Number(found[i] || 0));
+  for(let i=10;i<=15;i++){
+    mods.push(Number(row[i] || 0));
   }
   return mods;
 }
 
-// update modifiers table
-function updateAllModifiers(){
-  const modTable = document.getElementById("modTable");
-  // header
-  modTable.innerHTML = "<tr><th>Stat</th><th>Modificatore Totale</th></tr>";
-  const specieMods = getSpecieMods();
-  const classeMods = getClasseMods();
-  const inputs = Array.from(document.querySelectorAll("#statContainer input"));
-  inputs.forEach((inp, idx) => {
-    const statVal = Number(inp.value || 0);
-    const base = baseModifier(statVal);
-    const addSpec = Number(specieMods[idx] || 0);
-    const addClass = Number(classeMods[idx] || 0);
-    const tot = base + addSpec + addClass;
-    modTable.innerHTML += `<tr><td>${statNames[idx] || ("STAT"+(idx+1))}</td><td>${tot >= 0 ? "+"+tot : tot}</td></tr>`;
+/* ------------- EVENTS & CALCS ------------- */
+function onStatInputChange(e){
+  const inp = e.target;
+  const idx = Number(inp.dataset.idx);
+  let val = Number(inp.value) || 0;
+  if(val < 0) val = 0;
+  // compute used points and enforce limit
+  const all = Array.from(document.querySelectorAll("#stat-grid input")).map(i => Number(i.value) || 0);
+  const used = all.reduce((s,v)=>s+v,0);
+  // get available points from selected grado
+  const available = Number(puntiDisponibili) || 0;
+  // If used > available, revert this change (or clamp)
+  if(used > available){
+    // clamp this input so total <= available
+    const prevTotalExcl = used - val;
+    const allowed = Math.max(0, available - prevTotalExcl);
+    inp.value = allowed;
+  }
+  // update base mods display and recalc
+  updateBaseModDisplays();
+  recalcAll();
+  updatePreview();
+}
+
+function onGradeChangeIfNeeded(){
+  // when grado changes, update puntiDisponibili and reset stat values to 0
+  const gsel = document.getElementById("sel-grado");
+  const gid = gsel.value;
+  let bp = 0;
+  if(GRADI.length){
+    const found = GRADI.find(r => r[0] == gid);
+    if(found) bp = Number(found[3] || 0); // per header it's column D (index 3)
+  }
+  puntiDisponibili = bp;
+  // Set stat inputs to 0 when grade changes (safe)
+  document.querySelectorAll("#stat-grid input").forEach(i => i.value = 0);
+  document.getElementById("punti-info").textContent = `0 usati / ${puntiDisponibili} disponibili`;
+}
+
+/* ------------- recalc modifiers and UI ------------- */
+function updateBaseModDisplays(){
+  document.querySelectorAll("#stat-grid input").forEach(inp=>{
+    const idx = Number(inp.dataset.idx);
+    const v = Number(inp.value) || 0;
+    const base = Math.floor((v - 10)/2);
+    const el = document.getElementById("base-" + idx);
+    if(el) el.textContent = (base >= 0 ? "+"+base : base);
   });
 }
 
-// build pg table with existing PGs (if any) and include stat headers
+function recalcAll(){
+  // recalc used/available
+  const vals = Array.from(document.querySelectorAll("#stat-grid input")).map(i=>Number(i.value)||0);
+  const used = vals.reduce((s,v)=>s+v,0);
+  document.getElementById("punti-info").textContent = `${used} usati / ${puntiDisponibili} disponibili`;
+  // specie/class mods
+  const specieId = document.getElementById("sel-specie").value;
+  const classeId = document.getElementById("sel-classe").value;
+  const specieRow = SPECIE.find(r=>r[0]==specieId) || [];
+  const classeRow = CLASSI.find(r=>r[0]==classeId) || [];
+  const sMods = getSpecieModsByRow(specieRow);
+  const cMods = getClasseModsByRow(classeRow);
+  // build mod table
+  const tbody = document.querySelector("#mod-table tbody");
+  tbody.innerHTML = "";
+  statNames.forEach((sName, idx)=>{
+    const val = vals[idx] || 0;
+    const base = Math.floor((val - 10)/2);
+    const total = base + (Number(sMods[idx]||0)) + (Number(cMods[idx]||0));
+    const display = (total>=0? "+"+total : total);
+    tbody.innerHTML += `<tr><td>${sName}</td><td>${display}</td></tr>`;
+  });
+  updatePreview();
+}
+
+/* ------------- preview ------------- */
+function updatePreview(){
+  const name = document.getElementById("name").value || "Personaggio senza nome";
+  const specieText = (document.getElementById("sel-specie").selectedOptions[0] || {}).textContent || "-";
+  const classeText = (document.getElementById("sel-classe").selectedOptions[0] || {}).textContent || "-";
+  const multiText = (document.getElementById("sel-multi").selectedOptions[0] || {}).textContent || "-";
+  const livText = (document.getElementById("sel-liv").selectedOptions[0] || {}).textContent || "-";
+  const gradoText = (document.getElementById("sel-grado").selectedOptions[0] || {}).textContent || "-";
+
+  const vals = Array.from(document.querySelectorAll("#stat-grid input")).map(i=>Number(i.value)||0);
+  const specieId = document.getElementById("sel-specie").value;
+  const classeId = document.getElementById("sel-classe").value;
+  const specieRow = SPECIE.find(r=>r[0]==specieId) || [];
+  const classeRow = CLASSI.find(r=>r[0]==classeId) || [];
+  const sMods = getSpecieModsByRow(specieRow);
+  const cMods = getClasseModsByRow(classeRow);
+
+  let html = `<h3 style="margin:0 0 8px 0;color:var(--lego-blue)">${name}</h3>`;
+  html += `<div style="display:flex;gap:12px;flex-wrap:wrap"><div style="min-width:180px"><b>Specie:</b> ${specieText}<br><b>Classe:</b> ${classeText}<br><b>Multiverso:</b> ${multiText}<br><b>Livello:</b> ${livText}<br><b>Grado:</b> ${gradoText}</div>`;
+  html += `<div style="flex:1"><b>Statistiche</b><div style="margin-top:8px">`;
+  statNames.forEach((n, i)=>{
+    const base = Math.floor((vals[i]-10)/2);
+    const tot = base + (Number(sMods[i]||0)) + (Number(cMods[i]||0));
+    html += `<div style="display:flex;justify-content:space-between;padding:4px 0"><div>${n}</div><div>${vals[i]} (mod ${tot>=0? "+"+tot:tot})</div></div>`;
+  });
+  html += `</div></div></div>`;
+  document.getElementById("preview").innerHTML = html;
+}
+
+/* ------------- PG list management ------------- */
 function buildPGTable(){
-  const table = document.getElementById("pgTable");
-  // clear and build header row
-  const statCols = statNames.slice();
-  const headerRow = ["ID","NOME","ID_SPECIE","ID_CLASSE","ID_MULTIVERSO","ID_LIVELLO","ID_GRADO",...statCols];
-  table.innerHTML = "<tr>" + headerRow.map(h=>`<th>${h}</th>`).join("") + "</tr>";
-  // existing PGDB rows if present (PGDB may include header we removed earlier)
-  if (PGDB && PGDB.length){
-    // if rows may include header, try to detect and ignore (we stripped earlier)
-    PGDB.forEach(r => {
-      // ensure row has enough columns; pad missing stat columns with ""
-      const row = r.slice(0);
-      while (row.length < headerRow.length) row.push("");
-      table.innerHTML += "<tr>" + row.map(c=>`<td>${c}</td>`).join("") + "</tr>";
-    });
-  }
-  // also list any newly created PGs
-  NUOVI_PG.forEach(r => {
+  const thead = document.querySelector("#pg-table thead");
+  const tbody = document.querySelector("#pg-table tbody");
+  // headers: ID,NOME,ID_SPECIE,ID_CLASSE,ID_MULTIVERSO,ID_LIVELLO,ID_GRADO, {statNames...}
+  const headers = ["ID","NOME","ID_SPECIE","ID_CLASSE","ID_MULTIVERSO","ID_LIVELLO","ID_GRADO",...statNames];
+  thead.innerHTML = "<tr>" + headers.map(h=>`<th>${h}</th>`).join("") + "</tr>";
+  tbody.innerHTML = "";
+  // existing PGDB
+  PGDB.forEach(r=>{
     const row = r.slice(0);
-    while (row.length < headerRow.length) row.push("");
-    table.innerHTML += "<tr>" + row.map(c=>`<td>${c}</td>`).join("") + "</tr>";
+    while(row.length < headers.length) row.push("");
+    tbody.innerHTML += "<tr>" + row.map(c=>`<td>${c}</td>`).join("") + "</tr>";
+  });
+  // nuovi
+  NUOVI.forEach(r=>{
+    const row = r.slice(0);
+    while(row.length < headers.length) row.push("");
+    tbody.innerHTML += "<tr>" + row.map(c=>`<td>${c}</td>`).join("") + "</tr>";
   });
 }
 
-// add newly created pg to NUOVI_PG and update table
+/* ------------- add new PG ------------- */
 function aggiungiPG(){
-  const nome = document.getElementById("pgNome").value.trim();
-  if (!nome) { alert("Inserisci il nome del personaggio"); return; }
-  const specieId = document.getElementById("selSpecie").value || "";
-  const classeId = document.getElementById("selClasse").value || "";
-  const multiId = document.getElementById("selMulti").value || "";
-  const lvId = document.getElementById("selLivello").value || "";
-  const gradoId = document.getElementById("selGrado").value || "";
-  // determine next ID: look at PGDB last row if exists, otherwise use existing NUOVI_PG length +1
-  let lastId = 0;
-  if (PGDB && PGDB.length) {
-    // PGDB rows: first value is ID
-    const ids = PGDB.map(r => Number(r[0]) || 0);
-    lastId = Math.max(...ids, 0);
-  }
-  if (NUOVI_PG.length) {
-    const ids2 = NUOVI_PG.map(r => Number(r[0]) || 0);
-    lastId = Math.max(lastId, ...ids2);
-  }
-  const newId = lastId + 1;
-  // collect stat values in same order as statNames
-  const statValues = Array.from(document.querySelectorAll("#statContainer input")).map(i => Number(i.value || 0));
-  // build row: ID;NOME;ID_SPECIE;ID_CLASSE;ID_MULTIVERSO;ID_LIVELLO;ID_GRADO;stat...
-  const row = [String(newId), nome, specieId, classeId, multiId, lvId, gradoId, ...statValues.map(v=>String(v))];
-  NUOVI_PG.push(row);
-  // update table by re-building
+  const name = document.getElementById("name").value.trim();
+  if(!name){ alert("Inserisci un nome per il personaggio"); return; }
+  // compute next ID
+  let last = 0;
+  PGDB.forEach(r=>{ last = Math.max(last, Number(r[0]||0)); });
+  NUOVI.forEach(r=>{ last = Math.max(last, Number(r[0]||0)); });
+  const nid = last + 1;
+  const specieId = document.getElementById("sel-specie").value || "";
+  const classeId = document.getElementById("sel-classe").value || "";
+  const multiId = document.getElementById("sel-multi").value || "";
+  const livId = document.getElementById("sel-liv").value || "";
+  const gradoId = document.getElementById("sel-grado").value || "";
+  const vals = Array.from(document.querySelectorAll("#stat-grid input")).map(i=>String(Number(i.value)||0));
+  const row = [String(nid), name, specieId, classeId, multiId, livId, gradoId, ...vals];
+  NUOVI.push(row);
   buildPGTable();
-  // clear name field (keep selects)
-  document.getElementById("pgNome").value = "";
-  // reset stat inputs to zero and keep points allocation? We will reset to zero
-  document.querySelectorAll("#statContainer input").forEach(i => i.value = 0);
-  document.getElementById("puntiUsati").textContent = 0;
-  updateAllModifiers();
+  // reset name and stats
+  document.getElementById("name").value = "";
+  document.querySelectorAll("#stat-grid input").forEach(i=>i.value = 0);
+  puntiUsati = 0;
+  recalcAll();
+  updatePreview();
 }
 
-// download merged CSV (existing PGDB + NUOVI_PG)
+/* ------------- download merged CSV ------------- */
 function scaricaCSV(){
-  // prepare header: if PGDB had header originally we don't have it; we will create our own header:
-  const headers = ["ID","NOME","ID_SPECIE","ID_CLASSE","ID_MULTIVERSO","ID_LIVELLO","ID_GRADO", ...statNames];
-  const lines = [ headers.join(";") ];
-  // add existing PGDB rows (PGDB already are arrays of columns)
-  if (PGDB && PGDB.length){
-    PGDB.forEach(r => {
-      // ensure length = headers length
-      const copy = r.slice(0);
-      while (copy.length < headers.length) copy.push("");
-      lines.push(copy.join(";"));
-    });
-  }
-  // add new rows
-  NUOVI_PG.forEach(r => {
+  // header
+  const headers = ["ID","NOME","ID_SPECIE","ID_CLASSE","ID_MULTIVERSO","ID_LIVELLO","ID_GRADO",...statNames];
+  const lines = [headers.join(";")];
+  PGDB.forEach(r=>{
     const copy = r.slice(0);
-    while (copy.length < headers.length) copy.push("");
+    while(copy.length < headers.length) copy.push("");
     lines.push(copy.join(";"));
   });
-  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;' "});
+  NUOVI.forEach(r=>{
+    const copy = r.slice(0);
+    while(copy.length < headers.length) copy.push("");
+    lines.push(copy.join(";"));
+  });
+  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "pg-database.csv";
   a.click();
 }
 
-// reset new PG list and UI
-function resetNuovi(){
-  if (!confirm("Resetta la lista dei nuovi PG aggiunti (solo quelli non salvati)?")) return;
-  NUOVI_PG = [];
-  buildPGTable();
-}
+/* ------------- reset new ------------- */
+function resetNuovi(){ if(confirm("Resettare i nuovi PG non salvati?")){ NUOVI = []; buildPGTable(); }}
 
-// update modifiers on select/stat changes
-function updateAllModifiers(){
-  updateAllModifiersInternal();
-}
-function updateAllModifiersInternal(){
-  // same implementation as above: compute specieMods and classeMods and base then render table
-  const modTable = document.getElementById("modTable");
-  modTable.innerHTML = "<tr><th>Stat</th><th>Modificatore Totale</th></tr>";
-  const specieId = document.getElementById("selSpecie").value;
-  const classeId = document.getElementById("selClasse").value;
-  const specieRow = SPECIE.find(r => r[0] === specieId) || [];
-  const classeRow = CLASSI.find(r => r[0] === classeId) || [];
-  // specie modifiers expected at indexes 5..10, classi at 10..15 (per your header)
-  const sMods = [];
-  for (let i=5;i<=10;i++) sMods.push(Number(specieRow[i]||0));
-  const cMods = [];
-  for (let i=10;i<=15;i++) cMods.push(Number(classeRow[i]||0));
-  const inputs = Array.from(document.querySelectorAll("#statContainer input"));
-  inputs.forEach((inp, idx) => {
-    const val = Number(inp.value || 0);
-    const base = Math.floor((val - 10)/2);
-    const tot = base + (Number(sMods[idx]||0)) + (Number(cMods[idx]||0));
-    modTable.innerHTML += `<tr><td>${statNames[idx]||("STAT"+(idx+1))}</td><td>${tot >= 0 ? "+"+tot : tot}</td></tr>`;
+/* ------------- attach events ------------- */
+function attachLiveEvents(){
+  // name change preview
+  document.getElementById("name").addEventListener("input", updatePreview);
+  // stat inputs already have change listener in renderStatInputs
+  // also when selects change recalc
+  ["sel-specie","sel-classe","sel-multi","sel-liv","sel-grado"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.addEventListener("change", () => { onGradeChangeIfNeeded(); recalcAll(); updatePreview(); });
   });
 }
 
-// logout helper
-function logout(){ localStorage.removeItem("legoUser"); window.location.href = "index.html"; }
+/* ------------- logout ------------- */
+function logout(){ localStorage.removeItem("legoUser"); location.href="index.html"; }
 
+/* ------------- start ------------- */
+init();
 </script>
 </body>
 </html>
