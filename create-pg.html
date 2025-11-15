@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crea Personaggio</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="pg-create.css">
 </head>
 
 <body>
+
 <header>
   Crea Personaggio
   <button class="back" onclick="window.location.href='dashboard.html'">← Torna</button>
@@ -16,10 +18,12 @@
 </header>
 
 <main>
+
+  <!-- 🟦 DATI DI BASE -->
   <h2 class="section-title">Dati di Base</h2>
 
   <label for="pgName">Nome</label>
-  <input id="pgName" type="text" placeholder="Inserisci il nome del personaggio">
+  <input id="pgName" type="text" placeholder="Inserisci il nome">
 
   <label for="specie">Specie</label>
   <select id="specie"></select>
@@ -35,23 +39,35 @@
 
   <label for="grado">Grado</label>
   <select id="grado"></select>
+
   <p>Punti rimanenti da distribuire: <b id="puntiDispo">0</b></p>
 
-  <h2 class="section-title">Statistiche Primarie</h2>
 
+  <!-- 🟦 STATISTICHE -->
+  <h2 class="section-title">Statistiche Primarie</h2>
   <div id="statContainer"></div>
 
+
+  <!-- 🟦 CARD TCG — ANTEPRIMA -->
   <div id="previewCard">
-    <h2>Anteprima Personaggio</h2>
+
     <div id="preview-info"></div>
 
-    <h3 style="margin-top:20px;color:#3182ce;text-align:center;">Modificatori & Stat</h3>
-    <div class="mod-grid" id="preview-mods"></div>
+    <h3 style="text-align:center;margin-top:10px;color:#3182ce;font-weight:800;">
+      Statistiche & Modificatori
+    </h3>
+
+    <div id="preview-mods"></div>
+
   </div>
 
-  <button class="save-btn" onclick="downloadCSV()">💾 Salva e Scarica PG</button>
+
+  <!-- 🟦 SALVA -->
+  <button class="save-btn" onclick="downloadCSV()">💾 Salva PG</button>
+
 </main>
 
 <script src="pg-create.js"></script>
+
 </body>
 </html>
