@@ -1,73 +1,81 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crea Personaggio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea Personaggio</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="pg-create.css">
+    <link rel="stylesheet" href="pg-create.css">
 </head>
 
 <body>
 
-<header>
-  Crea Personaggio
-  <button class="back" onclick="window.location.href='dashboard.html'">← Torna</button>
-  <button class="logout" onclick="logout()">Logout</button>
-</header>
+    <header>
+        LEGO RPG Manager – Crea Personaggio
+        <button class="back" onclick="window.location.href='dashboard.html'">← Dashboard</button>
+        <button class="logout" onclick="logout()">Logout</button>
+    </header>
 
-<main>
+    <main>
 
-  <!-- 🟦 DATI DI BASE -->
-  <h2 class="section-title">Dati di Base</h2>
+        <!-- ============================
+             SEZIONE INPUT DATI
+        ============================= -->
+        <section>
+            <h2 class="section-title">Dati Personaggio</h2>
 
-  <label for="pgName">Nome</label>
-  <input id="pgName" type="text" placeholder="Inserisci il nome">
+            <label>Nome</label>
+            <input type="text" id="pgName" oninput="updateEverything()">
 
-  <label for="specie">Specie</label>
-  <select id="specie"></select>
+            <label>Specie</label>
+            <select id="specie" onchange="updateEverything()"></select>
 
-  <label for="classe">Classe</label>
-  <select id="classe"></select>
+            <label>Classe</label>
+            <select id="classe" onchange="updateEverything()"></select>
 
-  <label for="multiverso">Multiverso</label>
-  <select id="multiverso"></select>
+            <label>Multiverso</label>
+            <select id="multiverso" onchange="updateEverything()"></select>
 
-  <label for="livello">Livello</label>
-  <select id="livello"></select>
+            <label>Livello</label>
+            <select id="livello" onchange="updateEverything()"></select>
 
-  <label for="grado">Grado</label>
-  <select id="grado"></select>
+            <label>Grado</label>
+            <select id="grado" onchange="updateEverything()"></select>
 
-  <p>Punti rimanenti da distribuire: <b id="puntiDispo">0</b></p>
-
-
-  <!-- 🟦 STATISTICHE -->
-  <h2 class="section-title">Statistiche Primarie</h2>
-  <div id="statContainer"></div>
-
-
-  <!-- 🟦 CARD TCG — ANTEPRIMA -->
-  <div id="previewCard">
-
-    <div id="preview-info"></div>
-
-    <h3 style="text-align:center;margin-top:10px;color:#3182ce;font-weight:800;">
-      Statistiche & Modificatori
-    </h3>
-
-    <div id="preview-mods"></div>
-
-  </div>
+            <p><b>Punti da distribuire:</b> <span id="puntiDispo">0</span></p>
+        </section>
 
 
-  <!-- 🟦 SALVA -->
-  <button class="save-btn" onclick="downloadCSV()">💾 Salva PG</button>
+        <!-- ============================
+             STAT PRIMARIE + CONTROLLI
+        ============================= -->
+        <section>
+            <h2 class="section-title">Statistiche Primarie</h2>
+            <div id="statContainer"></div>
+        </section>
 
-</main>
 
-<script src="pg-create.js"></script>
+        <!-- ============================
+             ANTEPRIMA TCG
+        ============================= -->
+        <section>
+            <h2 class="section-title">Anteprima Carta</h2>
+
+            <div id="previewCard">
+
+                <div id="preview-info"></div>
+
+                <h3 style="text-align:center;margin-top:10px;">Statistiche</h3>
+                <div id="preview-mods"></div>
+
+            </div>
+        </section>
+
+        <button class="save-btn" onclick="downloadCSV()">💾 Esporta CSV</button>
+
+    </main>
+
+    <script src="pg-create.js"></script>
 
 </body>
 </html>
