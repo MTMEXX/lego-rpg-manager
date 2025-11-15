@@ -1,204 +1,285 @@
-/* ====== VARIABILI GLOBALI ====== */
-let statsBase = {};
-let puntiDisponibili = 0;
-let specieData = [];
-let classeData = [];
-let livelloData = [];
-let gradoData = [];
-let multiversoData = [];
-let statPrimarieList = [];
+// ===============================
+// CARICAMENTO CSV
+// ===============================
 
-const MAX_STAT = 18;
-const MIN_STAT = 1;
-
-/* ====== FUNZIONE GENERICA CSV ====== */
 async function loadCSV(url) {
     const res = await fetch(url);
     const text = await res.text();
+
+    // usa ; come separatore
     const rows = text.trim().split("\n").map(r => r.split(";"));
+
     return rows;
 }
 
-/* ====== INIZIALIZZAZIONE ====== */
-async function init() {
+// Percorsi GitHub del DB
+const DB = {
+    specie: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/speci.csv",
+    classe: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/classi.csv",
+    multiverso: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/multiversi-pg.csv",
+    livello: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/livelli.csv",
+    grado: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/gradi.csv",
+    stat: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/statistiche_primarie.csv"
+};
 
-    specieData = await loadCSV("db/speci.csv");
-    classeData = await loadCSV("db/classi.csv");
-    livelloData = await loadCSV("db/livelli.csv");
-    gradoData = await loadCSV("db/gradi.csv");
-    multiversoData = await loadCSV("db/multiversi-pg.csv");
-    statPrimarieList = await loadCSV("db/statistiche_primarie.csv");
+// Variabili dati caricati
+let specieData = [];
+let classeData = [];
+let multiversoData = [];
+let livelloData = [];
+let gradoData = [];
+let statData = [];
+
+// Oggetto statistiche (partono da 1)
+let stats = {};
+let puntiDisponibili = 0;
+
+
+// ===============================
+// INIZIALIZZAZIONE PAGINA
+// ===============================
+
+window.onload = async () => {
+
+    specieData = await loadCSV(DB.specie);
+    classeData = await loadCSV(DB.classe);
+    multiversoData = await loadCSV(DB.multiverso);
+    livelloData = await loadCSV(DB.livello);
+    gradoData = await loadCSV(DB.grado);
+    statData = await loadCSV(DB.stat);
 
     fillSelect("specie", specieData);
     fillSelect("classe", classeData);
+    fillSelect("multiverso", multiversoData);
     fillSelect("livello", livelloData);
     fillSelect("grado", gradoData);
-    fillSelect("multiverso", multiversoData);
 
-    createStatControls();
+    // inizializza statistiche base a 1
+    statData.slice(1).forEach(row => {
+        stats[row[1]] = 1;
+    });
+
+    renderStats();
     updateEverything();
-}
+};
+
+
+// ===============================
+// RIEMPIMENTO SELECT
+// ===============================
 
 function fillSelect(id, data) {
-    const sel = document.getElementById(id);
-    sel.innerHTML = "";
-    for (let i = 1; i < data.length; i++) {
-        sel.innerHTML += `<option value="${i}">${data[i][1]}</option>`;
-    }
-}
+    const select = document.getElementById(id);
+    select.innerHTML = "";
 
-/* ====== CREAZIONE CONTROLLI STAT ====== */
-function createStatControls() {
-    const box = document.getElementById("statContainer");
-    box.innerHTML = "";
-
-    statsBase = {};
-
-    statPrimarieList.slice(1).forEach(row => {
-        const id = row[0];
-        const nome = row[1];
-
-        statsBase[nome] = 1;
-
-        box.innerHTML += `
-            <div class="stat-row">
-                <span>${nome}</span>
-                <div class="stat-controls">
-                    <button class="stat-btn" onclick="modifyStat('${nome}', -1)">−</button>
-                    <span class="stat-value" id="val-${nome}">1</span>
-                    <button class="stat-btn" onclick="modifyStat('${nome}', 1)">+</button>
-                </div>
-            </div>
-        `;
+    data.slice(1).forEach(row => {
+        const opt = document.createElement("option");
+        opt.value = row[0];
+        opt.textContent = row[1];
+        select.appendChild(opt);
     });
 }
 
-/* ====== AGGIUSTAMENTO STAT ====== */
-function modifyStat(nome, delta) {
-    let newVal = statsBase[nome] + delta;
 
-    if (newVal < MIN_STAT) newVal = MIN_STAT;
-    if (newVal > MAX_STAT) newVal = MAX_STAT;
+// ===============================
+// RENDER STATISTICHE CON + / -
+// ===============================
 
-    // controllo budget punti
-    const spesi = totalPointsSpent(newVal, nome);
-    if (spesi > puntiDisponibili) return;
+function renderStats() {
+    const container = document.getElementById("statContainer");
+    container.innerHTML = "";
 
-    statsBase[nome] = newVal;
-    document.getElementById("val-" + nome).textContent = newVal;
+    statData.slice(1).forEach(row => {
+        const nome = row[1];
+
+        const div = document.createElement("div");
+        div.classList.add("stat-row");
+
+        div.innerHTML = `
+            <div><b>${nome}</b></div>
+            <div class="stat-controls">
+
+                <button class="stat-button" onclick="changeStat('${nome}', -1)">−</button>
+
+                <span id="val-${nome}">${stats[nome]}</span>
+
+                <button class="stat-button" onclick="changeStat('${nome}', +1)">+</button>
+
+            </div>
+        `;
+
+        container.appendChild(div);
+    });
+}
+
+
+// ===============================
+// MODIFICA STAT
+// ===============================
+
+function changeStat(nome, delta) {
+    const newVal = stats[nome] + delta;
+
+    if (newVal < 1 || newVal > 18) return;
+
+    // controlla budget punti
+    const spesi = totalPointsSpent();
+    if (delta > 0 && spesi >= puntiDisponibili) return;
+
+    stats[nome] = newVal;
+
+    document.getElementById(`val-${nome}`).textContent = newVal;
 
     updateEverything();
 }
 
-function totalPointsSpent(tempValue = null, statName = null) {
-    let tot = 0;
-    Object.keys(statsBase).forEach(k => {
-        let v = (k === statName && tempValue !== null) ? tempValue : statsBase[k];
-        tot += (v - 1);
-    });
-    return tot;
-}
 
-/* ====== CALCOLA MOD ====== */
-function calcMod(stat) {
+// ===============================
+// CALCOLO MODIFICATORI
+// ===============================
+
+function modBase(stat) {
     return Math.floor((stat - 10) / 2);
 }
 
-/* ====== RECUPERO MOD SPECIE + CLASSE ====== */
-function getSpecieMods() {
-    const idx = document.getElementById("specie").value;
-    const row = specieData[idx];
-    return {
-        FOR: Number(row[5]),
-        DES: Number(row[6]),
-        COS: Number(row[7]),
-        INT: Number(row[8]),
-        SAG: Number(row[9]),
-        CAR: Number(row[10])
+function sumMods(statName) {
+    const base = modBase(stats[statName]);
+
+    const specieID = document.getElementById("specie").value;
+    const classeID = document.getElementById("classe").value;
+
+    const specieRow = specieData.find(r => r[0] === specieID);
+    const classeRow = classeData.find(r => r[0] === classeID);
+
+    const index = {
+        "Forza": 5,
+        "Destrezza": 6,
+        "Costituzione": 7,
+        "Intelligenza": 8,
+        "Saggezza": 9,
+        "Carisma": 10
     };
+
+    const modSpecie = specieRow ? parseInt(specieRow[index[statName]]) : 0;
+    const modClasse = classeRow ? parseInt(classeRow[index[statName] + 5]) : 0;
+
+    return base + modSpecie + modClasse;
 }
 
-function getClasseMods() {
-    const idx = document.getElementById("classe").value;
-    const row = classeData[idx];
-    return {
-        FOR: Number(row[10]),
-        DES: Number(row[11]),
-        COS: Number(row[12]),
-        INT: Number(row[13]),
-        SAG: Number(row[14]),
-        CAR: Number(row[15])
-    };
+
+// ===============================
+// PUNTI DISPONIBILI
+// ===============================
+
+function totalPointsSpent() {
+    return Object.values(stats).reduce((s, v) => s + (v - 1), 0);
 }
 
-/* ====== UPDATE COMPLETO ====== */
+function updatePoints() {
+    const gradoID = document.getElementById("grado").value;
+    const gradoRow = gradoData.find(r => r[0] === gradoID);
+
+    puntiDisponibili = gradoRow ? parseInt(gradoRow[3]) : 0;
+
+    document.getElementById("puntiDispo").textContent =
+        puntiDisponibili - totalPointsSpent();
+}
+
+
+// ===============================
+// AGGIORNA TUTTO
+// ===============================
+
 function updateEverything() {
-
-    const gradoId = document.getElementById("grado").value;
-    puntiDisponibili = Number(gradoData[gradoId][3]);
-
-    const spesi = totalPointsSpent();
-    document.getElementById("puntiDispo").textContent = puntiDisponibili - spesi;
-
+    updatePoints();
     updatePreview();
 }
 
-/* ====== ANTEPRIMA TCG ====== */
+
+// ===============================
+// ANTEPRIMA CARTA
+// ===============================
+
 function updatePreview() {
+    const nome = document.getElementById("pgName").value || "Personaggio";
 
-    const name = document.getElementById("pgName").value || "—";
-    const specie = specieData[document.getElementById("specie").value][1];
-    const classe = classeData[document.getElementById("classe").value][1];
-    const mult = multiversoData[document.getElementById("multiverso").value][1];
-    const lv = livelloData[document.getElementById("livello").value][1];
-    const grado = gradoData[document.getElementById("grado").value][1];
+    const specie = document.getElementById("specie");
+    const specieTxt = specie.options[specie.selectedIndex]?.text || "";
 
-    // Mod
-    const sm = getSpecieMods();
-    const cm = getClasseMods();
+    const classe = document.getElementById("classe");
+    const classeTxt = classe.options[classe.selectedIndex]?.text || "";
 
-    const previewInfo = `
-        <h1>${name}</h1>
-        <div class="preview-meta">${specie} • ${classe}</div>
-        <div class="preview-meta">Multiverso: ${mult}</div>
-        <div class="preview-meta">Livello ${lv} • Grado ${grado}</div>
+    const mult = document.getElementById("multiverso");
+    const multTxt = mult.options[mult.selectedIndex]?.text || "";
+
+    const livello = document.getElementById("livello");
+    const livelloTxt = livello.options[livello.selectedIndex]?.text || "";
+
+    const grado = document.getElementById("grado");
+    const gradoTxt = grado.options[grado.selectedIndex]?.text || "";
+
+    document.getElementById("preview-info").innerHTML = `
+        <div style="font-size:1.6em; color:#e53e3e;">${nome}</div>
+        <div><b>${specieTxt}</b> • <b>${classeTxt}</b></div>
+        <div style="margin-top:4px;">${multTxt}</div>
+        <div style="font-size:0.9em; opacity:0.8;">Lv ${livelloTxt} – ${gradoTxt}</div>
     `;
-    document.getElementById("preview-info").innerHTML = previewInfo;
 
-    let modsHTML = `<div class="stats-grid">`;
+    // Stats nella carta
+    const box = document.getElementById("preview-mods");
+    box.innerHTML = "";
 
-    statPrimarieList.slice(1).forEach(row => {
-        const nome = row[1];
-        const val = statsBase[nome];
-        const baseMod = calcMod(val);
+    Object.keys(stats).forEach(nome => {
+        const val = stats[nome];
+        const mod = sumMods(nome);
 
-        const totalMod =
-            baseMod +
-            (sm[nome.toUpperCase()] || 0) +
-            (cm[nome.toUpperCase()] || 0);
-
-        modsHTML += `
-            <div class="stat-box">
-                ${nome}<br>
-                <span>${val}</span>
-                <div class="mod-value">${totalMod >= 0 ? "+" : ""}${totalMod}</div>
-            </div>
+        const div = document.createElement("div");
+        div.classList.add("mod-box");
+        div.innerHTML = `
+            <b>${nome}</b><br>
+            ${val} (${mod >= 0 ? "+" : ""}${mod})
         `;
+        box.appendChild(div);
+    });
+}
+
+
+// ===============================
+// EXPORT CSV
+// ===============================
+
+function downloadCSV() {
+    const nome = document.getElementById("pgName").value || "PG_SenzaNome";
+
+    let csv = "ID;NOME;SPECIE;CLASSE;MULTIVERSO;LIVELLO;GRADO";
+
+    Object.keys(stats).forEach(s => {
+        csv += `;${s};MOD_${s}`;
     });
 
-    modsHTML += `</div>`;
-    document.getElementById("preview-mods").innerHTML = modsHTML;
+    csv += "\n";
+
+    csv += `0;${nome};${specie.value};${classe.value};${multiverso.value};${livello.value};${grado.value}`;
+
+    Object.keys(stats).forEach(s => {
+        csv += `;${stats[s]};${sumMods(s)}`;
+    });
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${nome}.csv`;
+    a.click();
 }
 
-/* ====== SALVA CSV ====== */
-function downloadCSV() {
-    alert("Funzione download CSV in preparazione");
-}
 
-/* ====== LOGOUT ====== */
+// ===============================
+// LOGOUT
+// ===============================
+
 function logout() {
     localStorage.removeItem("legoUser");
     window.location.href = "index.html";
 }
-
-init();
