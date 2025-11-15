@@ -93,22 +93,6 @@ input, select {
     font-size: 1em;
 }
 
-/* 🔧 FIX solo per il campo Nome */
-.input-card input[type="text"] {
-    height: 38px;
-    padding: 6px 10px;
-    font-size: 0.95em;
-}
-
-.input-card label {
-    margin-bottom: 4px;
-}
-
-.input-card {
-    padding: 16px 18px 14px 18px !important;
-}
-
-
 .points-box {
     grid-column: 1 / -1;
     background: #fff7bd;
