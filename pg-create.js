@@ -9,45 +9,41 @@ const FILE_SPECIE = "speci.csv";
 const FILE_LIVELLI = "livelli.csv";
 const FILE_MULTIVERSO = "multiversi-pg.csv";
 
-// dati caricati
 let classiData=[], gradiData=[], specieData=[], livelliData=[], multiversiData=[];
 
-// stat
+// punti disponibili
 let puntiDisponibili = 0;
 
 
 //-------------------------------------------------------------
-// CARICA CSV (robusto)
+// CARICA CSV
 //-------------------------------------------------------------
 async function caricaCSV(nome) {
     const res = await fetch(BASE_URL + nome);
     const txt = await res.text();
+
     return txt.trim().split("\n").map(r => r.split(";"));
 }
 
 
 //-------------------------------------------------------------
-// POPOLA SELECT (solo colonne valide)
+// POPOLA SELECT
 //-------------------------------------------------------------
 function popolaSelect(select, data) {
-    if (!select || data.length < 2) return;
-
     select.innerHTML = "";
 
     for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        if (!row[0] || !row[1]) continue; // evita righe rotte
-
+        if (!data[i][0] || !data[i][1]) continue;
         const opt = document.createElement("option");
-        opt.value = row[0];
-        opt.textContent = row[1].trim();
+        opt.value = data[i][0];
+        opt.textContent = data[i][1];
         select.appendChild(opt);
     }
 }
 
 
 //-------------------------------------------------------------
-// CARICA TUTTI I CSV
+// INIT
 //-------------------------------------------------------------
 async function init() {
     specieData = await caricaCSV(FILE_SPECIE);
@@ -62,8 +58,8 @@ async function init() {
     popolaSelect(document.getElementById("livello"), livelliData);
     popolaSelect(document.getElementById("multiverso"), multiversiData);
 
-    aggiornaPuntiDaGrado();
     creaStatCards();
+    aggiornaPuntiDaGrado();
     aggiornaTutto();
 }
 
@@ -76,18 +72,19 @@ window.onload = init;
 function creaStatCards() {
     const stats = ["for","des","cos","int","sag","car"];
     const container = document.getElementById("statContainer");
-    container.innerHTML = "";
 
     stats.forEach(s => {
         container.innerHTML += `
             <div class="stat-card">
                 <h3>${s.toUpperCase()}</h3>
+
                 <div class="stat-controls">
-                    <button class="remove" onclick="modificaStat('${s}',-1)">–</button>
-                    <input id="stat-${s}" type="number" value="8" readonly>
-                    <button class="add" onclick="modificaStat('${s}',1)">+</button>
+                    <button class="stat-btn" onclick="modificaStat('${s}',-1)">–</button>
+                    <input id="stat-${s}" type="text" value="8" readonly>
+                    <button class="stat-btn" onclick="modificaStat('${s}',1)">+</button>
                 </div>
-                <p>Modificatore: <b id="mod-${s}">0</b></p>
+
+                <div class="stat-mod-value" id="mod-${s}">0</div>
             </div>
         `;
     });
@@ -95,7 +92,7 @@ function creaStatCards() {
 
 
 //-------------------------------------------------------------
-// AGGIORNA PUNTI DA GRADO
+// PUNTI DISPONIBILI DA GRADO
 //-------------------------------------------------------------
 function aggiornaPuntiDaGrado() {
     const id = document.getElementById("grado").value;
@@ -107,17 +104,28 @@ function aggiornaPuntiDaGrado() {
 
 
 //-------------------------------------------------------------
-// MODIFICA STAT
+// MODIFICA STAT— VERSIONE CORRETTA
 //-------------------------------------------------------------
 function modificaStat(s, delta) {
     const input = document.getElementById("stat-" + s);
-    let val = parseInt(input.value) || 0;
+    let val = parseInt(input.value);
 
-    if (delta > 0 && puntiDisponibili <= 0) return;
-    if (delta < 0 && val <= 1) return;
+    if (delta > 0) {
+        if (puntiDisponibili <= 0) return;
+        if (val >= 18) return;
 
-    input.value = val + delta;
-    puntiDisponibili -= delta;
+        val++;
+        puntiDisponibili--;
+    }
+
+    if (delta < 0) {
+        if (val <= 1) return;
+
+        val--;
+        puntiDisponibili++;
+    }
+
+    input.value = val;
     document.getElementById("puntiDispo").textContent = puntiDisponibili;
 
     aggiornaTutto();
@@ -132,7 +140,7 @@ function calculateTotalModifiers() {
     const val = s => parseInt(document.getElementById("stat-" + s).value);
     const base = v => Math.floor((v - 10) / 2);
 
-    // STAT BASE
+    // BASE
     const baseStats = {
         for: base(val("for")),
         des: base(val("des")),
@@ -142,7 +150,7 @@ function calculateTotalModifiers() {
         car: base(val("car"))
     };
 
-    // MOD SPECIE
+    // SPECIE
     const specieRow = specieData.find(r => r[0] === document.getElementById("specie").value);
     const modSpecie = specieRow ? {
         for: +specieRow[5] || 0,
@@ -150,10 +158,10 @@ function calculateTotalModifiers() {
         cos: +specieRow[7] || 0,
         int: +specieRow[8] || 0,
         sag: +specieRow[9] || 0,
-        car: +specieRow[10] || 0,
+        car: +specieRow[10] || 0
     } : {for:0,des:0,cos:0,int:0,sag:0,car:0};
 
-    // MOD CLASSE
+    // CLASSI
     const classeRow = classiData.find(r => r[0] === document.getElementById("classe").value);
     const modClasse = classeRow ? {
         for: +classeRow[10] || 0,
@@ -161,8 +169,9 @@ function calculateTotalModifiers() {
         cos: +classeRow[12] || 0,
         int: +classeRow[13] || 0,
         sag: +classeRow[14] || 0,
-        car: +classeRow[15] || 0,
+        car: +classeRow[15] || 0
     } : {for:0,des:0,cos:0,int:0,sag:0,car:0};
+
 
     // TOTALI
     ["for","des","cos","int","sag","car"].forEach(s => {
@@ -173,18 +182,22 @@ function calculateTotalModifiers() {
 
 
 //-------------------------------------------------------------
-// UPDATE PREVIEW
+// PREVIEW
 //-------------------------------------------------------------
 function updatePreview() {
-    const nome = document.getElementById("pgName").value || "—";
+    const specieSel = specie.options[specie.selectedIndex]?.text || "—";
+    const classeSel = classe.options[classe.selectedIndex]?.text || "—";
+    const multiSel = multiverso.options[multiverso.selectedIndex]?.text || "—";
+    const livSel = livello.options[livello.selectedIndex]?.text || "—";
+    const gradoSel = grado.options[grado.selectedIndex]?.text || "—";
 
     document.getElementById("preview").innerHTML = `
-        <div class="stat-line"><span>👤 Nome</span> <b>${nome}</b></div>
-        <div class="stat-line"><span>🧬 Specie</span> <b>${specie.options[specie.selectedIndex].text}</b></div>
-        <div class="stat-line"><span>⚔️ Classe</span> <b>${classe.options[classe.selectedIndex].text}</b></div>
-        <div class="stat-line"><span>🌌 Multiverso</span> <b>${multiverso.options[multiverso.selectedIndex].text}</b></div>
-        <div class="stat-line"><span>⭐ Livello</span> <b>${livello.options[livello.selectedIndex].text}</b></div>
-        <div class="stat-line"><span>🏅 Grado</span> <b>${grado.options[grado.selectedIndex].text}</b></div>
+        <div class="stat-line"><span>👤 Nome</span><b>${pgName.value || "—"}</b></div>
+        <div class="stat-line"><span>🧬 Specie</span><b>${specieSel}</b></div>
+        <div class="stat-line"><span>⚔️ Classe</span><b>${classeSel}</b></div>
+        <div class="stat-line"><span>🌌 Multiverso</span><b>${multiSel}</b></div>
+        <div class="stat-line"><span>⭐ Livello</span><b>${livSel}</b></div>
+        <div class="stat-line"><span>🏅 Grado</span><b>${gradoSel}</b></div>
     `;
 }
 

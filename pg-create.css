@@ -1,252 +1,119 @@
-/* -----------------------------------------
-   COLORI TEMA LEGO
--------------------------------------------- */
 :root {
     --lego-yellow: #f7d23e;
     --lego-red: #e53e3e;
     --lego-blue: #3182ce;
-    --lego-gray: #f4f4f4;
-    --card-bg: #ffffff;
+    --lego-gray: #f2f2f2;
 }
 
-/* -----------------------------------------
-   BASE
--------------------------------------------- */
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: var(--lego-gray);
-    color: #222;
-}
-
-/* -----------------------------------------
-   HEADER
--------------------------------------------- */
-header {
-    background: var(--lego-yellow);
-    padding: 20px;
-    text-align: center;
-    font-size: 1.8em;
-    font-weight: 800;
-    color: var(--lego-red);
-    text-shadow: 2px 2px 0 #fff;
-    position: relative;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-.back-btn, .logout-btn {
-    position: absolute;
-    top: 20px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.back-btn {
-    left: 20px;
-    background: var(--lego-blue);
-    color: white;
-}
-
-.logout-btn {
-    right: 20px;
-    background: var(--lego-red);
-    color: white;
-}
-
-.back-btn:hover {
-    background: #4a9aff;
-}
-
-.logout-btn:hover {
-    background: #ff4c4c;
-}
-
-/* -----------------------------------------
-   LAYOUT PRINCIPALE
--------------------------------------------- */
-.container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 20px;
-}
-
-/* -----------------------------------------
-   CARD CONTENITORE
--------------------------------------------- */
-.block {
+/* Container */
+.pg-create-container {
     background: white;
-    border-radius: 18px;
     padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    border-top: 8px solid var(--lego-yellow);
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    max-width: 1100px;
+    margin: auto;
 }
 
-.block h2 {
-    color: var(--lego-blue);
+/* Preview Card */
+.pg-preview {
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    border-top: 8px solid var(--lego-blue);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.pg-preview h2 {
     margin-top: 0;
-    font-size: 1.4em;
-}
-
-/* -----------------------------------------
-   FORM
--------------------------------------------- */
-label {
-    font-weight: 600;
-    margin-top: 15px;
-    display: block;
-}
-
-input, select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    margin-top: 5px;
-    font-size: 1em;
-    background: #fff;
-}
-
-input:disabled {
-    background: #eaeaea;
-}
-
-/* -----------------------------------------
-   STATISTICHE
--------------------------------------------- */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 18px;
-}
-
-.stat-box {
-    padding: 15px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
+    color: var(--lego-blue);
+    font-weight: 700;
     text-align: center;
 }
 
-.stat-box h3 {
-    margin: 0;
+.stat-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
     font-size: 1.1em;
-    color: #333;
 }
 
-.stat-value {
-    font-size: 1.7em;
+/* Cards Statistiche */
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 15px;
+    border-top: 6px solid var(--lego-yellow);
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    margin-bottom: 20px;
+}
+
+.stat-card h3 {
+    margin: 0;
+    color: var(--lego-blue);
     font-weight: 700;
-    margin: 8px 0;
+    font-size: 1.1em;
 }
 
-.stat-mod {
-    background: var(--lego-blue);
-    color: white;
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 0.9em;
-    font-weight: 600;
-}
-
-/* -----------------------------------------
-   BOTTONI +/- PER LE STAT
--------------------------------------------- */
+/* Controls */
 .stat-controls {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 8px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.stat-controls input {
+    width: 50px;
+    text-align: center;
+    font-size: 1.3em;
+    background: #f5f5f5;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-weight: 700;
 }
 
 .stat-btn {
-    padding: 6px 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     border: none;
-    background: var(--lego-yellow);
-    border-radius: 6px;
+    font-weight: 900;
+    font-size: 1.3em;
     cursor: pointer;
-    font-weight: 700;
-    transition: 0.2s;
+    color: #222;
+    background: var(--lego-yellow);
+    box-shadow: 0 3px 0 #cda92f;
+    transition: 0.15s;
 }
 
 .stat-btn:hover {
-    background: #ffe466;
+    background: #ffe46b;
 }
 
-/* Punti rimanenti */
-#punti-restanti {
-    font-weight: 700;
-    color: var(--lego-red);
+.stat-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #cda92f;
 }
 
-/* -----------------------------------------
-   PREVIEW PERSONAGGIO - LEGO CARD STYLE
--------------------------------------------- */
-.pg-card {
-    background: white;
-    border-radius: 20px;
-    border-top: 10px solid var(--lego-yellow);
-    border-left: 3px solid #ddd;
-    border-right: 3px solid #ddd;
-    padding: 25px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    width: 100%;
-}
-
-.pg-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.pg-name {
-    font-size: 1.6em;
-    font-weight: 800;
-    color: var(--lego-blue);
-}
-
-.pg-info {
-    margin-top: 15px;
-    line-height: 1.5;
-}
-
-.pg-info span {
-    font-weight: 700;
-    color: var(--lego-red);
-}
-
-/* -----------------------------------------
-   BOTTONE SALVA
--------------------------------------------- */
-.save-btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
+/* Mod Totali */
+.stat-mod-value {
+    margin-top: 5px;
+    display: inline-block;
+    padding: 5px 10px;
     background: var(--lego-blue);
     color: white;
-    border-radius: 12px;
-    font-size: 1.2em;
+    border-radius: 6px;
     font-weight: 700;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: 0.2s;
 }
 
-.save-btn:hover {
-    background: #4a9aff;
-}
-
-/* -----------------------------------------
-   RESPONSIVE
--------------------------------------------- */
-@media (max-width: 700px) {
-    .pg-header {
-        flex-direction: column;
-        text-align: center;
-    }
+/* Griglia Statistiche */
+#statContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
 }
