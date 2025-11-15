@@ -1,78 +1,214 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f4f5f7;
-  margin: 0;
-  color: #333;
+:root {
+  --lego-yellow: #f7d23e;
+  --lego-red: #e53e3e;
+  --lego-blue: #3182ce;
+  --lego-gray: #f8f8f8;
 }
 
+body {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background: var(--lego-gray);
+  color: #222;
+}
+
+/* HEADER */
 header {
+  background: var(--lego-yellow);
+  padding: 20px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.8em;
+  color: var(--lego-red);
+  text-shadow: 2px 2px 0 #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.back,
+.logout {
+  position: absolute;
+  top: 20px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  transition: 0.2s;
+}
+
+.back {
+  left: 20px;
+  background: var(--lego-blue);
+  color: white;
+}
+.back:hover {
+  background: #4a9aff;
+}
+
+.logout {
+  right: 20px;
+  background: var(--lego-red);
+  color: white;
+}
+.logout:hover {
+  background: #ff5252;
+}
+
+/* MAIN CONTAINER */
+main {
+  max-width: 1000px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  font-size: 2em;
+  color: var(--lego-blue);
+  margin-bottom: 30px;
+  font-weight: 800;
+}
+
+/* INPUTS */
+label {
+  font-weight: 600;
+  display: block;
+  margin-top: 10px;
+}
+
+select,
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  background: #fdfdfd;
+}
+
+/* STATISTICS GRID */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.stat-card {
+  padding: 15px;
+  background: #fafafa;
+  border-radius: 12px;
+  border-top: 6px solid var(--lego-yellow);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stat-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+button.add,
+button.remove {
+  flex: 1;
+  padding: 8px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+}
+
+button.add {
+  background: #38a169;
+  color: white;
+}
+button.add:hover {
+  background: #45c47d;
+}
+
+button.remove {
+  background: #e53e3e;
+  color: white;
+}
+button.remove:hover {
+  background: #ff5252;
+}
+
+/* SAVE BUTTON */
+.save-btn {
+  margin-top: 25px;
+  background: var(--lego-blue);
+  padding: 14px;
+  border: none;
+  width: 100%;
+  color: white;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.save-btn:hover {
+  background: #4a9aff;
+}
+
+/* -----------------------------------------------
+   NEW PREVIEW CARD (STILE CARTA)
+------------------------------------------------ */
+.preview-card {
+  margin-top: 40px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 25px;
+  border: 6px solid var(--lego-blue);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.preview-title {
+  font-size: 1.6em;
+  font-weight: 800;
+  color: var(--lego-red);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.preview-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: #0057b7; /* blu LEGO */
-  color: white;
-  padding: 10px 20px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
 }
 
-.logo {
-  font-weight: bold;
-  font-size: 1.2em;
+.preview-label {
+  font-weight: 700;
+  color: var(--lego-blue);
 }
 
-.settings, .back {
-  background: none;
-  border: none;
-  font-size: 1.4em;
-  color: white;
-  cursor: pointer;
-}
-
-main.menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.card {
+.stat-line {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border-radius: 12px;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.stat-icon {
+  margin-right: 8px;
+}
+
+.stat-mod {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: var(--lego-red);
+}
+
+/* BOTTOM SPACING */
+footer {
+  text-align: center;
+  color: #777;
   padding: 20px;
-  text-decoration: none;
-  color: #222;
-  font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  padding: 20px;
-  justify-content: center;
-}
-
-.actions button {
-  padding: 15px 25px;
-  font-size: 1em;
-  border-radius: 10px;
-  border: none;
-  background: #ffcf00; /* giallo LEGO */
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-.actions button:hover {
-  background: #ffc107;
 }
