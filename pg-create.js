@@ -1,5 +1,5 @@
 //-------------------------------------------------------------
-// CONFIGURAZIONE
+// CONFIG
 //-------------------------------------------------------------
 const BASE_URL = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/";
 
@@ -9,28 +9,40 @@ const FILE_SPECIE = "speci.csv";
 const FILE_LIVELLI = "livelli.csv";
 const FILE_MULTIVERSO = "multiversi-pg.csv";
 
-let classiData = [];
-let gradiData = [];
-let specieData = [];
-let livelliData = [];
-let multiversiData = [];
+// dati caricati
+let classiData=[], gradiData=[], specieData=[], livelliData=[], multiversiData=[];
 
-// STAT PRIMARIE
+// stat
 let puntiDisponibili = 0;
 
 
 //-------------------------------------------------------------
-// CARICA CSV
+// CARICA CSV (robusto)
 //-------------------------------------------------------------
-async function caricaCSV(nomeFile) {
-    const response = await fetch(BASE_URL + nomeFile);
-    const text = await response.text();
+async function caricaCSV(nome) {
+    const res = await fetch(BASE_URL + nome);
+    const txt = await res.text();
+    return txt.trim().split("\n").map(r => r.split(";"));
+}
 
-    // Split per righe
-    const rows = text.trim().split("\n");
 
-    // Ogni colonna è separata da ";"
-    return rows.map(r => r.split(";"));
+//-------------------------------------------------------------
+// POPOLA SELECT (solo colonne valide)
+//-------------------------------------------------------------
+function popolaSelect(select, data) {
+    if (!select || data.length < 2) return;
+
+    select.innerHTML = "";
+
+    for (let i = 1; i < data.length; i++) {
+        const row = data[i];
+        if (!row[0] || !row[1]) continue; // evita righe rotte
+
+        const opt = document.createElement("option");
+        opt.value = row[0];
+        opt.textContent = row[1].trim();
+        select.appendChild(opt);
+    }
 }
 
 
@@ -38,75 +50,77 @@ async function caricaCSV(nomeFile) {
 // CARICA TUTTI I CSV
 //-------------------------------------------------------------
 async function init() {
+    specieData = await caricaCSV(FILE_SPECIE);
     classiData = await caricaCSV(FILE_CLASSI);
     gradiData = await caricaCSV(FILE_GRADI);
-    specieData = await caricaCSV(FILE_SPECIE);
     livelliData = await caricaCSV(FILE_LIVELLI);
     multiversiData = await caricaCSV(FILE_MULTIVERSO);
 
+    popolaSelect(document.getElementById("specie"), specieData);
     popolaSelect(document.getElementById("classe"), classiData);
     popolaSelect(document.getElementById("grado"), gradiData);
-    popolaSelect(document.getElementById("specie"), specieData);
     popolaSelect(document.getElementById("livello"), livelliData);
     popolaSelect(document.getElementById("multiverso"), multiversiData);
+
+    aggiornaPuntiDaGrado();
+    creaStatCards();
+    aggiornaTutto();
 }
 
 window.onload = init;
 
 
 //-------------------------------------------------------------
-// POPOLARE MENU A TENDINA
+// CREA CARTE STAT
 //-------------------------------------------------------------
-function popolaSelect(select, data) {
-    if (!select || data.length <= 1) return;
+function creaStatCards() {
+    const stats = ["for","des","cos","int","sag","car"];
+    const container = document.getElementById("statContainer");
+    container.innerHTML = "";
 
-    select.innerHTML = "";
-
-    // prima riga è intestazione → la salto
-    for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        const option = document.createElement("option");
-        option.value = row[0];     // ID
-        option.textContent = row[1]; // NOME
-        select.appendChild(option);
-    }
+    stats.forEach(s => {
+        container.innerHTML += `
+            <div class="stat-card">
+                <h3>${s.toUpperCase()}</h3>
+                <div class="stat-controls">
+                    <button class="remove" onclick="modificaStat('${s}',-1)">–</button>
+                    <input id="stat-${s}" type="number" value="8" readonly>
+                    <button class="add" onclick="modificaStat('${s}',1)">+</button>
+                </div>
+                <p>Modificatore: <b id="mod-${s}">0</b></p>
+            </div>
+        `;
+    });
 }
 
 
 //-------------------------------------------------------------
-// GESTIONE PUNTI STAT (dal grado)
+// AGGIORNA PUNTI DA GRADO
 //-------------------------------------------------------------
 function aggiornaPuntiDaGrado() {
-    const gradoId = document.getElementById("grado").value;
-    const gradoRow = gradiData.find(r => r[0] === gradoId);
+    const id = document.getElementById("grado").value;
+    const row = gradiData.find(r => r[0] === id);
 
-    puntiDisponibili = parseInt(gradoRow?.[3]) || 0;
-    document.getElementById("punti-restanti").textContent = puntiDisponibili;
+    puntiDisponibili = parseInt(row?.[3]) || 0;
+    document.getElementById("puntiDispo").textContent = puntiDisponibili;
 }
 
 
 //-------------------------------------------------------------
-// MODIFICA DELLE STAT
+// MODIFICA STAT
 //-------------------------------------------------------------
-function modificaStat(stat, delta) {
-    const campo = document.getElementById("stat-" + stat);
-    let value = parseInt(campo.value) || 0;
+function modificaStat(s, delta) {
+    const input = document.getElementById("stat-" + s);
+    let val = parseInt(input.value) || 0;
 
-    // controlli
     if (delta > 0 && puntiDisponibili <= 0) return;
-    if (delta < 0 && value <= 1) return;
+    if (delta < 0 && val <= 1) return;
 
-    value += delta;
-    campo.value = value;
+    input.value = val + delta;
+    puntiDisponibili -= delta;
+    document.getElementById("puntiDispo").textContent = puntiDisponibili;
 
-    // aggiorna punti
-    if (delta > 0) puntiDisponibili--;
-    else puntiDisponibili++;
-
-    document.getElementById("punti-restanti").textContent = puntiDisponibili;
-
-    // aggiorna mod
-    calculateTotalModifiers();
+    aggiornaTutto();
 }
 
 
@@ -115,84 +129,70 @@ function modificaStat(stat, delta) {
 //-------------------------------------------------------------
 function calculateTotalModifiers() {
 
-    // STAT BASE
-    const forz = parseInt(document.getElementById("stat-for").value) || 0;
-    const des  = parseInt(document.getElementById("stat-des").value) || 0;
-    const cos  = parseInt(document.getElementById("stat-cos").value) || 0;
-    const intt = parseInt(document.getElementById("stat-int").value) || 0;
-    const sag  = parseInt(document.getElementById("stat-sag").value) || 0;
-    const car  = parseInt(document.getElementById("stat-car").value) || 0;
-
+    const val = s => parseInt(document.getElementById("stat-" + s).value);
     const base = v => Math.floor((v - 10) / 2);
 
-    //---------------------------------------------------------
-    // MOD SPECIE
-    //---------------------------------------------------------
-    const specieRow = specieData.find(r => r[0] === document.getElementById("specie").value);
-    const modSpecie = specieRow ? {
-        for: parseInt(specieRow[5]) || 0,
-        des: parseInt(specieRow[6]) || 0,
-        cos: parseInt(specieRow[7]) || 0,
-        int: parseInt(specieRow[8]) || 0,
-        sag: parseInt(specieRow[9]) || 0,
-        car: parseInt(specieRow[10]) || 0,
-    } : { for: 0, des: 0, cos: 0, int: 0, sag: 0, car: 0 };
-
-    //---------------------------------------------------------
-    // MOD CLASSE
-    //---------------------------------------------------------
-    const classeRow = classiData.find(r => r[0] === document.getElementById("classe").value);
-    const modClasse = classeRow ? {
-        for: parseInt(classeRow[10]) || 0,
-        des: parseInt(classeRow[11]) || 0,
-        cos: parseInt(classeRow[12]) || 0,
-        int: parseInt(classeRow[13]) || 0,
-        sag: parseInt(classeRow[14]) || 0,
-        car: parseInt(classeRow[15]) || 0,
-    } : { for: 0, des: 0, cos: 0, int: 0, sag: 0, car: 0 };
-
-    //---------------------------------------------------------
-    // MOD TOTALI
-    //---------------------------------------------------------
-    const total = {
-        for: base(forz) + modSpecie.for + modClasse.for,
-        des: base(des) + modSpecie.des + modClasse.des,
-        cos: base(cos) + modSpecie.cos + modClasse.cos,
-        int: base(intt) + modSpecie.int + modClasse.int,
-        sag: base(sag) + modSpecie.sag + modClasse.sag,
-        car: base(car) + modSpecie.car + modClasse.car,
+    // STAT BASE
+    const baseStats = {
+        for: base(val("for")),
+        des: base(val("des")),
+        cos: base(val("cos")),
+        int: base(val("int")),
+        sag: base(val("sag")),
+        car: base(val("car"))
     };
 
-    //---------------------------------------------------------
-    // UPDATE IN HTML
-    //---------------------------------------------------------
-    document.getElementById("mod-for").textContent = total.for;
-    document.getElementById("mod-des").textContent = total.des;
-    document.getElementById("mod-cos").textContent = total.cos;
-    document.getElementById("mod-int").textContent = total.int;
-    document.getElementById("mod-sag").textContent = total.sag;
-    document.getElementById("mod-car").textContent = total.car;
+    // MOD SPECIE
+    const specieRow = specieData.find(r => r[0] === document.getElementById("specie").value);
+    const modSpecie = specieRow ? {
+        for: +specieRow[5] || 0,
+        des: +specieRow[6] || 0,
+        cos: +specieRow[7] || 0,
+        int: +specieRow[8] || 0,
+        sag: +specieRow[9] || 0,
+        car: +specieRow[10] || 0,
+    } : {for:0,des:0,cos:0,int:0,sag:0,car:0};
+
+    // MOD CLASSE
+    const classeRow = classiData.find(r => r[0] === document.getElementById("classe").value);
+    const modClasse = classeRow ? {
+        for: +classeRow[10] || 0,
+        des: +classeRow[11] || 0,
+        cos: +classeRow[12] || 0,
+        int: +classeRow[13] || 0,
+        sag: +classeRow[14] || 0,
+        car: +classeRow[15] || 0,
+    } : {for:0,des:0,cos:0,int:0,sag:0,car:0};
+
+    // TOTALI
+    ["for","des","cos","int","sag","car"].forEach(s => {
+        const tot = baseStats[s] + modSpecie[s] + modClasse[s];
+        document.getElementById("mod-" + s).textContent = tot;
+    });
 }
 
 
 //-------------------------------------------------------------
 // UPDATE PREVIEW
 //-------------------------------------------------------------
-function aggiornarePreview() {
-    document.getElementById("preview-nome").textContent = document.getElementById("nome").value;
-    document.getElementById("preview-specie").textContent = document.getElementById("specie").selectedOptions[0]?.textContent || "";
-    document.getElementById("preview-classe").textContent = document.getElementById("classe").selectedOptions[0]?.textContent || "";
-    document.getElementById("preview-multiverso").textContent = document.getElementById("multiverso").selectedOptions[0]?.textContent || "";
-    document.getElementById("preview-livello").textContent = document.getElementById("livello").selectedOptions[0]?.textContent || "";
-    document.getElementById("preview-grado").textContent = document.getElementById("grado").selectedOptions[0]?.textContent || "";
+function updatePreview() {
+    const nome = document.getElementById("pgName").value || "—";
+
+    document.getElementById("preview").innerHTML = `
+        <div class="stat-line"><span>👤 Nome</span> <b>${nome}</b></div>
+        <div class="stat-line"><span>🧬 Specie</span> <b>${specie.options[specie.selectedIndex].text}</b></div>
+        <div class="stat-line"><span>⚔️ Classe</span> <b>${classe.options[classe.selectedIndex].text}</b></div>
+        <div class="stat-line"><span>🌌 Multiverso</span> <b>${multiverso.options[multiverso.selectedIndex].text}</b></div>
+        <div class="stat-line"><span>⭐ Livello</span> <b>${livello.options[livello.selectedIndex].text}</b></div>
+        <div class="stat-line"><span>🏅 Grado</span> <b>${grado.options[grado.selectedIndex].text}</b></div>
+    `;
 }
 
 
 //-------------------------------------------------------------
-// AGGIORNA TUTTO QUANDO CAMBIA QUALCOSA
+// AGGIORNA TUTTO
 //-------------------------------------------------------------
 function aggiornaTutto() {
-    aggiornaPuntiDaGrado();
     calculateTotalModifiers();
-    aggiornarePreview();
+    updatePreview();
 }
