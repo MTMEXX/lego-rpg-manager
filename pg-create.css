@@ -1,119 +1,145 @@
 :root {
-    --lego-yellow: #f7d23e;
-    --lego-red: #e53e3e;
-    --lego-blue: #3182ce;
-    --lego-gray: #f2f2f2;
+  --lego-yellow: #f7d23e;
+  --lego-red: #e53e3e;
+  --lego-blue: #3182ce;
+  --lego-gray: #f2f2f2;
 }
 
-/* Container */
-.pg-create-container {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    max-width: 1100px;
-    margin: auto;
+body {
+  font-family: "Montserrat", sans-serif;
+  background: var(--lego-gray);
+  margin: 0;
+  padding-bottom: 40px;
 }
 
-/* Preview Card */
-.pg-preview {
-    margin-top: 20px;
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 20px;
-    border-top: 8px solid var(--lego-blue);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+header {
+  background: var(--lego-yellow);
+  padding: 18px;
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: 800;
+  color: var(--lego-red);
+  text-shadow: 2px 2px 0 #fff;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-.pg-preview h2 {
-    margin-top: 0;
-    color: var(--lego-blue);
-    font-weight: 700;
-    text-align: center;
+.back, .logout {
+  position: absolute;
+  top: 15px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
 }
 
-.stat-line {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-bottom: 1px solid #eee;
-    font-size: 1.1em;
+.back { left: 20px; background: var(--lego-blue); }
+.logout { right: 20px; background: var(--lego-red); }
+
+main { max-width: 1200px; margin: auto; padding: 20px; }
+
+.section-title {
+  color: var(--lego-blue);
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 1.6em;
 }
 
-/* Cards Statistiche */
+label {
+  font-weight: 600;
+  margin-top: 10px;
+  display: block;
+}
+
+select, input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  margin-bottom: 12px;
+  font-size: 1em;
+}
+
+#statContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 20px;
+}
+
 .stat-card {
-    background: white;
-    border-radius: 16px;
-    padding: 15px;
-    border-top: 6px solid var(--lego-yellow);
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    margin-bottom: 20px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  border-top: 6px solid var(--lego-yellow);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+  text-align: center;
 }
 
 .stat-card h3 {
-    margin: 0;
-    color: var(--lego-blue);
-    font-weight: 700;
-    font-size: 1.1em;
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 800;
+  color: var(--lego-blue);
 }
 
-/* Controls */
 .stat-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.stat-controls input {
-    width: 50px;
-    text-align: center;
-    font-size: 1.3em;
-    background: #f5f5f5;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .stat-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    border: none;
-    font-weight: 900;
-    font-size: 1.3em;
-    cursor: pointer;
-    color: #222;
-    background: var(--lego-yellow);
-    box-shadow: 0 3px 0 #cda92f;
-    transition: 0.15s;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 900;
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #222;
+  background: var(--lego-yellow);
+  box-shadow: 0 3px 0 #cda92f;
+  transition: 0.15s;
 }
 
-.stat-btn:hover {
-    background: #ffe46b;
+.stat-controls input {
+  width: 50px;
+  text-align: center;
+  font-size: 1.2em;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  background: #f5f5f5;
+  font-weight: 700;
 }
 
-.stat-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 #cda92f;
+#previewCard {
+  margin-top: 35px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 22px 24px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  border-top: 10px solid var(--lego-blue);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.15);
 }
 
-/* Mod Totali */
-.stat-mod-value {
-    margin-top: 5px;
-    display: inline-block;
-    padding: 5px 10px;
-    background: var(--lego-blue);
-    color: white;
-    border-radius: 6px;
-    font-weight: 700;
-}
-
-/* Griglia Statistiche */
-#statContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
+.save-btn {
+  margin-top: 30px;
+  background: var(--lego-blue);
+  color: white;
+  padding: 14px 22px;
+  border: none;
+  font-size: 1.05em;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
