@@ -74,6 +74,7 @@ function fillSelect(id, data) {
 }
 
 
+
 /* =====================================================
    STATISTICHE PRIMARIE
 ===================================================== */
@@ -113,6 +114,7 @@ function changeStat(nome, delta) {
 }
 
 
+
 /* =====================================================
    MODIFICATORI
 ===================================================== */
@@ -143,35 +145,69 @@ function sumMods(statName) {
 }
 
 
+
 /* =====================================================
-   STATISTICHE SECONDARIE
+   MOTORE DI CALCOLO FORMULE SECONDARIE
 ===================================================== */
 
-function calcSecondaryStats() {
-    let results = [];
+function calculateFormula(formula, vars) {
+    let f = formula;
+
+    // sostituisci tutte le variabili
+    Object.keys(vars).forEach(key => {
+        const regex = new RegExp("\\b" + key + "\\b", "g");
+        f = f.replace(regex, vars[key]);
+    });
+
+    try {
+        return eval(f);
+    } catch (e) {
+        console.warn("Formula non valida:", formula);
+        return "?";
+    }
+}
+
+function computeSecondaryStats() {
+
+    // dati base per calcoli
+    const classeID = document.getElementById("classe").value;
+    const classeRow = classeData.find(r => r[0] === classeID);
+
+    const vars = {
+        FOR: stats.Forza,
+        DES: stats.Destrezza,
+        COS: stats.Costituzione,
+        INT: stats.Intelligenza,
+        SAG: stats.Saggezza,
+        CAR: stats.Carisma,
+
+        MOD_FOR: sumMods("Forza"),
+        MOD_DES: sumMods("Destrezza"),
+        MOD_COS: sumMods("Costituzione"),
+        MOD_INT: sumMods("Intelligenza"),
+        MOD_SAG: sumMods("Saggezza"),
+        MOD_CAR: sumMods("Carisma"),
+
+        LV: parseInt(document.getElementById("livello").value.replace(/\D/g, "")) || 1,
+
+        PVCLASSE: parseInt(classeRow[3]) || 0,
+        PECLASSE: parseInt(classeRow[4]) || 0,
+        PSCLASSE: parseInt(classeRow[5]) || 0,
+        VELCLASSE: parseInt(classeRow[6]) || 0,
+    };
+
+    const res = {};
 
     stat2Data.slice(1).forEach(row => {
         const nome = row[1];
-        let formula = row[2];
+        const formula = row[2];
 
-        // sostituisco i nomi delle stat primarie nella formula
-        Object.keys(stats).forEach(stat => {
-            formula = formula.replaceAll(stat, stats[stat]);
-        });
-
-        // prova calcolo
-        let val = 0;
-        try {
-            val = eval(formula);
-        } catch (e) {
-            val = "?";
-        }
-
-        results.push({ nome, valore: val });
+        res[nome] = calculateFormula(formula, vars);
     });
 
-    return results;
+    return res;
 }
+
 
 
 /* =====================================================
@@ -192,6 +228,7 @@ function updatePoints() {
 }
 
 
+
 /* =====================================================
    AGGIORNA TUTTO
 ===================================================== */
@@ -200,6 +237,7 @@ function updateEverything() {
     updatePoints();
     updatePreview();
 }
+
 
 
 /* =====================================================
@@ -240,37 +278,20 @@ function updatePreview() {
     });
 
     /* --- STAT SECONDARIE --- */
-    const sec = calcSecondaryStats();
-    let secBox = document.getElementById("preview-secondary");
-
-    if (!secBox) {
-        secBox = document.createElement("div");
-        secBox.id = "preview-secondary";
-        secBox.style.marginTop = "18px";
-        secBox.style.display = "grid";
-        secBox.style.gridTemplateColumns = "repeat(2,1fr)";
-        secBox.style.gap = "6px";
-        document.getElementById("previewCard").appendChild(secBox);
-    }
-
+    const secBox = document.getElementById("preview-secondary");
     secBox.innerHTML = "";
-    sec.forEach(s => {
+
+    const sec = computeSecondaryStats();
+
+    Object.keys(sec).forEach(nome => {
         secBox.innerHTML += `
             <div class="mod-box">
-                <b>${s.nome}</b><br>${s.valore}
+                <b>${nome}</b><br>${sec[nome]}
             </div>
         `;
     });
 }
 
-
-/* =====================================================
-   DOWNLOAD
-===================================================== */
-
-function downloadCSV() {
-    alert("Lo aggiorno dopo che finiamo tutte le stat secondarie 😊");
-}
 
 
 /* =====================================================
