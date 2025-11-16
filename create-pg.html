@@ -19,7 +19,7 @@
 <main>
 
     <!-- ============================================================
-         NUOVA SEZIONE INPUT MODERNA
+         SEZIONE INPUT
     ============================================================ -->
     <section class="input-section">
 
@@ -80,15 +80,25 @@
 
 
     <!-- ============================================================
-         SEZIONE STATISTICHE BASE
+         STATISTICHE PRIMARIE
     ============================================================ -->
     <section>
         <h2 class="section-title">Statistiche Primarie</h2>
         <div id="statContainer"></div>
     </section>
 
+
     <!-- ============================================================
-         ANTEPRIMA CARTA TCG
+         STATISTICHE SECONDARIE (FIX!)
+    ============================================================ -->
+    <section>
+        <h2 class="section-title">Statistiche Secondarie</h2>
+        <div id="secondaryStats" class="secondary-grid"></div>
+    </section>
+
+
+    <!-- ============================================================
+         CARD PREVIEW
     ============================================================ -->
     <section>
         <h2 class="section-title">Anteprima Carta</h2>
@@ -97,11 +107,15 @@
 
             <div id="preview-info"></div>
 
-            <h3 style="text-align:center;margin-top:10px;">Statistiche</h3>
+            <h3 style="text-align:center;margin-top:10px;">Statistiche Base</h3>
             <div id="preview-mods"></div>
+
+            <h3 style="text-align:center;margin-top:20px;">Statistiche Secondarie</h3>
+            <div id="preview-secondary"></div>
 
         </div>
     </section>
+
 
     <button class="save-btn" onclick="downloadCSV()">💾 Esporta CSV</button>
 

@@ -49,7 +49,19 @@ main {
 }
 
 /* ======================================
-   NUOVA SEZIONE INPUT
+   TITOLI DI SEZIONE
+====================================== */
+.section-title {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+    color: var(--lego-blue);
+    font-weight: 800;
+    text-align: center;
+}
+
+/* ======================================
+   INPUT SELECTION CARDS
 ====================================== */
 .input-section {
     display: grid;
@@ -82,6 +94,7 @@ main {
 .input-content label {
     font-weight: 700;
     color: var(--lego-blue);
+    display: block;
 }
 
 input, select {
@@ -103,9 +116,8 @@ input, select {
     font-size: 1.2em;
 }
 
-
 /* ======================================
-   STATISTICHE
+   STATISTICHE PRIMARIE
 ====================================== */
 .stat-row {
     display: flex;
@@ -140,22 +152,43 @@ input, select {
 }
 
 /* ======================================
+   STATISTICHE SECONDARIE (NEW)
+====================================== */
+.secondary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.secondary-box {
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    border-top: 4px solid var(--lego-yellow);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    text-align: center;
+    font-size: 0.95em;
+    font-weight: 600;
+}
+
+/* ======================================
    CARTA TCG
 ====================================== */
 #previewCard {
-    width: 370px;
+    width: 380px;
     margin: auto;
     background: var(--card-bg);
     padding: 22px;
-    border-radius: 18px;
-    border: 4px solid var(--card-border);
+    border-radius: 20px;
+    border: 5px solid var(--card-border);
     box-shadow: 0 8px 18px var(--card-shadow);
 }
 
 #preview-info {
     text-align: center;
-    font-weight: 700;
-    font-size: 1.1em;
+    font-weight: 800;
+    font-size: 1.3em;
     margin-bottom: 14px;
 }
 
@@ -163,18 +196,40 @@ input, select {
     display: grid;
     grid-template-columns: repeat(3,1fr);
     gap: 5px;
+    margin-bottom: 20px;
 }
 
 .mod-box {
     background: white;
     padding: 8px;
-    border-radius: 10px;
+    border-radius: 12px;
     border-top: 4px solid var(--lego-blue);
     text-align: center;
     font-size: 0.9em;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
+/* Carta — Stat Secondarie */
+#preview-secondary {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.preview-secondary-box {
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+    border-top: 4px solid var(--lego-red);
+    text-align: center;
+    font-size: 0.85em;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ======================================
+   SAVE BUTTON
+====================================== */
 .save-btn {
     margin-top: 35px;
     width: 100%;
