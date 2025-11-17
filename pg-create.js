@@ -1,270 +1,256 @@
-// ======================================
-// CONFIG
-// ======================================
-const BASE_PATH = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
+/* ==============================
+   LOGIN CHECK
+============================== */
+function logout() {
+    localStorage.removeItem("legoUser");
+    location.href = "index.html";
+}
 
-// CSV FILES
-const CSV_GRADI = BASE_PATH + "gradi.csv";
-const CSV_CLASSI = BASE_PATH + "classi.csv";
-const CSV_SPECIE = BASE_PATH + "speci.csv";
-const CSV_LIVELLI = BASE_PATH + "livelli.csv";
-const CSV_MULTIVERSI = BASE_PATH + "multiversi-pg.csv";
-const CSV_STAT_PRIMARIE = BASE_PATH + "statistiche_primarie.csv";
-const CSV_STAT_SECONDARIE = BASE_PATH + "statistiche_secondarie.csv";
+/* ==============================
+   LOAD CSV (super fix)
+============================== */
+async function loadCSV(url) {
+    const r = await fetch(url);
+    let t = await r.text();
 
-// ======================================
-// GLOBAL DATA LOADED FROM CSV
-// ======================================
-let gradi = [];
+    t = t
+        .replace(/^\uFEFF/, "")  // BOM
+        .replace(/\r\n/g, "\n")  // CRLF → LF
+        .replace(/\r/g, "\n");   // CR → LF
+
+    return t.trim().split("\n").slice(1)
+        .map(row => row.split(";").map(x => x.trim()))
+        .filter(row => row.length > 1);
+}
+
+/* ==============================
+   GLOBAL DATA
+============================== */
 let classi = [];
-let specie = [];
+let speci = [];
+let multi = [];
+let gradi = [];
 let livelli = [];
-let multiversi = [];
 let statPrimarie = [];
 let statSecondarie = [];
 
-// ======================================
-// LOAD CSV (generic)
-// ======================================
-async function loadCSV(url) {
-    const response = await fetch(url);
-    const text = await response.text();
+let stats = {};
+let modSpecie = {};
+let modClasse = {};
+let puntiDisponibili = 0;
 
-    return text
-        .trim()
-        .split("\n")
-        .slice(1) // skip headers
-        .map(row => row.split(";"));
-}
-
-// ======================================
-// INITIAL LOAD OF ALL CSV
-// ======================================
+/* ==============================
+   INIT
+============================== */
 async function init() {
-    gradi = await loadCSV(CSV_GRADI);
-    classi = await loadCSV(CSV_CLASSI);
-    specie = await loadCSV(CSV_SPECIE);
-    livelli = await loadCSV(CSV_LIVELLI);
-    multiversi = await loadCSV(CSV_MULTIVERSI);
-    statPrimarie = await loadCSV(CSV_STAT_PRIMARIE);
-    statSecondarie = await loadCSV(CSV_STAT_SECONDARIE);
 
-    populateSelect("pgClasse", classi, 1);
-    populateSelect("pgSpecie", specie, 1);
-    populateSelect("pgMultiverso", multiversi, 1);
-    populateSelect("pgLivello", livelli, 1);
-    populateSelect("pgGrado", gradi, 1);
+    classi = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/classi.csv");
+    speci  = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/speci.csv");
+    multi  = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/multiversi-pg.csv");
+    gradi  = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/gradi.csv");
+    livelli = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/livelli.csv");
+    statPrimarie = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/statistiche_primarie.csv");
+    statSecondarie = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/statistiche_secondarie.csv");
 
-    initializeStats();
+    setupSelectors();
+    setupPrimaryStats();
+    updatePreview();
 }
 
-init();
+/* ==============================
+   POPOLA SELECT
+============================== */
+function setupSelectors() {
+    fillSelect("pg-class", classi);
+    fillSelect("pg-specie", speci);
+    fillSelect("pg-multi", multi);
+    fillSelect("pg-grade", gradi);
+    fillSelect("pg-lv", livelli);
 
-// ======================================
-// POPULATE SELECT
-// columnIndex = which column contains the display name
-// ======================================
-function populateSelect(selectId, data, columnIndex) {
-    const select = document.getElementById(selectId);
+    document.querySelectorAll("select").forEach(sel =>
+        sel.addEventListener("change", updateAll)
+    );
+}
 
-    data.forEach(row => {
+function fillSelect(id, arr) {
+    const s = document.getElementById(id);
+    arr.forEach(r => {
         const opt = document.createElement("option");
-        opt.value = row[0];     // ID
-        opt.textContent = row[columnIndex];
-        select.appendChild(opt);
+        opt.value = r[0];
+        opt.textContent = r[1];
+        s.appendChild(opt);
     });
 }
 
-// ======================================
-// STAT PRIMARIE LOCAL STATE
-// ======================================
-let pgStats = {};
-let pgMods = {};
-let availablePoints = 0;
+/* ==============================
+   STAT PRIMARIE
+============================== */
+function setupPrimaryStats() {
+    const area = document.getElementById("primaryStats");
+    area.innerHTML = "";
 
-function initializeStats() {
-    statPrimarie.forEach(stat => {
-        let short = stat[1]; // NOME
-        pgStats[short] = 1;  // stat base
-        pgMods[short] = -4;  // (1 - 10) / 2 = -4
+    statPrimarie.forEach(row => {
+        const id = row[0];
+        const nome = row[1];
+
+        stats[id] = 1;
+
+        area.innerHTML += `
+        <div class="stat-row">
+            <span>⭐ ${nome}</span>
+
+            <div class="stat-controls">
+                <button class="stat-button" onclick="modifyStat('${id}', -1)">-</button>
+                <span id="stat-${id}">1</span>
+                <button class="stat-button" onclick="modifyStat('${id}', +1)">+</button>
+            </div>
+        </div>`;
+    });
+}
+
+function modifyStat(id, delta) {
+    if (delta > 0 && puntiDisponibili <= 0) return;
+
+    stats[id] = Math.max(1, Math.min(25, stats[id] + delta));
+
+    if (delta > 0) puntiDisponibili--;
+    else puntiDisponibili++;
+
+    document.getElementById("stat-" + id).textContent = stats[id];
+    document.getElementById("points-left").textContent = puntiDisponibili;
+
+    updateAll();
+}
+
+/* ==============================
+   UPDATE ALL
+============================== */
+function updateAll() {
+    updatePuntiStat();
+    updatePreview();
+}
+
+/* calcolo punti stat disponibili */
+function updatePuntiStat() {
+    const gradeID = document.getElementById("pg-grade").value;
+    const g = gradi.find(r => r[0] === gradeID);
+    if (!g) return;
+
+    const budget = parseInt(g[3]) || 0;
+    const spesi = Object.values(stats).reduce((a, b) => a + (b - 1), 0);
+
+    puntiDisponibili = budget - spesi;
+    document.getElementById("points-left").textContent = puntiDisponibili;
+}
+
+/* ==============================
+   PREVIEW UPDATE
+============================== */
+function updatePreview() {
+
+    /* Header */
+    const name = document.getElementById("pg-name").value || "---";
+    const sp = document.getElementById("pg-specie").selectedOptions[0]?.text || "---";
+    const cl = document.getElementById("pg-class").selectedOptions[0]?.text || "---";
+    const lv = document.getElementById("pg-lv").value || "--";
+
+    document.getElementById("prev-name").textContent = name;
+    document.getElementById("prev-sub").textContent = `${sp} / ${cl} / Lv ${lv}`;
+
+    /* MOD SPECIE */
+    const idSpec = document.getElementById("pg-specie").value;
+    const sRow = speci.find(r => r[0] === idSpec);
+    modSpecie = sRow ? {
+        FOR: parseInt(sRow[5]), DES: parseInt(sRow[6]),
+        COS: parseInt(sRow[7]), INT: parseInt(sRow[8]),
+        SAG: parseInt(sRow[9]), CAR: parseInt(sRow[10])
+    } : { FOR:0,DES:0,COS:0,INT:0,SAG:0,CAR:0 };
+
+    /* MOD CLASSE */
+    const idCl = document.getElementById("pg-class").value;
+    const cRow = classi.find(r => r[0] === idCl);
+    modClasse = cRow ? {
+        FOR: parseInt(cRow[10]), DES: parseInt(cRow[11]),
+        COS: parseInt(cRow[12]), INT: parseInt(cRow[13]),
+        SAG: parseInt(cRow[14]), CAR: parseInt(cRow[15])
+    } : { FOR:0,DES:0,COS:0,INT:0,SAG:0,CAR:0 };
+
+    /* MOD TOTALI */
+    const primMods = {};
+    statPrimarie.forEach(row => {
+        const id = row[0];
+        const nome = row[1];
+        const val = stats[id];
+        const base = Math.floor((val - 10) / 2);
+
+        const key = nome.toUpperCase().slice(0,3); // FOR, DES, COS...
+        const tot = base + (modSpecie[key]||0) + (modClasse[key]||0);
+
+        primMods[key] = tot;
     });
 
-    updateStatUI();
-    updatePreviewCard();
-}
+    /* RENDER PRIMARIE */
+    const primDiv = document.getElementById("preview-prim");
+    primDiv.innerHTML = "";
+    statPrimarie.forEach(row => {
+        const nome = row[1];
+        const key = nome.toUpperCase().slice(0,3);
+        const icon = statIcon(key);
 
-// ======================================
-// UPDATE AVAILABLE POINTS FROM GRADO
-// ======================================
-document.getElementById("pgGrado").addEventListener("change", () => {
-    const gradeID = document.getElementById("pgGrado").value;
-    const row = gradi.find(g => g[0] === gradeID);
-
-    availablePoints = row ? parseInt(row[3]) : 0;
-    updateStatUI();
-    updatePreviewCard();
-});
-
-// ======================================
-// MODIFY PRIMARY STAT
-// ======================================
-function modifyStat(short, delta) {
-    let newValue = pgStats[short] + delta;
-
-    if (newValue < 1) return;
-
-    let spent = Object.values(pgStats).reduce((a, b) => a + (b - 1), 0);
-
-    if (delta > 0 && spent >= availablePoints) return;
-    if (newValue > 25) return;
-
-    pgStats[short] = newValue;
-    pgMods[short] = Math.floor((newValue - 10) / 2);
-
-    updateStatUI();
-    updatePreviewCard();
-}
-
-// ======================================
-// UPDATE STAT LIST UI
-// ======================================
-function updateStatUI() {
-    statPrimarie.forEach(stat => {
-        let short = stat[1];
-        document.getElementById(`val-${short}`).textContent = pgStats[short];
-        document.getElementById(`mod-${short}`).textContent =
-            (pgMods[short] >= 0 ? "+" : "") + pgMods[short];
-    });
-
-    // update remaining points
-    let spent = Object.values(pgStats).reduce((a, b) => a + (b - 1), 0);
-    document.getElementById("remainingPoints").textContent =
-        availablePoints - spent;
-}
-
-// ======================================
-// ICONS
-// ======================================
-const primaryIcons = {
-    "FOR": "💪",
-    "DES": "🎯",
-    "COS": "🛡️",
-    "INT": "🧠",
-    "SAG": "👁️",
-    "CAR": "💬"
-};
-
-const secondaryIcons = {
-    "Punti Vita Massimi (PV Max)": "❤️",
-    "Punti Energia Massimi (PE Max)": "🔵",
-    "Punti Stamina Massimi (PS Max)": "💨",
-    "Classe Armatura (CA)": "🛡️",
-    "Iniziativa": "⚡",
-    "Bonus Attacco Fisico": "👊",
-    "Bonus Attacco Perforante": "🎯",
-    "Bonus Attacco Magico": "🔮",
-    "Bonus Stregonerie": "✨",
-    "Tiro Salvezza Magico (TS Magico)": "🔮",
-    "Tiro Salvezza Fisico (TS Fisico)": "🛡️",
-    "Velocità (Movimento Base)": "🦶",
-    "Capacità di Trasporto": "🎒",
-    "Percezione Passiva": "👁️"
-};
-
-// ======================================
-// CALCOLA STAT SECONDARIE
-// ======================================
-function calculateSecondaryStats() {
-    const cls = classi.find(c => c[0] === document.getElementById("pgClasse").value);
-    const lv = parseInt(document.getElementById("pgLivello").value || 1);
-
-    const PVCLASSE = parseInt(cls?.[3] || 0);
-    const PECLASSE = parseInt(cls?.[4] || 0);
-    const PSCLASSE = parseInt(cls?.[5] || 0);
-    const VELCLASSE = parseInt(cls?.[6] || 0);
-
-    return [
-        { name: "Punti Vita Massimi (PV Max)", value: PVCLASSE + lv * (2 + pgMods["COS"]) },
-        { name: "Punti Energia Massimi (PE Max)", value: PECLASSE + lv * (2 + pgMods["INT"]) },
-        { name: "Punti Stamina Massimi (PS Max)", value: PSCLASSE + (pgMods["COS"] + pgMods["FOR"]) + lv },
-        { name: "Classe Armatura (CA)", value: 10 + pgMods["DES"] },
-        { name: "Iniziativa", value: pgMods["DES"] },
-        { name: "Bonus Attacco Fisico", value: pgMods["FOR"] },
-        { name: "Bonus Attacco Perforante", value: pgMods["DES"] },
-        { name: "Bonus Attacco Magico", value: pgMods["INT"] },
-        { name: "Bonus Stregonerie", value: pgMods["SAG"] },
-        { name: "Tiro Salvezza Magico (TS Magico)", value: pgMods["SAG"] },
-        { name: "Tiro Salvezza Fisico (TS Fisico)", value: pgMods["COS"] },
-        { name: "Velocità (Movimento Base)", value: VELCLASSE },
-        { name: "Capacità di Trasporto", value: pgStats["FOR"] * 5 },
-        { name: "Percezione Passiva", value: 10 + pgMods["SAG"] }
-    ];
-}
-
-// ======================================
-// UPDATE PREVIEW CARD FULL
-// ======================================
-function updatePreviewCard() {
-
-    const card = document.getElementById("previewCard");
-    card.innerHTML = "";
-
-    const name = document.getElementById("pgName").value || "NUOVO PERSONAGGIO";
-
-    const speciesName =
-        specie.find(s => s[0] === document.getElementById("pgSpecie").value)?.[1] || "?";
-
-    const className =
-        classi.find(c => c[0] === document.getElementById("pgClasse").value)?.[1] || "?";
-
-    const multiversoName =
-        multiversi.find(m => m[0] === document.getElementById("pgMultiverso").value)?.[1] || "?";
-
-    const lv = document.getElementById("pgLivello").value || "?";
-
-    // HEADER
-    const header = document.createElement("div");
-    header.classList.add("preview-header");
-    header.innerHTML = `
-        <h2>${name}</h2>
-        <p>${speciesName} • ${className} • ${multiversoName} • Lv ${lv}</p>
-    `;
-
-    card.appendChild(header);
-
-    // PRIMARY STATS BLOCK
-    let primHTML = "";
-    statPrimarie.forEach(stat => {
-        let short = stat[1];
-        primHTML += `
+        primDiv.innerHTML += `
             <div class="preview-stat">
-                <span class="icon">${primaryIcons[short]}</span>
-                <span>${short}: ${pgStats[short]}</span>
-                <span class="mod">(${pgMods[short] >= 0 ? "+" : ""}${pgMods[short]})</span>
-            </div>
-        `;
+                <span class="icon">${icon}</span>
+                <span>${nome}</span>
+                <strong>${primMods[key]>=0?"+":""}${primMods[key]}</strong>
+            </div>`;
     });
 
-    const primBlock = document.createElement("div");
-    primBlock.classList.add("preview-block");
-    primBlock.innerHTML = `<h3>Statistiche Primarie</h3>${primHTML}`;
-    card.appendChild(primBlock);
+    /* SECONDARIE */
+    const secDiv = document.getElementById("preview-sec");
+    secDiv.innerHTML = "";
 
-    // SECONDARY STATS BLOCK
-    const sec = calculateSecondaryStats();
-    let secHTML = "";
+    statSecondarie.forEach(row => {
+        const nome = row[1];
+        let f = row[2];
 
-    sec.forEach(stat => {
-        secHTML += `
+        f = f.replace(/PVCLASSE/g, cRow ? parseInt(cRow[3]) : 0)
+             .replace(/PECLASSE/g, cRow ? parseInt(cRow[4]) : 0)
+             .replace(/PSCLASSE/g, cRow ? parseInt(cRow[5]) : 0)
+             .replace(/VELCLASSE/g, cRow ? parseInt(cRow[6]) : 0)
+             .replace(/LV/g, parseInt(lv)||0)
+             .replace(/MOD_FOR/g, primMods["FOR"]||0)
+             .replace(/MOD_DES/g, primMods["DES"]||0)
+             .replace(/MOD_COS/g, primMods["COS"]||0)
+             .replace(/MOD_INT/g, primMods["INT"]||0)
+             .replace(/MOD_SAG/g, primMods["SAG"]||0)
+             .replace(/MOD_CAR/g, primMods["CAR"]||0)
+             .replace(/FOR/g, stats["STAT1_FOR"] || 1);
+
+        let res = "?"
+
+        try { res = eval(f); }
+        catch(e){ res = "?"; }
+
+        secDiv.innerHTML += `
             <div class="preview-stat secondary">
-                <span class="icon">${secondaryIcons[stat.name]}</span>
-                <span>${stat.name}: <strong>${stat.value}</strong></span>
-            </div>
-        `;
+                <span class="icon">📘</span>
+                <span>${nome}</span>
+                <strong>${res}</strong>
+            </div>`;
     });
-
-    const secBlock = document.createElement("div");
-    secBlock.classList.add("preview-block");
-    secBlock.innerHTML = `<h3>Statistiche Secondarie</h3>${secHTML}`;
-    card.appendChild(secBlock);
 }
+
+/* Icone stat primarie */
+function statIcon(key) {
+    return {
+        FOR:"💪",
+        DES:"🎯",
+        COS:"❤️",
+        INT:"🧠",
+        SAG:"👁️",
+        CAR:"🗣️"
+    }[key] || "⭐";
+}
+
+/* avvio */
+init();

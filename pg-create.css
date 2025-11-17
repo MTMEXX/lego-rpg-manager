@@ -1,24 +1,18 @@
+/* --- CSS UGUALE ALL’ULTIMA VERSIONE CHE FUNZIONAVA --- */
+/* Lo ripubblico per sicurezza */
+
 :root {
     --lego-yellow: #f7d23e;
     --lego-red: #e53e3e;
     --lego-blue: #3182ce;
     --lego-gray: #f8f8f8;
-
     --card-bg: #ffffff;
     --card-border: #ffc400;
     --card-shadow: rgba(0,0,0,0.18);
 }
 
-/* ======================================
-   BASE PAGE
-====================================== */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    background: var(--lego-gray);
-}
-
+/* layout generali */
+body { margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; background: var(--lego-gray); }
 header {
     background: var(--lego-yellow);
     color: var(--lego-red);
@@ -29,7 +23,6 @@ header {
     position: relative;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-
 .back, .logout {
     position: absolute;
     top: 18px;
@@ -41,28 +34,18 @@ header {
     border-radius: 8px;
     cursor: pointer;
 }
-
 .back { left: 20px; background: var(--lego-blue); }
 .logout { right: 20px; }
 
-main {
-    width: min(1100px, 95%);
-    margin: auto;
-    margin-top: 30px;
-}
+main { width: min(1100px, 95%); margin: auto; margin-top: 30px; }
 
-
-
-/* ======================================
-   INPUT SECTION (Specie/Classe/Multiverso)
-====================================== */
+/* input cards */
 .input-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 18px;
     margin-bottom: 35px;
 }
-
 .input-card {
     background: white;
     padding: 15px 20px;
@@ -72,168 +55,59 @@ main {
     gap: 16px;
     border-top: 6px solid var(--lego-yellow);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: 0.25s;
 }
-
-.input-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-}
-
-.input-icon {
-    font-size: 1.8em;
-}
-
-.input-content label {
-    font-weight: 700;
-    color: var(--lego-blue);
-}
-
+.input-content label { font-weight: 700; color: var(--lego-blue); }
 input, select {
     width: 100%;
     padding: 9px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    margin-top: 5px;
-    font-size: 1em;
 }
 
-.points-box {
-    grid-column: 1 / -1;
-    background: #fff7bd;
-    border-left: 6px solid var(--lego-yellow);
-    padding: 12px 20px;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 1.2em;
-}
-
-
-
-/* ======================================
-   PRIMARY STATS
-====================================== */
+/* stat rows */
 .stat-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     background: white;
-    border-radius: 12px;
     padding: 12px;
+    border-radius: 12px;
     margin-bottom: 12px;
     border-left: 6px solid var(--lego-blue);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
-
-.stat-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
+.stat-controls { display: flex; gap: 8px; }
 .stat-button {
     background: var(--lego-yellow);
     border: none;
-    font-size: 1.1em;
     padding: 4px 10px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 700;
 }
 
-.stat-button:hover {
-    background: #ffe16d;
-}
-
-
-
-/* ======================================
-   PREVIEW CARD — TCG STYLE
-====================================== */
-
+/* preview card */
 #previewCard {
     width: 380px;
-    margin: 40px auto;
+    margin: auto;
     background: var(--card-bg);
     padding: 22px;
     border-radius: 18px;
     border: 4px solid var(--card-border);
-
-    /* effetto carta */
-    box-shadow:
-        0 6px 10px rgba(0,0,0,0.15),
-        inset 0 0 20px rgba(255, 240, 150, 0.25);
+    box-shadow: 0 6px 10px var(--card-shadow);
 }
 
-/* header della carta */
-.preview-header h2 {
-    font-size: 1.8em;
-    margin: 0;
-    text-shadow: 2px 2px 0 #ffe27a;
-    text-align: center;
-}
+.preview-header h2 { text-align: center; }
+.preview-block h3 { color: var(--lego-blue); margin-top: 15px; }
 
-.preview-header p {
-    text-align: center;
-    font-weight: 600;
-    color: #777;
-    margin-top: 5px;
-}
-
-
-
-/* blocchi (primarie / secondarie) */
-.preview-block {
-    margin-top: 25px;
-}
-
-.preview-block h3 {
-    margin-bottom: 10px;
-    font-size: 1.1em;
-    color: var(--lego-blue);
-}
-
-
-
-/* stat in carta */
 .preview-stat {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-
-    background: white;
     padding: 8px 12px;
     border-radius: 10px;
+    background: white;
     border-left: 5px solid var(--lego-blue);
-
-    margin-bottom: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    margin-bottom: 6px;
 }
+.preview-stat.secondary { border-left-color: var(--lego-red); }
 
-.preview-stat.secondary {
-    border-left-color: var(--lego-red);
-}
-
-.preview-stat .icon {
-    font-size: 1.3em;
-    margin-right: 8px;
-}
-
-
-
-/* SAVE BUTTON */
-.save-btn {
-    margin-top: 35px;
-    width: 100%;
-    padding: 14px;
-    background: var(--lego-blue);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.2em;
-    cursor: pointer;
-}
-
-.save-btn:hover {
-    background: #4fa7ff;
-}
+.icon { margin-right: 8px; font-size: 1.2em; }
