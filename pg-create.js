@@ -7,20 +7,19 @@ function logout() {
 }
 
 /* ==============================
-   LOAD CSV (super fix)
+   LOAD CSV FIX
 ============================== */
 async function loadCSV(url) {
     const r = await fetch(url);
     let t = await r.text();
 
-    t = t
-        .replace(/^\uFEFF/, "")  // BOM
-        .replace(/\r\n/g, "\n")  // CRLF → LF
-        .replace(/\r/g, "\n");   // CR → LF
+    t = t.replace(/^\uFEFF/, "")
+         .replace(/\r\n/g, "\n")
+         .replace(/\r/g, "\n");
 
     return t.trim().split("\n").slice(1)
         .map(row => row.split(";").map(x => x.trim()))
-        .filter(row => row.length > 1);
+        .filter(r => r.length > 1);
 }
 
 /* ==============================
@@ -39,11 +38,20 @@ let modSpecie = {};
 let modClasse = {};
 let puntiDisponibili = 0;
 
+/* Mapping automatico FOR/DES/... */
+const STAT_MAP = {
+    "FOR": "FORZA",
+    "DES": "DESTREZZA",
+    "COS": "COSTITUZIONE",
+    "INT": "INTELLIGENZA",
+    "SAG": "SAGGEZZA",
+    "CAR": "CARISMA"
+};
+
 /* ==============================
    INIT
 ============================== */
 async function init() {
-
     classi = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/classi.csv");
     speci  = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/speci.csv");
     multi  = await loadCSV("https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/multiversi-pg.csv");
@@ -130,7 +138,7 @@ function updateAll() {
     updatePreview();
 }
 
-/* calcolo punti stat disponibili */
+/* punti stat disponibili */
 function updatePuntiStat() {
     const gradeID = document.getElementById("pg-grade").value;
     const g = gradi.find(r => r[0] === gradeID);
@@ -177,29 +185,27 @@ function updatePreview() {
 
     /* MOD TOTALI */
     const primMods = {};
+
     statPrimarie.forEach(row => {
         const id = row[0];
         const nome = row[1];
+        const short = nome.toUpperCase().slice(0,3); // FOR, DES, ...
         const val = stats[id];
         const base = Math.floor((val - 10) / 2);
 
-        const key = nome.toUpperCase().slice(0,3); // FOR, DES, COS...
-        const tot = base + (modSpecie[key]||0) + (modClasse[key]||0);
-
-        primMods[key] = tot;
+        primMods[short] = base + (modSpecie[short] || 0) + (modClasse[short] || 0);
     });
 
-    /* RENDER PRIMARIE */
+    /* Render Primarie */
     const primDiv = document.getElementById("preview-prim");
     primDiv.innerHTML = "";
+
     statPrimarie.forEach(row => {
         const nome = row[1];
         const key = nome.toUpperCase().slice(0,3);
-        const icon = statIcon(key);
-
+        
         primDiv.innerHTML += `
             <div class="preview-stat">
-                <span class="icon">${icon}</span>
                 <span>${nome}</span>
                 <strong>${primMods[key]>=0?"+":""}${primMods[key]}</strong>
             </div>`;
@@ -213,44 +219,29 @@ function updatePreview() {
         const nome = row[1];
         let f = row[2];
 
+        /* sostituzioni */
         f = f.replace(/PVCLASSE/g, cRow ? parseInt(cRow[3]) : 0)
              .replace(/PECLASSE/g, cRow ? parseInt(cRow[4]) : 0)
              .replace(/PSCLASSE/g, cRow ? parseInt(cRow[5]) : 0)
              .replace(/VELCLASSE/g, cRow ? parseInt(cRow[6]) : 0)
-             .replace(/LV/g, parseInt(lv)||0)
-             .replace(/MOD_FOR/g, primMods["FOR"]||0)
-             .replace(/MOD_DES/g, primMods["DES"]||0)
-             .replace(/MOD_COS/g, primMods["COS"]||0)
-             .replace(/MOD_INT/g, primMods["INT"]||0)
-             .replace(/MOD_SAG/g, primMods["SAG"]||0)
-             .replace(/MOD_CAR/g, primMods["CAR"]||0)
-             .replace(/FOR/g, stats["STAT1_FOR"] || 1);
+             .replace(/LV/g, parseInt(lv) || 0)
+             .replace(/MOD_FOR/g, primMods["FOR"] || 0)
+             .replace(/MOD_DES/g, primMods["DES"] || 0)
+             .replace(/MOD_COS/g, primMods["COS"] || 0)
+             .replace(/MOD_INT/g, primMods["INT"] || 0)
+             .replace(/MOD_SAG/g, primMods["SAG"] || 0)
+             .replace(/MOD_CAR/g, primMods["CAR"] || 0)
+             .replace(/FOR/g, stats[statPrimarie[0][0]] || 1);
 
-        let res = "?"
-
-        try { res = eval(f); }
-        catch(e){ res = "?"; }
+        let res = "?";
+        try { res = eval(f); } catch(e){ res = "?"; }
 
         secDiv.innerHTML += `
             <div class="preview-stat secondary">
-                <span class="icon">📘</span>
                 <span>${nome}</span>
                 <strong>${res}</strong>
             </div>`;
     });
 }
 
-/* Icone stat primarie */
-function statIcon(key) {
-    return {
-        FOR:"💪",
-        DES:"🎯",
-        COS:"❤️",
-        INT:"🧠",
-        SAG:"👁️",
-        CAR:"🗣️"
-    }[key] || "⭐";
-}
-
-/* avvio */
 init();
