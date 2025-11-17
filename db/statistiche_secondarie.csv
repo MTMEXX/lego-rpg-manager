@@ -1,7 +1,7 @@
 ﻿ID;NOME;FORMULA
-STAT2_1;Punti Vita Massimi (PV Max);PVCLASSE + (MOD_COS * LV)
-STAT2_2;Punti Energia Massimi (PE Max);PECLASSE + (MOD_INT * LV)
-STAT2_3;Punti Stamina Massimi (PS Max);PSCLASSE + MOD_COS + MOD_FOR
+STAT2_1;Punti Vita Massimi (PV Max);PVCLASSE + LV * (2 + MOD_COS)
+STAT2_2;Punti Energia Massimi (PE Max);PECLASSE + LV * (2 + MOD_INT)
+STAT2_3;Punti Stamina Massimi (PS Max);PSCLASSE + MOD_COS + MOD_FOR + LV
 STAT2_4;Classe Armatura (CA);10 + MOD_DES
 STAT2_5;Iniziativa;MOD_DES
 STAT2_6;Bonus Attacco Fisico;MOD_FOR

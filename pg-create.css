@@ -9,6 +9,9 @@
     --card-shadow: rgba(0,0,0,0.18);
 }
 
+/* ======================================
+   BASE PAGE
+====================================== */
 body {
     margin: 0;
     padding: 0;
@@ -48,20 +51,10 @@ main {
     margin-top: 30px;
 }
 
-/* ======================================
-   TITOLI DI SEZIONE
-====================================== */
-.section-title {
-    margin-top: 25px;
-    margin-bottom: 10px;
-    font-size: 1.4em;
-    color: var(--lego-blue);
-    font-weight: 800;
-    text-align: center;
-}
+
 
 /* ======================================
-   INPUT SELECTION CARDS
+   INPUT SECTION (Specie/Classe/Multiverso)
 ====================================== */
 .input-section {
     display: grid;
@@ -94,7 +87,6 @@ main {
 .input-content label {
     font-weight: 700;
     color: var(--lego-blue);
-    display: block;
 }
 
 input, select {
@@ -116,8 +108,10 @@ input, select {
     font-size: 1.2em;
 }
 
+
+
 /* ======================================
-   STATISTICHE PRIMARIE
+   PRIMARY STATS
 ====================================== */
 .stat-row {
     display: flex;
@@ -151,85 +145,83 @@ input, select {
     background: #ffe16d;
 }
 
-/* ======================================
-   STATISTICHE SECONDARIE (NEW)
-====================================== */
-.secondary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 15px;
-}
 
-.secondary-box {
-    background: white;
-    padding: 10px;
-    border-radius: 12px;
-    border-top: 4px solid var(--lego-yellow);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    text-align: center;
-    font-size: 0.95em;
-    font-weight: 600;
-}
 
 /* ======================================
-   CARTA TCG
+   PREVIEW CARD — TCG STYLE
 ====================================== */
+
 #previewCard {
     width: 380px;
-    margin: auto;
+    margin: 40px auto;
     background: var(--card-bg);
     padding: 22px;
-    border-radius: 20px;
-    border: 5px solid var(--card-border);
-    box-shadow: 0 8px 18px var(--card-shadow);
+    border-radius: 18px;
+    border: 4px solid var(--card-border);
+
+    /* effetto carta */
+    box-shadow:
+        0 6px 10px rgba(0,0,0,0.15),
+        inset 0 0 20px rgba(255, 240, 150, 0.25);
 }
 
-#preview-info {
+/* header della carta */
+.preview-header h2 {
+    font-size: 1.8em;
+    margin: 0;
+    text-shadow: 2px 2px 0 #ffe27a;
     text-align: center;
-    font-weight: 800;
-    font-size: 1.3em;
-    margin-bottom: 14px;
 }
 
-#preview-mods {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 5px;
-    margin-bottom: 20px;
-}
-
-.mod-box {
-    background: white;
-    padding: 8px;
-    border-radius: 12px;
-    border-top: 4px solid var(--lego-blue);
+.preview-header p {
     text-align: center;
-    font-size: 0.9em;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-weight: 600;
+    color: #777;
+    margin-top: 5px;
 }
 
-/* Carta — Stat Secondarie */
-#preview-secondary {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 8px;
-    margin-top: 12px;
+
+
+/* blocchi (primarie / secondarie) */
+.preview-block {
+    margin-top: 25px;
 }
 
-.preview-secondary-box {
+.preview-block h3 {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: var(--lego-blue);
+}
+
+
+
+/* stat in carta */
+.preview-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     background: white;
-    padding: 8px;
+    padding: 8px 12px;
     border-radius: 10px;
-    border-top: 4px solid var(--lego-red);
-    text-align: center;
-    font-size: 0.85em;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-left: 5px solid var(--lego-blue);
+
+    margin-bottom: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* ======================================
-   SAVE BUTTON
-====================================== */
+.preview-stat.secondary {
+    border-left-color: var(--lego-red);
+}
+
+.preview-stat .icon {
+    font-size: 1.3em;
+    margin-right: 8px;
+}
+
+
+
+/* SAVE BUTTON */
 .save-btn {
     margin-top: 35px;
     width: 100%;

@@ -1,5 +1,5 @@
 ﻿ID;NOME;Mod_PV_Base;Mod_PE_Base;Mod_PS_Base;Mod _for;Mod_des;Mod_cos;Mod_int;Mod_sag;Mod_car
-SPECIE1;Standard (Umanoide);1;-2;1;0;0;0;0;0;0
+SPECIE1;Umano;1;-2;1;0;0;0;0;0;0
 SPECIE2;Creatura Mitologica;4;-2;2;2;-1;1;-1;0;-1
 SPECIE3;Costrutto Robotico;2;2;-1;1;-1;0;2;0;-2
 SPECIE4;Ninja (Addestrato);-1;2;4;-1;2;-1;0;1;0

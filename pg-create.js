@@ -1,304 +1,270 @@
-/* =====================================================
-   CARICAMENTO CSV
-===================================================== */
+// ======================================
+// CONFIG
+// ======================================
+const BASE_PATH = "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/refs/heads/main/db/";
 
+// CSV FILES
+const CSV_GRADI = BASE_PATH + "gradi.csv";
+const CSV_CLASSI = BASE_PATH + "classi.csv";
+const CSV_SPECIE = BASE_PATH + "speci.csv";
+const CSV_LIVELLI = BASE_PATH + "livelli.csv";
+const CSV_MULTIVERSI = BASE_PATH + "multiversi-pg.csv";
+const CSV_STAT_PRIMARIE = BASE_PATH + "statistiche_primarie.csv";
+const CSV_STAT_SECONDARIE = BASE_PATH + "statistiche_secondarie.csv";
+
+// ======================================
+// GLOBAL DATA LOADED FROM CSV
+// ======================================
+let gradi = [];
+let classi = [];
+let specie = [];
+let livelli = [];
+let multiversi = [];
+let statPrimarie = [];
+let statSecondarie = [];
+
+// ======================================
+// LOAD CSV (generic)
+// ======================================
 async function loadCSV(url) {
-    const res = await fetch(url);
-    const text = await res.text();
-    return text.trim().split("\n").map(r => r.split(";"));
+    const response = await fetch(url);
+    const text = await response.text();
+
+    return text
+        .trim()
+        .split("\n")
+        .slice(1) // skip headers
+        .map(row => row.split(";"));
 }
 
-const DB = {
-    specie: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/speci.csv",
-    classe: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/classi.csv",
-    multiverso: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/multiversi-pg.csv",
-    livello: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/livelli.csv",
-    grado: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/gradi.csv",
-    stat: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/statistiche_primarie.csv",
-    stat2: "https://raw.githubusercontent.com/MTMEXX/lego-rpg-manager/main/db/statistiche_secondarie.csv"
-};
+// ======================================
+// INITIAL LOAD OF ALL CSV
+// ======================================
+async function init() {
+    gradi = await loadCSV(CSV_GRADI);
+    classi = await loadCSV(CSV_CLASSI);
+    specie = await loadCSV(CSV_SPECIE);
+    livelli = await loadCSV(CSV_LIVELLI);
+    multiversi = await loadCSV(CSV_MULTIVERSI);
+    statPrimarie = await loadCSV(CSV_STAT_PRIMARIE);
+    statSecondarie = await loadCSV(CSV_STAT_SECONDARIE);
 
-let specieData = [];
-let classeData = [];
-let multiversoData = [];
-let livelloData = [];
-let gradoData = [];
-let statData = [];
-let stat2Data = [];
+    populateSelect("pgClasse", classi, 1);
+    populateSelect("pgSpecie", specie, 1);
+    populateSelect("pgMultiverso", multiversi, 1);
+    populateSelect("pgLivello", livelli, 1);
+    populateSelect("pgGrado", gradi, 1);
 
-let stats = {};
-let puntiDisponibili = 0;
+    initializeStats();
+}
 
+init();
 
-/* =====================================================
-   INIZIALIZZAZIONE
-===================================================== */
+// ======================================
+// POPULATE SELECT
+// columnIndex = which column contains the display name
+// ======================================
+function populateSelect(selectId, data, columnIndex) {
+    const select = document.getElementById(selectId);
 
-window.onload = async () => {
-    specieData = await loadCSV(DB.specie);
-    classeData = await loadCSV(DB.classe);
-    multiversoData = await loadCSV(DB.multiverso);
-    livelloData = await loadCSV(DB.livello);
-    gradoData = await loadCSV(DB.grado);
-    statData = await loadCSV(DB.stat);
-    stat2Data = await loadCSV(DB.stat2);
-
-    fillSelect("specie", specieData);
-    fillSelect("classe", classeData);
-    fillSelect("multiverso", multiversoData);
-    fillSelect("livello", livelloData);
-    fillSelect("grado", gradoData);
-
-    // inizializza stat primarie = 1
-    statData.slice(1).forEach(r => stats[r[1]] = 1);
-
-    renderStats();
-    updateEverything();
-};
-
-
-/* =====================================================
-   SELECT DINAMICHE
-===================================================== */
-
-function fillSelect(id, data) {
-    const sel = document.getElementById(id);
-    sel.innerHTML = "";
-
-    data.slice(1).forEach(r => {
+    data.forEach(row => {
         const opt = document.createElement("option");
-        opt.value = r[0];
-        opt.textContent = r[1];
-        sel.appendChild(opt);
+        opt.value = row[0];     // ID
+        opt.textContent = row[columnIndex];
+        select.appendChild(opt);
     });
 }
 
+// ======================================
+// STAT PRIMARIE LOCAL STATE
+// ======================================
+let pgStats = {};
+let pgMods = {};
+let availablePoints = 0;
 
-
-/* =====================================================
-   STATISTICHE PRIMARIE
-===================================================== */
-
-function renderStats() {
-    const c = document.getElementById("statContainer");
-    c.innerHTML = "";
-
-    statData.slice(1).forEach(row => {
-        const nome = row[1];
-
-        c.innerHTML += `
-        <div class="stat-row">
-            <b>${nome}</b>
-
-            <div class="stat-controls">
-                <button class="stat-button" onclick="changeStat('${nome}',-1)">−</button>
-                <span id="val-${nome}">${stats[nome]}</span>
-                <button class="stat-button" onclick="changeStat('${nome}',1)">+</button>
-            </div>
-        </div>
-        `;
-    });
-}
-
-function changeStat(nome, delta) {
-    let newVal = stats[nome] + delta;
-    if (newVal < 1 || newVal > 25) return;
-
-    const spesi = totalPointsSpent();
-    if (delta > 0 && spesi >= puntiDisponibili) return;
-
-    stats[nome] = newVal;
-    document.getElementById(`val-${nome}`).textContent = newVal;
-
-    updateEverything();
-}
-
-
-
-/* =====================================================
-   MODIFICATORI
-===================================================== */
-
-function modBase(stat) {
-    return Math.floor((stat - 10) / 2);
-}
-
-function sumMods(statName) {
-
-    const base = modBase(stats[statName]);
-
-    const specieID = document.getElementById("specie").value;
-    const classeID = document.getElementById("classe").value;
-
-    const rowS = specieData.find(r => r[0] === specieID);
-    const rowC = classeData.find(r => r[0] === classeID);
-
-    const index = {
-        "Forza": 5, "Destrezza": 6, "Costituzione": 7,
-        "Intelligenza": 8, "Saggezza": 9, "Carisma": 10
-    };
-
-    const modSpecie = rowS ? parseInt(rowS[index[statName]] || 0) : 0;
-    const modClasse = rowC ? parseInt(rowC[index[statName] + 5] || 0) : 0;
-
-    return base + modSpecie + modClasse;
-}
-
-
-
-/* =====================================================
-   MOTORE DI CALCOLO FORMULE SECONDARIE
-===================================================== */
-
-function calculateFormula(formula, vars) {
-    let f = formula;
-
-    // sostituisci tutte le variabili
-    Object.keys(vars).forEach(key => {
-        const regex = new RegExp("\\b" + key + "\\b", "g");
-        f = f.replace(regex, vars[key]);
+function initializeStats() {
+    statPrimarie.forEach(stat => {
+        let short = stat[1]; // NOME
+        pgStats[short] = 1;  // stat base
+        pgMods[short] = -4;  // (1 - 10) / 2 = -4
     });
 
-    try {
-        return eval(f);
-    } catch (e) {
-        console.warn("Formula non valida:", formula);
-        return "?";
-    }
+    updateStatUI();
+    updatePreviewCard();
 }
 
-function computeSecondaryStats() {
+// ======================================
+// UPDATE AVAILABLE POINTS FROM GRADO
+// ======================================
+document.getElementById("pgGrado").addEventListener("change", () => {
+    const gradeID = document.getElementById("pgGrado").value;
+    const row = gradi.find(g => g[0] === gradeID);
 
-    // dati base per calcoli
-    const classeID = document.getElementById("classe").value;
-    const classeRow = classeData.find(r => r[0] === classeID);
+    availablePoints = row ? parseInt(row[3]) : 0;
+    updateStatUI();
+    updatePreviewCard();
+});
 
-    const vars = {
-        FOR: stats.Forza,
-        DES: stats.Destrezza,
-        COS: stats.Costituzione,
-        INT: stats.Intelligenza,
-        SAG: stats.Saggezza,
-        CAR: stats.Carisma,
+// ======================================
+// MODIFY PRIMARY STAT
+// ======================================
+function modifyStat(short, delta) {
+    let newValue = pgStats[short] + delta;
 
-        MOD_FOR: sumMods("Forza"),
-        MOD_DES: sumMods("Destrezza"),
-        MOD_COS: sumMods("Costituzione"),
-        MOD_INT: sumMods("Intelligenza"),
-        MOD_SAG: sumMods("Saggezza"),
-        MOD_CAR: sumMods("Carisma"),
+    if (newValue < 1) return;
 
-        LV: parseInt(document.getElementById("livello").value.replace(/\D/g, "")) || 1,
+    let spent = Object.values(pgStats).reduce((a, b) => a + (b - 1), 0);
 
-        PVCLASSE: parseInt(classeRow[3]) || 0,
-        PECLASSE: parseInt(classeRow[4]) || 0,
-        PSCLASSE: parseInt(classeRow[5]) || 0,
-        VELCLASSE: parseInt(classeRow[6]) || 0,
-    };
+    if (delta > 0 && spent >= availablePoints) return;
+    if (newValue > 25) return;
 
-    const res = {};
+    pgStats[short] = newValue;
+    pgMods[short] = Math.floor((newValue - 10) / 2);
 
-    stat2Data.slice(1).forEach(row => {
-        const nome = row[1];
-        const formula = row[2];
+    updateStatUI();
+    updatePreviewCard();
+}
 
-        res[nome] = calculateFormula(formula, vars);
+// ======================================
+// UPDATE STAT LIST UI
+// ======================================
+function updateStatUI() {
+    statPrimarie.forEach(stat => {
+        let short = stat[1];
+        document.getElementById(`val-${short}`).textContent = pgStats[short];
+        document.getElementById(`mod-${short}`).textContent =
+            (pgMods[short] >= 0 ? "+" : "") + pgMods[short];
     });
 
-    return res;
+    // update remaining points
+    let spent = Object.values(pgStats).reduce((a, b) => a + (b - 1), 0);
+    document.getElementById("remainingPoints").textContent =
+        availablePoints - spent;
 }
 
+// ======================================
+// ICONS
+// ======================================
+const primaryIcons = {
+    "FOR": "💪",
+    "DES": "🎯",
+    "COS": "🛡️",
+    "INT": "🧠",
+    "SAG": "👁️",
+    "CAR": "💬"
+};
 
+const secondaryIcons = {
+    "Punti Vita Massimi (PV Max)": "❤️",
+    "Punti Energia Massimi (PE Max)": "🔵",
+    "Punti Stamina Massimi (PS Max)": "💨",
+    "Classe Armatura (CA)": "🛡️",
+    "Iniziativa": "⚡",
+    "Bonus Attacco Fisico": "👊",
+    "Bonus Attacco Perforante": "🎯",
+    "Bonus Attacco Magico": "🔮",
+    "Bonus Stregonerie": "✨",
+    "Tiro Salvezza Magico (TS Magico)": "🔮",
+    "Tiro Salvezza Fisico (TS Fisico)": "🛡️",
+    "Velocità (Movimento Base)": "🦶",
+    "Capacità di Trasporto": "🎒",
+    "Percezione Passiva": "👁️"
+};
 
-/* =====================================================
-   PUNTI DISPONIBILI
-===================================================== */
+// ======================================
+// CALCOLA STAT SECONDARIE
+// ======================================
+function calculateSecondaryStats() {
+    const cls = classi.find(c => c[0] === document.getElementById("pgClasse").value);
+    const lv = parseInt(document.getElementById("pgLivello").value || 1);
 
-function totalPointsSpent() {
-    return Object.values(stats).reduce((s, v) => s + (v - 1), 0);
+    const PVCLASSE = parseInt(cls?.[3] || 0);
+    const PECLASSE = parseInt(cls?.[4] || 0);
+    const PSCLASSE = parseInt(cls?.[5] || 0);
+    const VELCLASSE = parseInt(cls?.[6] || 0);
+
+    return [
+        { name: "Punti Vita Massimi (PV Max)", value: PVCLASSE + lv * (2 + pgMods["COS"]) },
+        { name: "Punti Energia Massimi (PE Max)", value: PECLASSE + lv * (2 + pgMods["INT"]) },
+        { name: "Punti Stamina Massimi (PS Max)", value: PSCLASSE + (pgMods["COS"] + pgMods["FOR"]) + lv },
+        { name: "Classe Armatura (CA)", value: 10 + pgMods["DES"] },
+        { name: "Iniziativa", value: pgMods["DES"] },
+        { name: "Bonus Attacco Fisico", value: pgMods["FOR"] },
+        { name: "Bonus Attacco Perforante", value: pgMods["DES"] },
+        { name: "Bonus Attacco Magico", value: pgMods["INT"] },
+        { name: "Bonus Stregonerie", value: pgMods["SAG"] },
+        { name: "Tiro Salvezza Magico (TS Magico)", value: pgMods["SAG"] },
+        { name: "Tiro Salvezza Fisico (TS Fisico)", value: pgMods["COS"] },
+        { name: "Velocità (Movimento Base)", value: VELCLASSE },
+        { name: "Capacità di Trasporto", value: pgStats["FOR"] * 5 },
+        { name: "Percezione Passiva", value: 10 + pgMods["SAG"] }
+    ];
 }
 
-function updatePoints() {
-    const gID = document.getElementById("grado").value;
-    const gRow = gradoData.find(r => r[0] === gID);
-    puntiDisponibili = gRow ? parseInt(gRow[3]) : 0;
+// ======================================
+// UPDATE PREVIEW CARD FULL
+// ======================================
+function updatePreviewCard() {
 
-    document.getElementById("puntiDispo").textContent =
-        puntiDisponibili - totalPointsSpent();
-}
+    const card = document.getElementById("previewCard");
+    card.innerHTML = "";
 
+    const name = document.getElementById("pgName").value || "NUOVO PERSONAGGIO";
 
+    const speciesName =
+        specie.find(s => s[0] === document.getElementById("pgSpecie").value)?.[1] || "?";
 
-/* =====================================================
-   AGGIORNA TUTTO
-===================================================== */
+    const className =
+        classi.find(c => c[0] === document.getElementById("pgClasse").value)?.[1] || "?";
 
-function updateEverything() {
-    updatePoints();
-    updatePreview();
-}
+    const multiversoName =
+        multiversi.find(m => m[0] === document.getElementById("pgMultiverso").value)?.[1] || "?";
 
+    const lv = document.getElementById("pgLivello").value || "?";
 
-
-/* =====================================================
-   ANTEPRIMA CARTA
-===================================================== */
-
-function updatePreview() {
-
-    const nome = document.getElementById("pgName").value || "Personaggio";
-
-    const specieTxt = specie.options[specie.selectedIndex].text;
-    const classeTxt = classe.options[classe.selectedIndex].text;
-    const multTxt = multiverso.options[multiverso.selectedIndex].text;
-    const livTxt = livello.options[livello.selectedIndex].text;
-    const gradoTxt = grado.options[grado.selectedIndex].text;
-
-    document.getElementById("preview-info").innerHTML = `
-        <div style="font-size:1.6em; color:#e53e3e;">${nome}</div>
-        <div><b>${specieTxt}</b> • <b>${classeTxt}</b></div>
-        <div style="margin-top:4px;">${multTxt}</div>
-        <div style="font-size:0.9em; opacity:0.8;">Lv ${livTxt} – ${gradoTxt}</div>
+    // HEADER
+    const header = document.createElement("div");
+    header.classList.add("preview-header");
+    header.innerHTML = `
+        <h2>${name}</h2>
+        <p>${speciesName} • ${className} • ${multiversoName} • Lv ${lv}</p>
     `;
 
-    /* --- STAT PRIMARIE --- */
-    const box = document.getElementById("preview-mods");
-    box.innerHTML = "";
+    card.appendChild(header);
 
-    Object.keys(stats).forEach(s => {
-        const val = stats[s];
-        const mod = sumMods(s);
-
-        box.innerHTML += `
-            <div class="mod-box">
-                <b>${s}</b><br>
-                ${val} (${mod >= 0 ? "+" : ""}${mod})
+    // PRIMARY STATS BLOCK
+    let primHTML = "";
+    statPrimarie.forEach(stat => {
+        let short = stat[1];
+        primHTML += `
+            <div class="preview-stat">
+                <span class="icon">${primaryIcons[short]}</span>
+                <span>${short}: ${pgStats[short]}</span>
+                <span class="mod">(${pgMods[short] >= 0 ? "+" : ""}${pgMods[short]})</span>
             </div>
         `;
     });
 
-    /* --- STAT SECONDARIE --- */
-    const secBox = document.getElementById("preview-secondary");
-    secBox.innerHTML = "";
+    const primBlock = document.createElement("div");
+    primBlock.classList.add("preview-block");
+    primBlock.innerHTML = `<h3>Statistiche Primarie</h3>${primHTML}`;
+    card.appendChild(primBlock);
 
-    const sec = computeSecondaryStats();
+    // SECONDARY STATS BLOCK
+    const sec = calculateSecondaryStats();
+    let secHTML = "";
 
-    Object.keys(sec).forEach(nome => {
-        secBox.innerHTML += `
-            <div class="mod-box">
-                <b>${nome}</b><br>${sec[nome]}
+    sec.forEach(stat => {
+        secHTML += `
+            <div class="preview-stat secondary">
+                <span class="icon">${secondaryIcons[stat.name]}</span>
+                <span>${stat.name}: <strong>${stat.value}</strong></span>
             </div>
         `;
     });
-}
 
-
-
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-function logout() {
-    localStorage.removeItem("legoUser");
-    window.location.href = "index.html";
+    const secBlock = document.createElement("div");
+    secBlock.classList.add("preview-block");
+    secBlock.innerHTML = `<h3>Statistiche Secondarie</h3>${secHTML}`;
+    card.appendChild(secBlock);
 }
