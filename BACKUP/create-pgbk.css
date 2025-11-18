@@ -1,0 +1,192 @@
+:root {
+    --lego-yellow: #f7d23e;
+    --lego-red: #e53e3e;
+    --lego-blue: #3182ce;
+    --lego-gray: #f8f8f8;
+
+    --card-bg: #ffffff;
+    --card-border: #ffc400;
+    --card-shadow: rgba(0,0,0,0.18);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: var(--lego-gray);
+}
+
+header {
+    background: var(--lego-yellow);
+    color: var(--lego-red);
+    padding: 15px;
+    font-weight: 800;
+    text-align: center;
+    font-size: 1.8em;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.back, .logout {
+    position: absolute;
+    top: 18px;
+    background: var(--lego-red);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.back { left: 20px; background: var(--lego-blue); }
+.logout { right: 20px; }
+
+main {
+    width: min(1100px, 95%);
+    margin: auto;
+    margin-top: 30px;
+}
+
+/* ======================================
+   NUOVA SEZIONE INPUT
+====================================== */
+.input-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+.input-card {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-top: 6px solid var(--lego-yellow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: 0.25s;
+}
+
+.input-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.input-icon {
+    font-size: 1.8em;
+}
+
+.input-content label {
+    font-weight: 700;
+    color: var(--lego-blue);
+}
+
+input, select {
+    width: 100%;
+    padding: 9px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    font-size: 1em;
+}
+
+.points-box {
+    grid-column: 1 / -1;
+    background: #fff7bd;
+    border-left: 6px solid var(--lego-yellow);
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+
+/* ======================================
+   STATISTICHE
+====================================== */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-left: 6px solid var(--lego-blue);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.stat-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-button {
+    background: var(--lego-yellow);
+    border: none;
+    font-size: 1.1em;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.stat-button:hover {
+    background: #ffe16d;
+}
+
+/* ======================================
+   CARTA TCG
+====================================== */
+#previewCard {
+    width: 370px;
+    margin: auto;
+    background: var(--card-bg);
+    padding: 22px;
+    border-radius: 18px;
+    border: 4px solid var(--card-border);
+    box-shadow: 0 8px 18px var(--card-shadow);
+}
+
+#preview-info {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 14px;
+}
+
+#preview-mods {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 5px;
+}
+
+.mod-box {
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+    border-top: 4px solid var(--lego-blue);
+    text-align: center;
+    font-size: 0.9em;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.save-btn {
+    margin-top: 35px;
+    width: 100%;
+    padding: 14px;
+    background: var(--lego-blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #4fa7ff;
+}
