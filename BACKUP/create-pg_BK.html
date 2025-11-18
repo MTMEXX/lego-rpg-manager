@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crea Personaggio</title>
+    <link rel="stylesheet" href="pg-create.css">
+</head>
+
+<body>
+<header>
+    CREA PERSONAGGIO
+    <button class="back" onclick="location.href='dashboard.html'">← Dashboard</button>
+    <button class="logout" onclick="logout()">Logout</button>
+</header>
+
+<main>
+
+    <!-- ===========================
+         INPUT SECTION
+    ============================ -->
+    <section class="input-section">
+
+        <!-- NOME -->
+        <div class="input-card">
+            <div class="input-icon">🧱</div>
+            <div class="input-content">
+                <label>Nome</label>
+                <input id="pg-name" type="text" placeholder="Nome personaggio">
+            </div>
+        </div>
+
+        <!-- SPECIE -->
+        <div class="input-card">
+            <div class="input-icon">🧬</div>
+            <div class="input-content">
+                <label>Specie</label>
+                <select id="pg-specie">
+                    <option value="">Seleziona specie…</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- CLASSE -->
+        <div class="input-card">
+            <div class="input-icon">⚔️</div>
+            <div class="input-content">
+                <label>Classe</label>
+                <select id="pg-class">
+                    <option value="">Seleziona classe…</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- MULTIVERSO -->
+        <div class="input-card">
+            <div class="input-icon">🌌</div>
+            <div class="input-content">
+                <label>Multiverso</label>
+                <select id="pg-multi">
+                    <option value="">Seleziona multiverso…</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- LIVELLO -->
+        <div class="input-card">
+            <div class="input-icon">🎚️</div>
+            <div class="input-content">
+                <label>Livello</label>
+                <select id="pg-lv">
+                    <option value="">Lv…</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- GRADO -->
+        <div class="input-card">
+            <div class="input-icon">🏅</div>
+            <div class="input-content">
+                <label>Grado</label>
+                <select id="pg-grade">
+                    <option value="">Seleziona grado…</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="points-box">
+            Punti Stat disponibili: <span id="points-left">0</span>
+        </div>
+
+    </section>
+
+    <!-- ===========================
+         STAT PRIMARIE
+    ============================ -->
+    <h2>Statistiche Primarie</h2>
+
+    <div id="primaryStats"></div>
+
+    <!-- ===========================
+         PREVIEW CARD
+    ============================ -->
+    <h2>Anteprima Personaggio</h2>
+
+    <div id="previewCard">
+        <div class="preview-header">
+            <h2 id="prev-name">---</h2>
+            <p id="prev-sub">Specie / Classe / LV</p>
+        </div>
+
+        <div class="preview-block">
+            <h3>Statistiche Primarie</h3>
+            <div id="preview-prim"></div>
+        </div>
+
+        <div class="preview-block">
+            <h3>Statistiche Secondarie</h3>
+            <div id="preview-sec"></div>
+        </div>
+    </div>
+
+</main>
+
+<script src="pg-create.js"></script>
+</body>
+</html>
